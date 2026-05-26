@@ -1,0 +1,18 @@
+{
+  "name": "arms-waste-management",
+  "version": "1.0.0",
+  "description": "Automated Refuse Management Systems - Digital waste tracking and recycling platform",
+  "scripts": {
+    "dev": "node ./scripts/dev.mjs",
+    "dev:backend": "npm --prefix backend run start:dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "bootstrap:admin": "node bootstrap-admin.js",
+    "install:all": "npm --prefix backend install && npm --prefix frontend install"
+  },
+  "dependencies": {
+    "@react-google-maps/api": "^2.20.8"
+  }
+}

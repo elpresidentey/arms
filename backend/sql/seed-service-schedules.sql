@@ -1,0 +1,296 @@
+-- Seed service schedules for Amuwo Odofin Local Government
+
+DELETE FROM service_schedules;
+
+INSERT INTO service_schedules (
+  "scheduleCode",
+  "serviceType",
+  ward,
+  street,
+  zone,
+  frequency,
+  "serviceDays",
+  "startTimeWindow",
+  "endTimeWindow",
+  description,
+  "operatorName",
+  "operatorPhoneNumber",
+  "operatorEmail",
+  "serviceProviders",
+  status,
+  "publishedDate",
+  "effectiveFromDate",
+  "effectiveToDate"
+) VALUES
+  -- Festac Town Waste Collection
+  (
+    'SCH-WAS-FES-001',
+    'Waste Collection',
+    'Festac Town',
+    'All Streets',
+    'Phase 1',
+    'weekly',
+    ARRAY['Monday', 'Thursday'],
+    '07:00',
+    '11:00',
+    'Regular household waste collection for Festac Town Phase 1. Please place bins outside by 7:00 AM on collection days.',
+    'Festac Waste Services',
+    '08012345678',
+    'festac@arms.ng',
+    ARRAY['LAWMA', 'Festac PSP'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '6 months'
+  ),
+  (
+    'SCH-WAS-FES-002',
+    'Waste Collection',
+    'Festac Town',
+    'All Streets',
+    'Phase 2',
+    'weekly',
+    ARRAY['Tuesday', 'Friday'],
+    '07:00',
+    '11:00',
+    'Regular household waste collection for Festac Town Phase 2. Please place bins outside by 7:00 AM on collection days.',
+    'Festac Waste Services',
+    '08012345678',
+    'festac@arms.ng',
+    ARRAY['LAWMA', 'Festac PSP'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '6 months'
+  ),
+  
+  -- Bulky Waste Pickup
+  (
+    'SCH-BUL-FES-003',
+    'Bulky Waste Pickup',
+    'Festac Town',
+    'All Streets',
+    'All Phases',
+    'monthly',
+    ARRAY['First Saturday'],
+    '08:00',
+    '14:00',
+    'Monthly bulky waste pickup for furniture, appliances, and large items. Schedule pickup 3 days in advance by calling the operator.',
+    'Festac Waste Services',
+    '08012345678',
+    'festac@arms.ng',
+    ARRAY['LAWMA'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '1 year'
+  ),
+  
+  -- Amuwo Area
+  (
+    'SCH-WAS-AMU-004',
+    'Waste Collection',
+    'Amuwo',
+    'Agege Motor Road',
+    'Mile 2',
+    'daily',
+    ARRAY['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    '06:00',
+    '10:00',
+    'Daily commercial waste collection for Agege Motor Road businesses. Early morning service to minimize traffic disruption.',
+    'Mile 2 Waste Management',
+    '08023456789',
+    'mile2@arms.ng',
+    ARRAY['LAWMA'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '6 months'
+  ),
+  (
+    'SCH-WAS-AMU-005',
+    'Waste Collection',
+    'Amuwo',
+    'Okota Road',
+    'Okota',
+    'weekly',
+    ARRAY['Wednesday', 'Saturday'],
+    '07:00',
+    '12:00',
+    'Residential waste collection for Okota Road area. Please separate recyclables from general waste.',
+    'Okota Waste Services',
+    '08034567890',
+    'okota@arms.ng',
+    ARRAY['LAWMA', 'Okota PSP'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '6 months'
+  ),
+  
+  -- Kirikiri
+  (
+    'SCH-WAS-KIR-006',
+    'Waste Collection',
+    'Kirikiri',
+    'All Streets',
+    'Kirikiri Town',
+    'weekly',
+    ARRAY['Tuesday', 'Friday'],
+    '07:00',
+    '11:00',
+    'Regular waste collection for Kirikiri Town residential areas.',
+    'Kirikiri Waste Management',
+    '08045678901',
+    'kirikiri@arms.ng',
+    ARRAY['LAWMA'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '6 months'
+  ),
+  
+  -- Satellite Town
+  (
+    'SCH-WAS-SAT-007',
+    'Waste Collection',
+    'Satellite Town',
+    'All Streets',
+    'Satellite',
+    'weekly',
+    ARRAY['Monday', 'Thursday'],
+    '07:00',
+    '11:00',
+    'Household waste collection for Satellite Town. Bins should be placed at designated collection points.',
+    'Satellite Waste Services',
+    '08056789012',
+    'satellite@arms.ng',
+    ARRAY['LAWMA', 'Satellite PSP'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '6 months'
+  ),
+  
+  -- Bin Replacement Service
+  (
+    'SCH-BIN-ALL-008',
+    'Bin Replacement',
+    'All Wards',
+    'All Streets',
+    'Amuwo Odofin LGA',
+    'as_needed',
+    ARRAY['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    '09:00',
+    '16:00',
+    'Damaged or missing waste bins can be replaced. Visit our office or call to request a replacement. Service fee applies.',
+    'ARMS Central Office',
+    '08067890123',
+    'bins@arms.ng',
+    ARRAY['LAWMA'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '1 year'
+  ),
+  
+  -- Recycling Collection
+  (
+    'SCH-REC-FES-009',
+    'Recycling Collection',
+    'Festac Town',
+    'All Streets',
+    'All Phases',
+    'biweekly',
+    ARRAY['Second Saturday', 'Fourth Saturday'],
+    '08:00',
+    '13:00',
+    'Separate collection for recyclable materials (plastic, paper, metal, glass). Please sort items before collection.',
+    'Festac Recycling Services',
+    '08078901234',
+    'recycle@arms.ng',
+    ARRAY['LAWMA', 'Recycling Partners'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '1 year'
+  ),
+  
+  -- Trade Fair Area
+  (
+    'SCH-WAS-TRA-010',
+    'Waste Collection',
+    'Trade Fair',
+    'Badagry Expressway',
+    'Trade Fair Complex',
+    'daily',
+    ARRAY['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    '06:00',
+    '10:00',
+    'Daily commercial waste collection for Trade Fair Complex. Market traders should bag waste properly.',
+    'Trade Fair Waste Management',
+    '08089012345',
+    'tradefair@arms.ng',
+    ARRAY['LAWMA'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '6 months'
+  ),
+  
+  -- Mazamaza
+  (
+    'SCH-WAS-MAZ-011',
+    'Waste Collection',
+    'Mazamaza',
+    'All Streets',
+    'Mazamaza',
+    'weekly',
+    ARRAY['Wednesday', 'Saturday'],
+    '07:00',
+    '11:00',
+    'Residential waste collection for Mazamaza area. Please use provided bins or bags.',
+    'Mazamaza Waste Services',
+    '08090123456',
+    'mazamaza@arms.ng',
+    ARRAY['LAWMA'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '6 months'
+  ),
+  
+  -- Special Waste Collection
+  (
+    'SCH-SPE-ALL-012',
+    'Special Waste Collection',
+    'All Wards',
+    'All Streets',
+    'Amuwo Odofin LGA',
+    'as_needed',
+    ARRAY['By Appointment'],
+    '09:00',
+    '16:00',
+    'Collection of hazardous or special waste (electronics, chemicals, medical waste). Must be scheduled in advance. Special fees apply.',
+    'ARMS Special Waste Unit',
+    '08001234567',
+    'special@arms.ng',
+    ARRAY['LAWMA', 'Specialized Contractors'],
+    'published',
+    NOW(),
+    NOW(),
+    NOW() + INTERVAL '1 year'
+  )
+ON CONFLICT ("scheduleCode") DO NOTHING;
+
+-- Display inserted schedules
+SELECT 
+  "scheduleCode",
+  "serviceType",
+  ward,
+  zone,
+  frequency,
+  "serviceDays",
+  status
+FROM service_schedules
+ORDER BY ward, "serviceType";

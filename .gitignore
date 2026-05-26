@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+*.log
+*.err.log
+*.sqlite
+backend/arms-dev.sqlite
+frontend/dist/
+backend/dist/

@@ -1,0 +1,7 @@
+ALTER TABLE waste_collections
+  ALTER COLUMN latitude DROP NOT NULL,
+  ALTER COLUMN longitude DROP NOT NULL;
+
+ALTER TABLE reports
+  ALTER COLUMN latitude DROP NOT NULL,
+  ALTER COLUMN longitude DROP NOT NULL;
