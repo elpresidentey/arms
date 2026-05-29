@@ -76,6 +76,7 @@ const Wallet: React.FC = () => {
     data: resolvedAccount,
     isFetching: isResolvingAccount,
     isError: isAccountResolutionError,
+    error: accountResolutionError,
   } = useQuery({
     queryKey: ['wallet-account-resolution', cleanAccountNumber, bankCode],
     queryFn: () => walletApi.resolveAccount({ accountNumber: cleanAccountNumber, bankCode }),
@@ -275,7 +276,7 @@ const Wallet: React.FC = () => {
                       Account could not be verified
                     </p>
                     <p className="mt-1 text-xs text-rose-600">
-                      Please check the bank and account number. If the issue persists, ensure Paystack is properly configured in the backend.
+                      {getErrorMessage(accountResolutionError, 'Please check the bank and account number. If using test mode, ensure you have a valid test account.')}
                     </p>
                   </div>
                 ) : cleanAccountNumber.length === 10 && bankCode ? (

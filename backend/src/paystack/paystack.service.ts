@@ -114,18 +114,33 @@ export class PaystackService {
       bank_id: number;
     };
   }> {
-    const response = await this.makeRequest<{
-      status: boolean;
-      message: string;
-      data: {
-        account_number: string;
-        account_name: string;
-        bank_id: number;
-      };
-    }>(
-      `/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`,
-    );
-    return response.data;
+    try {
+      const response = await this.makeRequest<{
+        status: boolean;
+        message: string;
+        data: {
+          account_number: string;
+          account_name: string;
+          bank_id: number;
+        };
+      }>(
+        `/bank/resolve?account_number=${accountNumber}&bank_code=${bankCode}`,
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Account verification failed for ${accountNumber} with bank ${bankCode}`, error.response?.data);
+      
+      // Provide more specific error messages
+      if (error.response?.status === 422) {
+        throw new Error('Invalid account number or bank code. Please verify the details and try again.');
+      } else if (error.response?.status === 400) {
+        throw new Error('Account verification failed. Please check that the account number is correct.');
+      } else if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+      
+      throw new Error('Unable to verify account. Please try again or contact support if the issue persists.');
+    }
   }
 
   /**

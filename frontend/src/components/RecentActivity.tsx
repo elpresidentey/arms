@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { Recycle, Wallet, FileText, Truck, ClipboardList, AlertCircle, Route as RouteIcon, Radio } from 'lucide-react'
+import { Recycle, Wallet, FileText, Truck, ClipboardList, AlertCircle, Route as RouteIcon } from 'lucide-react'
 import { walletApi } from '../services/api'
 import { useSocket } from '../contexts/SocketContext'
 import { useAuth } from '../contexts/AuthContext'
@@ -71,11 +71,11 @@ const RecentActivity: React.FC = () => {
   return (
     <div className="space-y-3">
       {liveNotifications.length > 0 && (
-        <div className="mb-2 flex items-center gap-2">
-          <span className="ambient-pulse inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50">
-            <Radio className="h-3 w-3 text-emerald-500 animate-pulse" />
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Recent updates</span>
+          <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
+            {liveNotifications.length}
           </span>
-          <span className="text-xs font-medium text-emerald-700 uppercase tracking-wider">Live</span>
         </div>
       )}
 

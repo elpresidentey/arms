@@ -8,7 +8,6 @@ import {
   ClipboardList,
   Clock,
   MapPin,
-  Radio,
   Recycle,
   Route as RouteIcon,
   Truck,
@@ -40,7 +39,7 @@ import { BILLING_ADMIN_ROLES, hasRole } from '../routes/roles'
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth()
-  const { notifications, isConnected } = useSocket()
+  const { notifications } = useSocket()
   const queryClient = useQueryClient()
   const isResident = user?.role === 'resident'
   const canIssueBills = hasRole(user?.role, BILLING_ADMIN_ROLES)
@@ -223,63 +222,59 @@ const Dashboard: React.FC = () => {
 
       <section className="panel-shell dashboard-grid relative overflow-hidden rounded-xl">
         <div className="relative grid gap-0 lg:grid-cols-[1.45fr_0.55fr]">
-          <div className="p-5 sm:p-6">
+          <div className="p-4 sm:p-6">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="ambient-pulse inline-flex items-center gap-2 rounded-full border border-primary-100 bg-primary-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-primary-700">
+              <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary-100 bg-primary-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-primary-700 sm:tracking-[0.14em]">
                 <MapPin className="h-3.5 w-3.5" />
-                {user?.street || user?.address || 'Address pending'}
-              </span>
-              <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold ${isConnected ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                <Radio className="h-3.5 w-3.5" />
-                {isConnected ? 'Updates on' : 'Updates offline'}
+                <span className="truncate">{user?.street || user?.address || 'Address pending'}</span>
               </span>
             </div>
 
-            <div className="mt-5 max-w-3xl">
+            <div className="mt-4 max-w-3xl sm:mt-5">
               <p className="caption text-slate-500">
                 {isResident ? 'Your dashboard' : 'Staff dashboard'}
               </p>
-              <h1 className="font-display mt-1.5 max-w-2xl text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl text-balance">
+              <h1 className="font-display mt-1.5 max-w-2xl text-xl font-bold tracking-tight text-slate-950 sm:text-3xl text-balance">
                 {isResident
                   ? getResidentDashboardGreeting(user)
                   : 'Operations summary'}
               </h1>
-              <p className="mt-3 max-w-2xl body text-slate-600">
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:mt-3">
                 {isResident
                   ? 'Track refuse collection, household requests, complaints, wallet activity, and recycling from one place.'
                   : 'Monitor refuse routes, resident complaints, service requests, truck readiness, and payout activity from one view.'}
               </p>
             </div>
 
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-2.5">
+            <div className="mt-4 grid grid-cols-1 gap-2.5 sm:mt-5 sm:flex sm:flex-wrap">
               {isResident ? (
                 <>
-                  <Link to="/app/service-requests" className="w-full sm:w-auto">
+                  <Link to="/app/service-requests">
                     <Button size="lg" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 shadow-lg shadow-primary-600/15">
                       <ClipboardList className="h-4 w-4" />
                       New refuse request
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link to="/app/reports" className="w-full sm:w-auto">
+                  <Link to="/app/reports">
                     <Button size="lg" variant="outline" className="w-full sm:w-auto inline-flex items-center justify-center gap-2">
                       <AlertCircle className="h-4 w-4" />
                       Report refuse issue
                     </Button>
                   </Link>
-                  <Link to="/app/schedules" className="w-full sm:w-auto">
+                  <Link to="/app/schedules">
                     <Button size="lg" variant="outline" className="w-full sm:w-auto inline-flex items-center justify-center gap-2">
                       <RouteIcon className="h-4 w-4" />
                       View refuse schedule
                     </Button>
                   </Link>
                   {nextBill && (
-                    <div className="w-full sm:w-auto">
+                    <div>
                       <PayBillButton bill={nextBill} size="lg" showAmount className="w-full sm:w-auto" />
                     </div>
                   )}
                   {payableBills.length > 0 && (
-                    <Link to="/app/bills" className="w-full sm:w-auto">
+                    <Link to="/app/bills">
                       <Button size="lg" variant="outline" className="w-full sm:w-auto inline-flex items-center justify-center gap-2">
                         <Receipt className="h-4 w-4" />
                         View all bills
@@ -290,20 +285,20 @@ const Dashboard: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <Link to="/app/operations" className="w-full sm:w-auto">
+                  <Link to="/app/operations">
                     <Button size="lg" className="w-full sm:w-auto inline-flex items-center justify-center gap-2 shadow-lg shadow-primary-600/15">
                       <RouteIcon className="h-4 w-4" />
                       Open refuse operations
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link to="/app/reports" className="w-full sm:w-auto">
+                  <Link to="/app/reports">
                     <Button size="lg" variant="outline" className="w-full sm:w-auto inline-flex items-center justify-center gap-2">
                       <AlertCircle className="h-4 w-4" />
                       Review complaints
                     </Button>
                   </Link>
-                  <Link to="/app/service-requests" className="w-full sm:w-auto">
+                  <Link to="/app/service-requests">
                     <Button size="lg" variant="outline" className="w-full sm:w-auto inline-flex items-center justify-center gap-2">
                       <ClipboardList className="h-4 w-4" />
                       Manage refuse requests
@@ -313,7 +308,7 @@ const Dashboard: React.FC = () => {
               )}
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="mt-4 grid gap-3 sm:mt-5 sm:grid-cols-3">
               <MetricCard
                 compact
                 accent="teal"
@@ -341,9 +336,9 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="border-t border-slate-200/80 bg-[linear-gradient(180deg,#1f2e1d_0%,#2a3d28_100%)] p-5 text-white lg:border-l lg:border-t-0">
+          <div className="border-t border-slate-200/80 bg-[linear-gradient(180deg,#1f2e1d_0%,#2a3d28_100%)] p-4 text-white sm:p-5 lg:border-l lg:border-t-0">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Next action</p>
-            <div className="mt-5 space-y-5">
+            <div className="mt-4 space-y-4 sm:mt-5 sm:space-y-5">
               {isResident && nextBill ? (
                 <div
                   className={`rounded-xl border p-4 ${
@@ -355,7 +350,7 @@ const Dashboard: React.FC = () => {
                   <p className="text-xs text-amber-200/90">
                     {nextBill.status === 'overdue' ? 'Overdue refuse bill' : 'Refuse bill due'}
                   </p>
-                  <p className="mt-1 text-2xl font-semibold">{formatCurrency(nextBill.totalAmount)}</p>
+                  <p className="mt-1 text-xl font-semibold sm:text-2xl">{formatCurrency(nextBill.totalAmount)}</p>
                   <p className="mt-1 text-sm text-slate-300">
                     {nextBill.status === 'overdue' ? 'Expired' : 'Due'} {formatShortDate(nextBill.dueDate)}
                   </p>
@@ -365,7 +360,7 @@ const Dashboard: React.FC = () => {
                 </div>
               ) : null}
               <div>
-                <p className="text-xl font-semibold tracking-tight sm:text-2xl">
+                <p className="text-lg font-semibold tracking-tight sm:text-2xl">
                   {nextCollection ? formatShortDate(nextCollection.scheduledDate) : 'No pickup queued'}
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-300">

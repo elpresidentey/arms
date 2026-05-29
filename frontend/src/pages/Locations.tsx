@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { ExternalLink, LocateFixed, Navigation, Radio, Recycle, Trash2 } from 'lucide-react'
+import { ExternalLink, LocateFixed, Navigation, Recycle, Trash2 } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import StatePanel from '../components/StatePanel'
 import Surface from '../components/Surface'
 import { useAuth } from '../contexts/AuthContext'
-import { useSocket } from '../contexts/SocketContext'
 import { collectionRoutesApi, locationsApi } from '../services/api'
 import { CollectionRoute, LocationPoi } from '../types'
 import { formatDayTime } from '../utils/format'
@@ -60,7 +59,6 @@ const getRouteTrackingState = (route: CollectionRoute) => {
 
 const Locations: React.FC = () => {
   const { user } = useAuth()
-  const { isConnected } = useSocket()
   const [locationType, setLocationType] = useState<'all' | LocationPoi['category']>('all')
 
   const center = {
@@ -124,10 +122,7 @@ const Locations: React.FC = () => {
             </div>
             <div className="rounded-xl border border-primary-100 bg-primary-50/80 px-4 py-3 shadow-sm">
               <p className="text-xs font-medium uppercase tracking-[0.14em] text-primary-700">Updates</p>
-              <p className="mt-2 flex items-center gap-2 text-sm font-semibold text-primary-900">
-                <Radio className="h-4 w-4" />
-                {isConnected ? 'Connected' : 'Polling'}
-              </p>
+              <p className="mt-2 text-sm font-semibold text-primary-900">Auto-refresh</p>
             </div>
           </div>
         }
