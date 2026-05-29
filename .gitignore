@@ -9,3 +9,6 @@ dist/
 backend/arms-dev.sqlite
 frontend/dist/
 backend/dist/
+
+.vercel
+.env*.local
