@@ -78,14 +78,30 @@ export function configureApp(app: INestApplication) {
   app.use('/auth/forgot-password', authLimiter);
 
   const allowedOrigins = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
+    ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean)
     : [process.env.FRONTEND_URL || 'http://localhost:3000'];
+
+  const isAllowedOrigin = (origin: string) => {
+    if (allowedOrigins.includes(origin)) {
+      return true;
+    }
+
+    if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) {
+      return true;
+    }
+
+    if (process.env.NODE_ENV !== 'production' && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/i.test(origin)) {
+      return true;
+    }
+
+    return false;
+  };
 
   app.enableCors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));

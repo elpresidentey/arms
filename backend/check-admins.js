@@ -1,12 +1,37 @@
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./arms-dev.sqlite');
+require('dotenv').config();
+const { Client } = require('pg');
 
-db.all("SELECT id, email, role, firstName, lastName FROM users WHERE role = 'admin'", (err, rows) => {
-  if (err) {
-    console.error('Error:', err);
-  } else {
-    console.log('Admin users in database:');
-    console.log(JSON.stringify(rows, null, 2));
+const DATABASE_URL = process.env.DATABASE_URL;
+
+if (!DATABASE_URL) {
+  console.error('DATABASE_URL is required in backend/.env');
+  process.exit(1);
+}
+
+async function checkAdmins() {
+  const client = new Client({
+    connectionString: DATABASE_URL,
+    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
+  });
+
+  await client.connect();
+
+  try {
+    const result = await client.query(`
+      SELECT id, email, role, "firstName", "lastName"
+      FROM users
+      WHERE role = 'admin'
+      ORDER BY "createdAt" DESC
+    `);
+
+    console.log('Admin users in Supabase Postgres:');
+    console.log(JSON.stringify(result.rows, null, 2));
+  } finally {
+    await client.end();
   }
-  db.close();
+}
+
+checkAdmins().catch((error) => {
+  console.error('Error:', error.message);
+  process.exit(1);
 });

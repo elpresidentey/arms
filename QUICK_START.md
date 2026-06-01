@@ -98,7 +98,7 @@ See `CLEANUP_GUIDE.md` for detailed instructions.
 
 ### Cleanup Scripts
 - `backend/cleanup-all.js` - Complete cleanup
-- `backend/cleanup-demo.js` - Database only
+- `backend/cleanup-postgres.js` - Supabase Postgres only
 - `backend/cleanup-supabase-auth.js` - Auth only
 
 ---
@@ -165,11 +165,10 @@ npm run cleanup:auth
 ```bash
 # Check database users
 cd backend
-node -e "const sqlite3 = require('sqlite3').verbose(); const db = new sqlite3.Database('./arms-dev.sqlite'); db.all('SELECT COUNT(*) as count FROM users', (err, rows) => { console.log('Users:', rows[0].count); db.close(); });"
+npm run check:users
 
 # Check auth users
-cd backend
-node cleanup-supabase-auth.js
+npm run check:admins
 ```
 
 ---

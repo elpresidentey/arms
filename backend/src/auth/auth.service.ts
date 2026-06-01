@@ -13,6 +13,9 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
   private readonly supabase: SupabaseClient;
   private readonly canManageSupabaseUsers: boolean;
+  private readonly tokenCacheTtlMs: number;
+  private readonly authUserCache = new Map<string, { expiresAt: number; value: { userId: string; email: string } }>();
+  private readonly accessTokenCache = new Map<string, { expiresAt: number; value: { userId: string; email: string; role: UserRole } }>();
 
   constructor(
     private usersService: UsersService,
@@ -29,6 +32,7 @@ export class AuthService {
     }
 
     this.canManageSupabaseUsers = Boolean(serviceRoleKey);
+    this.tokenCacheTtlMs = this.configService.get<number>('AUTH_TOKEN_CACHE_TTL_MS', 60000);
 
     this.supabase = createClient(supabaseUrl, supabaseKey, {
       auth: {
@@ -172,19 +176,36 @@ export class AuthService {
   }
 
   async verifySupabaseAccessToken(token: string) {
+    const cached = this.authUserCache.get(token);
+    if (cached && cached.expiresAt > Date.now()) {
+      return cached.value;
+    }
+
     const { data, error } = await this.supabase.auth.getUser(token);
 
     if (error || !data.user?.id || !data.user.email) {
       throw new UnauthorizedException('Invalid Supabase access token');
     }
 
-    return {
+    const authUser = {
       userId: data.user.id,
       email: data.user.email,
     };
+
+    this.authUserCache.set(token, {
+      expiresAt: Date.now() + this.tokenCacheTtlMs,
+      value: authUser,
+    });
+
+    return authUser;
   }
 
   async verifyAccessToken(token: string) {
+    const cached = this.accessTokenCache.get(token);
+    if (cached && cached.expiresAt > Date.now()) {
+      return cached.value;
+    }
+
     const authUser = await this.verifySupabaseAccessToken(token);
 
     const profile = await this.resolveProfileByAuthIdentity(authUser.userId, authUser.email);
@@ -192,11 +213,18 @@ export class AuthService {
       throw new UnauthorizedException('User profile not found for this authentication session');
     }
 
-    return {
+    const verifiedUser = {
       userId: profile.id,
       email: authUser.email,
       role: profile.role,
     };
+
+    this.accessTokenCache.set(token, {
+      expiresAt: Date.now() + this.tokenCacheTtlMs,
+      value: verifiedUser,
+    });
+
+    return verifiedUser;
   }
 
   private async getProfileByAuthIdentity(userId: string, email?: string | null) {
