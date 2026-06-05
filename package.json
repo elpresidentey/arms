@@ -4,13 +4,13 @@
   "description": "Automated Refuse Management Systems - Digital waste tracking and recycling platform",
   "scripts": {
     "dev": "node ./scripts/dev.mjs",
-    "dev:backend": "npm --prefix backend run start:dev",
-    "dev:frontend": "npm --prefix frontend run dev",
-    "build": "npm --prefix backend run build && npm --prefix frontend run build",
-    "build:backend": "npm --prefix backend run build",
-    "build:frontend": "npm --prefix frontend run build",
+    "dev:backend": "node ./scripts/run-npm.mjs backend run start:dev",
+    "dev:frontend": "node ./scripts/run-npm.mjs frontend run dev",
+    "build": "node ./scripts/run-npm.mjs backend run build && node ./scripts/run-npm.mjs frontend run build",
+    "build:backend": "node ./scripts/run-npm.mjs backend run build",
+    "build:frontend": "node ./scripts/run-npm.mjs frontend run build",
     "bootstrap:admin": "node bootstrap-admin.js",
-    "install:all": "npm --prefix backend install && npm --prefix frontend install"
+    "install:all": "node ./scripts/run-npm.mjs backend install && node ./scripts/run-npm.mjs frontend install"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.8"

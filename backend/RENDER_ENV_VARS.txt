@@ -1,0 +1,102 @@
+RENDER ENVIRONMENT VARIABLES - COPY ONE BY ONE
+================================================
+
+Instructions:
+1. In Render, click "Advanced" button
+2. For each variable below, click "Add Environment Variable"
+3. Copy the KEY (left side) into the "Key" field
+4. Copy the VALUE (right side) into the "Value" field
+5. Click "Add" and repeat for the next variable
+
+================================================
+
+KEY: DB_PROVIDER
+VALUE: postgres
+
+KEY: DATABASE_URL
+VALUE: postgresql://postgres.vnkvdnagnkvlyrnkeczh:HmNB2wnzzNkF2lOb@aws-1-eu-central-2.pooler.supabase.com:5432/postgres
+
+KEY: DB_HOST
+VALUE: aws-1-eu-central-2.pooler.supabase.com
+
+KEY: DB_PORT
+VALUE: 5432
+
+KEY: DB_USERNAME
+VALUE: postgres.vnkvdnagnkvlyrnkeczh
+
+KEY: DB_PASSWORD
+VALUE: HmNB2wnzzNkF2lOb
+
+KEY: DB_NAME
+VALUE: postgres
+
+KEY: DB_SSL
+VALUE: true
+
+KEY: DB_SYNC
+VALUE: false
+
+KEY: DB_SEED
+VALUE: false
+
+KEY: JWT_SECRET
+VALUE: QhwfbSHzMd5wVLWZMs6+GQYmk73NSUVJyt3iD91jVgA=
+
+KEY: JWT_EXPIRES_IN
+VALUE: 7d
+
+KEY: FRONTEND_URL
+VALUE: https://frontend-psi-weld-dh3z0pv6q4.vercel.app
+
+KEY: ALLOWED_ORIGINS
+VALUE: https://frontend-psi-weld-dh3z0pv6q4.vercel.app
+
+KEY: RESEND_API_KEY
+VALUE: re_E96Nd4bN_E7mXeytykUvgZFUwahfv4AJW
+
+KEY: RESEND_FROM_EMAIL
+VALUE: onboarding@resend.dev
+
+KEY: SUPPORT_EMAIL
+VALUE: support@your-verified-domain.com
+
+KEY: NODE_ENV
+VALUE: production
+
+KEY: PORT
+VALUE: 3001
+
+KEY: GEOAPIFY_API_KEY
+VALUE: b420e94b0c8a46d39bc3c7e2dda83811
+
+KEY: SUPABASE_URL
+VALUE: https://vnkvdnagnkvlyrnkeczh.supabase.co
+
+KEY: SUPABASE_ANON_KEY
+VALUE: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZua3ZkbmFnbmt2bHlybmtlY3poIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2MjU2NDYsImV4cCI6MjA5MzIwMTY0Nn0.hiQj72oMfM4smSzbDBKcxIJnIdcUZ9RrGVdOpq8lSbE
+
+KEY: SUPABASE_SERVICE_ROLE_KEY
+VALUE: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZua3ZkbmFnbmt2bHlybmtlY3poIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzYyNTY0NiwiZXhwIjoyMDkzMjAxNjQ2fQ.3pgRYnYaFP-NZsafr5GtZm1MqnEq6vVDdvectc1V8bo
+
+KEY: SUPABASE_PASSWORD_REDIRECT_URL
+VALUE: https://frontend-psi-weld-dh3z0pv6q4.vercel.app/reset-password
+
+KEY: SENTRY_DSN
+VALUE: https://f6562ffa926a4392a4955bf1902388ea@o4511359747293184.ingest.us.sentry.io/4511359766036480
+
+KEY: PAYSTACK_SECRET_KEY
+VALUE: sk_test_2123289e6435a7fd496da2597503940b8c38d3b1
+
+KEY: PAYSTACK_TEST_MODE
+VALUE: true
+
+KEY: BOOTSTRAP_ADMIN_TOKEN
+VALUE: arms_bootstrap_2026_secure_token_xyz
+
+================================================
+TOTAL: 28 environment variables
+================================================
+
+TIP: Keep this file open in a separate window while adding variables to Render.
+This makes it easy to copy-paste each KEY and VALUE.
