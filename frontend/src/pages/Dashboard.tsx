@@ -171,9 +171,17 @@ const Dashboard: React.FC = () => {
     recyclables?.filter((item) => item.status === 'logged' || item.status === 'pickup_requested').length || 0
   const completedCollections = collections?.filter((collection) => ['completed', 'verified'].includes(collection.status)).length || 0
   const pendingCollections = collections?.filter((collection) => ['scheduled', 'in_progress'].includes(collection.status)).length || 0
+  
+  const now = new Date()
   const nextCollection = collections
-    ?.filter((collection) => ['scheduled', 'in_progress'].includes(collection.status))
+    ?.filter((collection) => {
+      const isScheduledOrInProgress = ['scheduled', 'in_progress'].includes(collection.status)
+      const scheduledDate = new Date(collection.scheduledDate)
+      const isFuture = scheduledDate >= now
+      return isScheduledOrInProgress && isFuture
+    })
     .sort((a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime())[0]
+  
   const latestCollection = collections?.[0]
   const hasSummaryError = isWasteStatsError || isRecyclablesError || (isResident && isBalanceError)
   const servicePulseData = React.useMemo(
@@ -371,14 +379,14 @@ const Dashboard: React.FC = () => {
               ) : null}
               <div>
                 <p className="text-lg font-semibold tracking-tight sm:text-2xl">
-                  {nextCollection ? formatShortDate(nextCollection.scheduledDate) : 'No pickup queued'}
+                  {nextCollection ? formatShortDate(nextCollection.scheduledDate) : 'No upcoming pickups'}
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
                   {nextCollection
                     ? `${nextCollection.status.replace('_', ' ')} collection for ${nextCollection.street || user?.street || 'your street'}.`
                     : isResident
-                      ? 'Schedule a collection or check route availability to get the next service window.'
-                      : 'Review route schedules and logistics readiness to assign the next service window.'}
+                      ? 'No pickups scheduled for your area. Check the collection schedule or submit a special pickup request if needed.'
+                      : 'No upcoming collections scheduled. Review route schedules to assign service windows.'}
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-3 border-t border-white/10 pt-5">
