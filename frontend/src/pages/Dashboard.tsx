@@ -84,6 +84,8 @@ const Dashboard: React.FC = () => {
   } = useQuery({
     queryKey: ['my-recyclables'],
     queryFn: isResident ? recyclablesApi.getMyRecyclables : recyclablesApi.getRecyclables,
+    staleTime: 30_000,
+    refetchInterval: 60_000,
   })
 
   const { data: valuationSummary } = useQuery({
@@ -99,16 +101,22 @@ const Dashboard: React.FC = () => {
   } = useQuery({
     queryKey: [isResident ? 'my-waste-collections' : 'waste-collections'],
     queryFn: isResident ? wasteCollectionsApi.getMyCollections : wasteCollectionsApi.getCollections,
+    staleTime: 30_000, // 30 seconds
+    refetchInterval: 60_000, // Refetch every 60 seconds
   })
 
   const { data: routeSummary } = useQuery({
     queryKey: ['collection-routes-summary'],
     queryFn: collectionRoutesApi.getSummary,
+    staleTime: 30_000,
+    refetchInterval: 60_000,
   })
 
   const { data: requestSummary } = useQuery({
     queryKey: ['service-requests-summary'],
     queryFn: serviceRequestsApi.getSummary,
+    staleTime: 30_000,
+    refetchInterval: 60_000,
   })
 
   const {
@@ -120,6 +128,8 @@ const Dashboard: React.FC = () => {
     queryFn: billingApi.getMyBills,
     enabled: isResident,
     refetchOnWindowFocus: true,
+    staleTime: 30_000,
+    refetchInterval: 60_000,
   })
 
   const {
@@ -336,7 +346,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="border-t border-slate-200/80 bg-[linear-gradient(180deg,#1f2e1d_0%,#2a3d28_100%)] p-4 text-white sm:p-5 lg:border-l lg:border-t-0">
+          <div className="relative z-10 border-t border-slate-200/80 bg-[linear-gradient(180deg,#1f2e1d_0%,#2a3d28_100%)] p-4 text-white sm:p-5 lg:border-l lg:border-t-0">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Next action</p>
             <div className="mt-4 space-y-4 sm:mt-5 sm:space-y-5">
               {isResident && nextBill ? (

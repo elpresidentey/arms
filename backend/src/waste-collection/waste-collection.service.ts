@@ -18,7 +18,7 @@ export class WasteCollectionService {
 
   async findAll(): Promise<WasteCollection[]> {
     return this.wasteCollectionRepository.find({
-      order: { createdAt: 'DESC' },
+      order: { scheduledDate: 'DESC' },
       relations: ['resident'],
     });
   }
@@ -81,7 +81,7 @@ export class WasteCollectionService {
   async getMyCollections(residentId: string): Promise<WasteCollection[]> {
     return this.wasteCollectionRepository.find({
       where: { residentId },
-      order: { createdAt: 'DESC' },
+      order: { scheduledDate: 'DESC' },
       relations: ['resident'],
     });
   }
