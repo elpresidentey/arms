@@ -28,7 +28,6 @@ import RecentActivity from '../components/RecentActivity'
 import StatePanel from '../components/StatePanel'
 import Surface from '../components/Surface'
 import WasteTimeline from '../components/WasteTimeline'
-import WelcomeModal from '../components/WelcomeModal'
 import OnboardingChecklist from '../components/OnboardingChecklist'
 import { TimelineSkeleton } from '../components/Skeleton'
 import AdminBillIssuePanel from '../components/billing/AdminBillIssuePanel'
@@ -44,10 +43,8 @@ const Dashboard: React.FC = () => {
   const isResident = user?.role === 'resident'
   const canIssueBills = hasRole(user?.role, BILLING_ADMIN_ROLES)
   const {
-    shouldShowWelcome,
     shouldShowChecklist,
     state,
-    markWelcomeSeen,
     completeStep,
     dismissChecklist,
   } = useOnboarding()
@@ -173,38 +170,54 @@ const Dashboard: React.FC = () => {
   const pendingCollections = collections?.filter((collection) => ['scheduled', 'in_progress'].includes(collection.status)).length || 0
   
   const now = new Date()
-  const nextCollection = collections
-    ?.filter((collection) => {
-      const isScheduledOrInProgress = ['scheduled', 'in_progress'].includes(collection.status)
-      const scheduledDate = new Date(collection.scheduledDate)
-      const isFuture = scheduledDate >= now
-      return isScheduledOrInProgress && isFuture
-    })
-    .sort((a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime())[0]
+  const nextCollection = React.useMemo(() => {
+    if (!collections || collections.length === 0) return null
+    
+    return collections
+      .filter((collection) => {
+        if (!['scheduled', 'in_progress'].includes(collection.status)) return false
+        if (!collection.scheduledDate) return false
+        
+        const scheduledDate = new Date(collection.scheduledDate)
+        // Check if date is valid
+        if (isNaN(scheduledDate.getTime())) return false
+        
+        return scheduledDate >= now
+      })
+      .sort((a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime())[0] || null
+  }, [collections, now])
   
   const latestCollection = collections?.[0]
+  
   const hasSummaryError = isWasteStatsError || isRecyclablesError || (isResident && isBalanceError)
+  
   const servicePulseData = React.useMemo(
     () => buildResidentPulseData(collections || [], recyclables || []),
     [collections, recyclables],
   )
+  
   const workloadRingData = React.useMemo(
-    () => [
-      { name: 'Collections', value: pendingCollections, fill: '#3d5a36' },
-      { name: 'Requests', value: requestSummary?.openRequests ?? 0, fill: '#d97706' },
-      { name: 'Recyclables', value: pendingRecyclables, fill: '#16a34a' },
-    ].filter((entry) => entry.value > 0),
+    () => {
+      const data = [
+        { name: 'Collections', value: pendingCollections, fill: '#3d5a36' },
+        { name: 'Requests', value: requestSummary?.openRequests ?? 0, fill: '#d97706' },
+        { name: 'Recyclables', value: pendingRecyclables, fill: '#16a34a' },
+      ].filter((entry) => entry.value > 0)
+      
+      // Return empty array if no data to prevent chart rendering issues
+      return data.length > 0 ? data : []
+    },
     [pendingCollections, pendingRecyclables, requestSummary?.openRequests],
   )
 
   return (
     <div className="page-container">
-      {/* Welcome Modal for First-Time Users */}
-      <WelcomeModal
+      {/* Welcome Modal Disabled - User requested removal */}
+      {/* <WelcomeModal
         isOpen={shouldShowWelcome}
         onClose={markWelcomeSeen}
         userName={user?.firstName}
-      />
+      /> */}
 
       {/* Onboarding Checklist */}
       {shouldShowChecklist && isResident && (
@@ -724,15 +737,22 @@ const buildResidentPulseData = (
 
     const inRange = (value?: string) => {
       if (!value) return false
-      const parsed = new Date(value)
-      return parsed >= date && parsed < nextDate
+      try {
+        const parsed = new Date(value)
+        // Check if date is valid
+        if (isNaN(parsed.getTime())) return false
+        return parsed >= date && parsed < nextDate
+      } catch {
+        return false
+      }
     }
+
+    const collectionsCount = collections?.filter((item) => inRange(item.scheduledDate || item.createdAt)).length || 0
+    const recyclablesCount = recyclables?.filter((item) => inRange(item.createdAt)).length || 0
 
     return {
       label: date.toLocaleDateString('en-NG', { month: 'short', day: 'numeric' }),
-      activity:
-        collections.filter((item) => inRange(item.scheduledDate || item.createdAt)).length +
-        recyclables.filter((item) => inRange(item.createdAt)).length,
+      activity: collectionsCount + recyclablesCount,
     }
   })
 }
