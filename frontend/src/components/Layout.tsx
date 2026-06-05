@@ -250,51 +250,52 @@ const Layout: React.FC = () => {
                     <span className="text-slate-500">{user?.ward || 'Ward unavailable'}</span>
                   </div>
 
-                  {hasNotifications ? (
-                    <div ref={notificationsRef} className="relative">
-                      <button
-                        type="button"
-                        onClick={() => setIsNotificationsOpen((prev) => !prev)}
-                        className="relative inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 px-3 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md"
-                        aria-label="Open updates"
-                      >
-                        <Bell className="h-4 w-4 text-slate-500" />
-                        <span className="hidden sm:inline">Updates</span>
-                        {unreadCount > 0 ? (
-                          <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary-600 px-1.5 text-[10px] font-bold text-white">
-                            {unreadCount > 9 ? '9+' : unreadCount}
-                          </span>
-                        ) : null}
-                      </button>
+                  <div ref={notificationsRef} className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIsNotificationsOpen((prev) => !prev)}
+                      className="relative inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 px-3 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md"
+                      aria-label="Open updates"
+                    >
+                      <Bell className="h-4 w-4 text-slate-500" />
+                      <span className="hidden sm:inline">Updates</span>
+                      {unreadCount > 0 ? (
+                        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary-600 px-1.5 text-[10px] font-bold text-white">
+                          {unreadCount > 9 ? '9+' : unreadCount}
+                        </span>
+                      ) : null}
+                    </button>
 
-                      {isNotificationsOpen ? (
-                        <div className="fixed inset-x-4 top-20 z-[9999] max-h-[70vh] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-12 sm:w-[380px]">
-                          <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
-                            <div>
-                              <p className="text-sm font-semibold text-slate-950">Updates</p>
-                              <p className="text-xs text-slate-500">{unreadCount} unread</p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <button
-                                type="button"
-                                className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950"
-                                onClick={markAllRead}
-                                disabled={unreadCount === 0}
-                              >
-                                Mark read
-                              </button>
-                              <button
-                                type="button"
-                                className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-rose-600 transition-colors hover:bg-rose-50"
-                                onClick={clearAll}
-                              >
-                                Clear
-                              </button>
-                            </div>
+                    {isNotificationsOpen ? (
+                      <div className="fixed inset-x-4 top-20 z-[9999] max-h-[70vh] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-12 sm:w-[380px]">
+                        <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-950">Updates</p>
+                            <p className="text-xs text-slate-500">{unreadCount} unread</p>
                           </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={markAllRead}
+                              disabled={unreadCount === 0}
+                            >
+                              Mark read
+                            </button>
+                            <button
+                              type="button"
+                              className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-rose-600 transition-colors hover:bg-rose-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={clearAll}
+                              disabled={!hasNotifications}
+                            >
+                              Clear
+                            </button>
+                          </div>
+                        </div>
 
-                          <div className="max-h-[calc(70vh-58px)] divide-y divide-slate-100 overflow-y-auto">
-                            {notifications.map((item) => (
+                        <div className="max-h-[calc(70vh-58px)] divide-y divide-slate-100 overflow-y-auto">
+                          {hasNotifications ? (
+                            notifications.map((item) => (
                               <button
                                 key={item.id}
                                 type="button"
@@ -308,12 +309,22 @@ const Layout: React.FC = () => {
                                   <span className="mt-1.5 block text-[11px] font-medium text-slate-400">{new Date(item.createdAt).toLocaleString()}</span>
                                 </span>
                               </button>
-                            ))}
-                          </div>
+                            ))
+                          ) : (
+                            <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 mb-3">
+                                <Bell className="h-8 w-8 text-slate-400" />
+                              </div>
+                              <p className="text-sm font-semibold text-slate-900 mb-1">No updates yet</p>
+                              <p className="text-xs text-slate-500 max-w-[240px]">
+                                You'll see real-time notifications here when there are updates to your collections, payments, or requests.
+                              </p>
+                            </div>
+                          )}
                         </div>
-                      ) : null}
-                    </div>
-                  ) : null}
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>
