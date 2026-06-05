@@ -24,6 +24,7 @@ import { LogisticsModule } from './logistics/logistics.module';
 import { ServiceSchedulesModule } from './service-schedules/service-schedules.module';
 import { BillingModule } from './billing/billing.module';
 import { SecurityLoggerMiddleware } from './common/middleware/security-logger.middleware';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -100,6 +101,7 @@ import { SecurityLoggerMiddleware } from './common/middleware/security-logger.mi
     LogisticsModule,
     ServiceSchedulesModule,
     BillingModule,
+    HealthModule,
   ],
   providers: [
     // Apply rate limiting globally
