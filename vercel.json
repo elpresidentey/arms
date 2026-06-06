@@ -1,23 +1,7 @@
 {
-  "builds": [
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "frontend/dist"
-      }
-    }
-  ],
-  "outputDirectory": "frontend/dist",
   "buildCommand": "cd frontend && npm run build",
   "installCommand": "cd frontend && npm install",
-  "functions": {
-    "frontend/dist/**": {
-      "headers": {
-        "cache-control": "s-maxage=31536000"
-      }
-    }
-  },
+  "outputDirectory": "frontend/dist",
   "rewrites": [
     {
       "source": "/(.*)",
