@@ -374,7 +374,7 @@ export const MobileCollectionItem: React.FC<MobileCollectionItemProps> = ({
   onNavigate,
 }) => {
   const statusConfig = {
-    pending: { label: 'Pending', variant: 'secondary' as const },
+    pending: { label: 'Pending', variant: 'default' as const },
     in_progress: { label: 'In Progress', variant: 'warning' as const },
     completed: { label: 'Completed', variant: 'success' as const },
     failed: { label: 'Failed', variant: 'error' as const },

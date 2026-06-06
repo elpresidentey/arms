@@ -3,10 +3,9 @@
  */
 import React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react'
+import { AlertCircle, Eye, EyeOff } from 'lucide-react'
 import { cn } from '../utils'
 import { Input } from '../primitives/Input'
-import { Button } from '../primitives/Button'
 import { Stack } from '../layouts/MobileLayout'
 
 // Form Field Wrapper
@@ -342,7 +341,7 @@ export const FormActions: React.FC<FormActionsProps> = ({
 }
 
 // Complete Form wrapper with validation
-export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
+export interface FormProps extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   onSubmit: (data: FormData) => void | Promise<void>
   isSubmitting?: boolean
   title?: string

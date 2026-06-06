@@ -134,7 +134,7 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
         isResident ? 'xl:grid-cols-5' : 'xl:grid-cols-4'
       }`}
     >
-      {metricsConfig.map((metric, index) => (
+      {metricsConfig.map((metric) => (
         <MetricCard
           key={metric.label}
           accent={metric.accent}

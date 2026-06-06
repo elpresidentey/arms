@@ -10,8 +10,8 @@ import Surface from '../Surface'
 import StatePanel from '../StatePanel'
 import WasteTimeline from '../WasteTimeline'
 import { TimelineSkeleton } from '../Skeleton'
-import { formatDayTime, formatCurrency } from '../../utils/format'
-import { WasteCollection, ServiceRequestSummary } from '../../types'
+import { formatDayTime } from '../../utils/format'
+import { WasteCollection } from '../../types'
 
 interface StatusRowProps {
   icon: React.ReactNode
@@ -68,11 +68,12 @@ interface DashboardContentProps {
   latestCollection?: WasteCollection | null
   completedCollections: number
   pendingRecyclables: number
-  requestSummary?: ServiceRequestSummary
+  requestSummary?: {
+    openRequests?: number
+  }
   routeSummary?: {
     dueToday: number
     disruptedRoutes: number
-    overdueRequests: number
   }
   servicePulseData?: Array<{
     label: string
@@ -232,7 +233,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                   icon={<Clock className="h-4 w-4" />}
                   label="Open service requests"
                   value={`${requestSummary?.openRequests ?? 0} open`}
-                  tone={(routeSummary?.overdueRequests ?? 0) > 0 ? 'warn' : 'neutral'}
+                  tone={(requestSummary?.openRequests ?? 0) > 0 ? 'warn' : 'neutral'}
                 />
                 <StatusRow
                   icon={<Recycle className="h-4 w-4" />}

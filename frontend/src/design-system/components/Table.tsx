@@ -7,7 +7,6 @@ import { ChevronDown, ChevronUp, ArrowUpDown, Search, Filter, MoreHorizontal } f
 import { cn } from '../utils'
 import { Button } from '../primitives/Button'
 import { Input } from '../primitives/Input'
-import { Badge } from '../primitives/Badge'
 
 // Table variants
 const tableVariants = cva(
@@ -92,7 +91,6 @@ const Table = <T extends Record<string, any>>({
 }: TableProps<T>) => {
   const [sortKey, setSortKey] = React.useState<string | null>(null)
   const [sortDirection, setSortDirection] = React.useState<SortDirection>(null)
-  const [filters, setFilters] = React.useState<Record<string, string>>({})
   const [searchQuery, setSearchQuery] = React.useState('')
 
   // Handle sorting
@@ -113,14 +111,7 @@ const Table = <T extends Record<string, any>>({
   }
 
   // Handle filtering
-  const handleFilter = (key: string, value: string) => {
-    const newFilters = { ...filters, [key]: value }
-    if (!value) {
-      delete newFilters[key]
-    }
-    setFilters(newFilters)
-    onFilter?.(newFilters)
-  }
+
 
   // Get cell value
   const getCellValue = (row: T, column: ColumnDef<T>) => {
@@ -219,7 +210,7 @@ const Table = <T extends Record<string, any>>({
                       type="checkbox"
                       checked={isAllSelected}
                       ref={(input) => {
-                        if (input) input.indeterminate = isPartiallySelected
+                        if (input) input.indeterminate = Boolean(isPartiallySelected)
                       }}
                       onChange={(e) => handleSelectAll(e.target.checked)}
                       className="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
@@ -277,7 +268,7 @@ const Table = <T extends Record<string, any>>({
                         <td className="px-4 py-3">
                           <input
                             type="checkbox"
-                            checked={isSelected}
+                            checked={Boolean(isSelected)}
                             onChange={(e) => handleRowSelect(rowId, e.target.checked)}
                             className="rounded border-slate-300 text-primary-600 focus:ring-primary-500"
                           />

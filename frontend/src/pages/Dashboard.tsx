@@ -258,12 +258,14 @@ const Dashboard: React.FC = () => {
       )}
 
       {/* Dashboard Header */}
-      <DashboardHeader
-        user={user}
-        isResident={isResident}
-        nextBill={nextBill}
-        payableBillsCount={payableBills.length}
-      />
+      {user && (
+        <DashboardHeader
+          user={user}
+          isResident={isResident}
+          nextBill={nextBill}
+          payableBillsCount={payableBills.length}
+        />
+      )}
 
       {/* Admin Bill Issue Panel */}
       {!isResident && canIssueBills && <AdminBillIssuePanel compact />}
@@ -278,7 +280,7 @@ const Dashboard: React.FC = () => {
       ) : (
         <DashboardMetrics
           isResident={isResident}
-          wasteStats={wasteStats}
+          wasteStats={wasteStats ? { ...wasteStats, lastPickup: wasteStats.lastPickup || undefined } : undefined}
           balance={balance}
           walletSummary={walletSummary}
           valuationSummary={valuationSummary}
@@ -306,7 +308,7 @@ const Dashboard: React.FC = () => {
         completedCollections={completedCollections}
         pendingRecyclables={pendingRecyclables}
         requestSummary={requestSummary}
-        routeSummary={routeSummary}
+        routeSummary={routeSummary ? { dueToday: routeSummary.dueToday, disruptedRoutes: routeSummary.disruptedRoutes } : undefined}
         servicePulseData={servicePulseData}
         workloadRingData={workloadRingData}
       />

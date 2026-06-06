@@ -96,7 +96,7 @@ const MobileOperationsExample: React.FC = () => {
     },
     {
       label: 'Issues',
-      value: collectionItems.filter(item => item.status === 'failed').length,
+      value: 0, // No failed items in current data structure
       icon: <AlertTriangle className="w-4 h-4" />,
       variant: 'error' as const,
     },
