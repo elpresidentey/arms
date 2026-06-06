@@ -18,7 +18,15 @@ type LocationState = {
 
 /** Protected app index: role-aware dashboard */
 export const AppHome = () => {
-  const { user } = useAuth()
+  const { user, isLoading } = useAuth()
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-2 border-primary-600 border-t-transparent rounded-full"></div>
+      </div>
+    )
+  }
 
   if (!user) {
     return null
@@ -36,7 +44,15 @@ interface RoleGuardProps {
 export const RoleGuard = ({ access, children }: RoleGuardProps) => {
   const { user, isLoading } = useAuth()
 
-  if (isLoading || !user) {
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-2 border-primary-600 border-t-transparent rounded-full"></div>
+      </div>
+    )
+  }
+
+  if (!user) {
     return null
   }
 

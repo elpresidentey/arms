@@ -11,12 +11,12 @@ import Surface from '../components/Surface'
 import ErrorBoundary from '../components/ErrorBoundary'
 
 const recyclableTypeOptions = [
-  { value: 'plastic_bottles' as RecyclableType, label: 'Plastic Bottles' },
-  { value: 'glass_bottles' as RecyclableType, label: 'Glass Bottles' },
-  { value: 'aluminum_cans' as RecyclableType, label: 'Aluminum Cans' },
+  { value: 'plastic_bottles' as RecyclableType, label: 'Plastic bottles' },
+  { value: 'glass_bottles' as RecyclableType, label: 'Glass bottles' },
+  { value: 'aluminum_cans' as RecyclableType, label: 'Aluminum cans' },
   { value: 'cardboard' as RecyclableType, label: 'Cardboard' },
   { value: 'paper' as RecyclableType, label: 'Paper' },
-  { value: 'metal_scraps' as RecyclableType, label: 'Metal Scraps' },
+  { value: 'metal_scraps' as RecyclableType, label: 'Metal scraps' },
   { value: 'electronics' as RecyclableType, label: 'Electronics' },
   { value: 'other' as RecyclableType, label: 'Other' },
 ]
