@@ -85,7 +85,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const isProduction = import.meta.env.PROD
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
     const isVercelBackend = apiUrl.includes('vercel.app')
-    const isRenderBackend = apiUrl.includes('onrender.com')
 
     if (isProduction && (isVercelBackend || (!apiUrl || apiUrl.includes('backend-seven-chi-51')))) {
       // Vercel backend has issues - disable WebSocket connections

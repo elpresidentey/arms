@@ -12,7 +12,7 @@ import { PATHS } from '../routes/paths'
 
 const Layout: React.FC = () => {
   const { user, logout } = useAuth()
-  const { notifications, unreadCount, markAllRead, clearAll, markRead } = useSocket()
+  const { notifications, unreadCount, markAllRead, clearAll, markRead, isConnected } = useSocket()
   const location = useLocation()
   const navigate = useNavigate()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
