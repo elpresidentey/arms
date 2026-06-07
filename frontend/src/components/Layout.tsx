@@ -254,11 +254,17 @@ const Layout: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsNotificationsOpen((prev) => !prev)}
-                      className="relative inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200/80 bg-white/85 px-3 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-md"
+                      className={`relative inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200/80 px-3 text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md ${
+                        isConnected 
+                          ? 'bg-white/85 text-slate-700 hover:bg-white' 
+                          : 'bg-slate-100/85 text-slate-500 hover:bg-slate-200'
+                      }`}
                       aria-label="Open updates"
                     >
-                      <Bell className="h-4 w-4 text-slate-500" />
-                      <span className="hidden sm:inline">Updates</span>
+                      <Bell className={`h-4 w-4 ${isConnected ? 'text-slate-500' : 'text-slate-400'}`} />
+                      <span className="hidden sm:inline">
+                        {isConnected ? 'Updates' : 'Updates (Offline)'}
+                      </span>
                       {unreadCount > 0 ? (
                         <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary-600 px-1.5 text-[10px] font-bold text-white">
                           {unreadCount > 9 ? '9+' : unreadCount}

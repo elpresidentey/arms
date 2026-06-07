@@ -81,18 +81,44 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return
     }
 
-    const newSocket = io(import.meta.env.VITE_API_URL || 'http://localhost:3001', {
+    // Check if we're in production and disable socket connections on Vercel
+    const isProduction = import.meta.env.PROD
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+    const isVercelBackend = apiUrl.includes('vercel.app')
+
+    if (isProduction && isVercelBackend) {
+      // Vercel doesn't support WebSocket connections in serverless functions
+      // Set connected to false and skip socket initialization
+      setIsConnected(false)
+      console.warn('Real-time notifications disabled: Vercel backend does not support WebSocket connections')
+      return
+    }
+
+    const newSocket = io(apiUrl, {
       auth: {
         token,
       },
+      transports: ['websocket', 'polling'],
+      timeout: 5000,
     })
 
     newSocket.on('connect', () => {
       setIsConnected(true)
+      console.log('Socket connected successfully')
     })
 
     newSocket.on('disconnect', () => {
       setIsConnected(false)
+      console.log('Socket disconnected')
+    })
+
+    newSocket.on('connect_error', (error) => {
+      setIsConnected(false)
+      console.warn('Socket connection failed:', error.message)
+      // Don't retry on Vercel backend to prevent spam
+      if (apiUrl.includes('vercel.app')) {
+        newSocket.disconnect()
+      }
     })
 
     newSocket.on('waste-collection-update', (data) => {
