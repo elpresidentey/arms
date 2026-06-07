@@ -224,20 +224,21 @@
 }
 
 @layer components {
-  /* Typography Hierarchy System */
+  /* Typography Hierarchy System - Improved hierarchy with reduced text */
   
-  /* Card Labels - Small, uppercase, tracking */
+  /* Card Labels - Smaller, refined */
   .card-label {
-    @apply text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500;
-    letter-spacing: 0.08em;
+    @apply text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-500;
+    letter-spacing: 0.1em;
   }
   
-  /* Card Titles - Medium weight, good contrast */
+  /* Card Titles - Better contrast, title case */
   .card-title {
     @apply text-sm font-semibold text-slate-900 leading-tight;
+    text-transform: capitalize;
   }
   
-  /* Card Values - Large, bold, display font */
+  /* Card Values - Larger impact */
   .card-value {
     @apply font-display text-2xl sm:text-3xl font-bold text-slate-950 leading-none tracking-tight;
   }
@@ -246,9 +247,9 @@
     @apply font-display text-xl sm:text-2xl font-bold text-slate-950 leading-none tracking-tight;
   }
   
-  /* Card Details - Small, muted */
+  /* Card Details - Cleaner, concise */
   .card-detail {
-    @apply text-xs text-slate-600 leading-relaxed;
+    @apply text-xs text-slate-600 leading-normal;
   }
   
   /* Modal Titles - Large, bold */

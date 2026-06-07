@@ -13,15 +13,20 @@ import { getErrorMessage } from '../utils/errors'
 import { formatDayTime } from '../utils/format'
 
 const requestTypes = [
-  { value: 'bin_replacement', label: 'Bin replacement' },
-  { value: 'new_bin', label: 'New bin request' },
-  { value: 'bulky_pickup', label: 'Bulky waste pickup' },
-  { value: 'missed_pickup_follow_up', label: 'Missed pickup follow-up' },
-  { value: 'service_transfer', label: 'Service transfer' },
-  { value: 'property_onboarding', label: 'Property onboarding' },
+  { value: 'bin_replacement', label: 'Bin Replacement' },
+  { value: 'new_bin', label: 'New Bin Request' },
+  { value: 'bulky_pickup', label: 'Bulky Waste Pickup' },
+  { value: 'missed_pickup_follow_up', label: 'Missed Pickup Follow-Up' },
+  { value: 'service_transfer', label: 'Service Transfer' },
+  { value: 'property_onboarding', label: 'Property Onboarding' },
 ] as const
 
-const priorityOptions = ['low', 'medium', 'high', 'urgent'] as const
+const priorityOptions = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' },
+  { value: 'urgent', label: 'Urgent' }
+] as const
 
 const updateStatusOptions: ServiceRequest['status'][] = [
   'submitted',
@@ -237,7 +242,7 @@ const ServiceRequests: React.FC = () => {
                   }
                 >
                   {priorityOptions.map((priority) => (
-                    <option key={priority} value={priority}>{priority[0].toUpperCase() + priority.slice(1)}</option>
+                    <option key={priority.value} value={priority.value}>{priority.label}</option>
                   ))}
                 </select>
               </div>
@@ -329,7 +334,7 @@ const ServiceRequests: React.FC = () => {
                         {request.requestNumber}
                       </span>
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[request.status] ?? statusStyles.submitted}`}>
-                        {request.status.replace(/_/g, ' ')}
+                        {request.status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                       </span>
                     </div>
                     <h3 className="mt-3 text-lg font-semibold text-slate-950">{request.title}</h3>
@@ -342,7 +347,7 @@ const ServiceRequests: React.FC = () => {
                   </div>
                 </div>
                 <div className="mt-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
-                  <p className="font-medium text-slate-900">{request.type.replace(/_/g, ' ')}</p>
+                  <p className="font-medium text-slate-900">{request.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
                   <p className="mt-1">{request.address}</p>
                   {request.resolutionNotes ? <p className="mt-2 text-slate-500">Resolution: {request.resolutionNotes}</p> : null}
                 </div>
@@ -368,7 +373,7 @@ const ServiceRequests: React.FC = () => {
                         >
                           {updateStatusOptions.map((status) => (
                             <option key={status} value={status}>
-                              {status.replace(/_/g, ' ')}
+                              {status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                             </option>
                           ))}
                         </select>
@@ -390,8 +395,8 @@ const ServiceRequests: React.FC = () => {
                           }
                         >
                           {priorityOptions.map((priority) => (
-                            <option key={priority} value={priority}>
-                              {priority[0].toUpperCase() + priority.slice(1)}
+                            <option key={priority.value} value={priority.value}>
+                              {priority.label}
                             </option>
                           ))}
                         </select>

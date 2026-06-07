@@ -60,71 +60,71 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
         {
           accent: 'teal' as const,
           icon: <Truck className="h-5 w-5" />,
-          label: 'Last pickup',
+          label: 'Last Pickup',
           value: isLoading.wasteStats ? 'Loading' : formatShortDate(wasteStats?.lastPickup),
-          detail: `${completedCollections} completed records`,
+          detail: `${completedCollections} completed`,
         },
         {
           accent: 'sky' as const,
           icon: <Calendar className="h-5 w-5" />,
-          label: 'This month',
+          label: 'This Month',
           value: isLoading.wasteStats ? 'Loading' : `${wasteStats?.thisMonth || 0}`,
-          detail: `${pendingCollections} scheduled or active`,
+          detail: `${pendingCollections} pending`,
         },
         {
           accent: 'amber' as const,
           icon: <Wallet className="h-5 w-5" />,
-          label: 'Wallet balance',
+          label: 'Balance',
           value: isLoading.balance ? 'Loading' : formatCurrency(balance?.balance || 0),
-          detail: `${walletSummary?.transactionCount ?? 0} wallet transactions`,
+          detail: `${walletSummary?.transactionCount ?? 0} transactions`,
         },
         {
           accent: 'emerald' as const,
           icon: <Recycle className="h-5 w-5" />,
-          label: 'Recycling value',
+          label: 'Recycling',
           value: isLoading.recyclables ? 'Loading' : formatCurrency(valuationSummary?.totalEstimated || 0),
-          detail: `${valuationSummary?.pendingItems ?? pendingRecyclables} pending items`,
+          detail: `${valuationSummary?.pendingItems ?? pendingRecyclables} pending`,
         },
         {
           accent: 'rose' as const,
           icon: <Receipt className="h-5 w-5" />,
-          label: 'Refuse bills',
+          label: 'Bills',
           value: (billsSummary?.payableBillsCount || 0) > 0 
             ? formatCurrency(billsSummary?.totalDue || 0) 
-            : 'Paid up',
+            : 'Paid Up',
           detail: (billsSummary?.payableBillsCount || 0) > 0
-            ? `${billsSummary?.payableBillsCount} bill${(billsSummary?.payableBillsCount || 0) > 1 ? 's' : ''} outstanding`
-            : `${billsSummary?.paidBillsCount || 0} paid on record`,
+            ? `${billsSummary?.payableBillsCount} outstanding`
+            : `${billsSummary?.paidBillsCount || 0} paid`,
         },
       ]
     : [
         {
           accent: 'teal' as const,
           icon: <Truck className="h-5 w-5" />,
-          label: 'Last pickup',
+          label: 'Last Pickup',
           value: isLoading.wasteStats ? 'Loading' : formatShortDate(wasteStats?.lastPickup),
-          detail: `${completedCollections} completed records`,
+          detail: `${completedCollections} completed`,
         },
         {
           accent: 'sky' as const,
           icon: <Calendar className="h-5 w-5" />,
-          label: 'This month',
+          label: 'This Month',
           value: isLoading.wasteStats ? 'Loading' : `${wasteStats?.thisMonth || 0}`,
-          detail: `${pendingCollections} scheduled or active`,
+          detail: `${pendingCollections} pending`,
         },
         {
           accent: 'indigo' as const,
           icon: <RouteIcon className="h-5 w-5" />,
-          label: 'Routes due today',
+          label: 'Routes Today',
           value: `${routeSummary?.dueToday ?? 0}`,
-          detail: `${routeSummary?.disruptedRoutes ?? 0} disrupted routes`,
+          detail: `${routeSummary?.disruptedRoutes ?? 0} disrupted`,
         },
         {
           accent: 'violet' as const,
           icon: <Recycle className="h-5 w-5" />,
-          label: 'Recycling queue',
+          label: 'Recycling',
           value: isLoading.recyclables ? 'Loading' : `${pendingRecyclables}`,
-          detail: 'resident items awaiting pickup or processing',
+          detail: 'awaiting pickup',
         },
       ]
 

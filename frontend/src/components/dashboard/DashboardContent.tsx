@@ -104,18 +104,14 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
     <section className="grid grid-cols-1 gap-5 xl:grid-cols-[1.35fr_0.65fr]">
       {/* Main timeline */}
       <Surface
-        title="Collection timeline"
-        subtitle={
-          isResident 
-            ? 'Recent and upcoming service activity for this account.' 
-            : 'Recent and upcoming refuse collection activity across resident routes.'
-        }
+        title="Recent Activity"
+        subtitle="Latest collections and updates"
         action={
           <Link 
             to="/app/waste-history" 
             className="inline-flex items-center gap-2 text-sm font-semibold text-primary-700 hover:text-primary-800"
           >
-            View history
+            View All
             <ArrowRight className="h-4 w-4" />
           </Link>
         }
@@ -142,8 +138,8 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
       <div className="space-y-5">
         {/* Activity chart */}
         <Surface
-          title={isResident ? 'Recent account activity' : 'Recent operations activity'}
-          subtitle="Collection and recycling activity for the last six days."
+          title="Activity Trend"
+          subtitle="Last 6 days"
         >
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
@@ -190,33 +186,33 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
 
         {/* Service status */}
         <Surface 
-          title="Service status" 
-          subtitle={isResident ? "Your account activity summary." : "What needs attention now."}
+          title="Status Overview" 
+          subtitle="Current account status"
         >
           <div className="space-y-1">
             {isResident ? (
               <>
                 <StatusRow
                   icon={<Truck className="h-4 w-4" />}
-                  label="Next collection"
-                  value={nextCollection ? formatDayTime(nextCollection.scheduledDate) : 'Not scheduled'}
+                  label="Next Collection"
+                  value={nextCollection ? formatDayTime(nextCollection.scheduledDate) : 'Not Scheduled'}
                   tone={nextCollection ? 'good' : 'neutral'}
                 />
                 <StatusRow
                   icon={<CheckCircle2 className="h-4 w-4" />}
-                  label="Completed collections"
+                  label="Completed"
                   value={`${completedCollections} this month`}
                   tone="good"
                 />
                 <StatusRow
                   icon={<Recycle className="h-4 w-4" />}
                   label="Recyclables"
-                  value={`${pendingRecyclables} pending pickup`}
+                  value={`${pendingRecyclables} pending`}
                   tone={pendingRecyclables > 0 ? 'warn' : 'good'}
                 />
                 <StatusRow
                   icon={<Clock className="h-4 w-4" />}
-                  label="Service requests"
+                  label="Requests"
                   value={`${requestSummary?.openRequests ?? 0} open`}
                   tone={(requestSummary?.openRequests ?? 0) > 0 ? 'warn' : 'good'}
                 />
@@ -225,26 +221,26 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
               <>
                 <StatusRow
                   icon={<CheckCircle2 className="h-4 w-4" />}
-                  label="Route readiness"
+                  label="Routes"
                   value={`${routeSummary?.dueToday ?? 0} due today`}
                   tone={(routeSummary?.disruptedRoutes ?? 0) > 0 ? 'warn' : 'good'}
                 />
                 <StatusRow
                   icon={<Clock className="h-4 w-4" />}
-                  label="Open service requests"
+                  label="Requests"
                   value={`${requestSummary?.openRequests ?? 0} open`}
                   tone={(requestSummary?.openRequests ?? 0) > 0 ? 'warn' : 'neutral'}
                 />
                 <StatusRow
                   icon={<Recycle className="h-4 w-4" />}
                   label="Recyclables"
-                  value={`${pendingRecyclables} awaiting action`}
+                  value={`${pendingRecyclables} awaiting`}
                   tone={pendingRecyclables > 0 ? 'warn' : 'good'}
                 />
                 <StatusRow
                   icon={<Truck className="h-4 w-4" />}
-                  label="Latest collection"
-                  value={latestCollection ? formatDayTime(latestCollection.scheduledDate) : 'No record yet'}
+                  label="Latest"
+                  value={latestCollection ? formatDayTime(latestCollection.scheduledDate) : 'No Record'}
                   tone="neutral"
                 />
               </>
@@ -254,12 +250,8 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
 
         {/* Workload distribution */}
         <Surface
-          title="Current workload mix"
-          subtitle={
-            isResident 
-              ? 'A compact view of the queues currently attached to your account.' 
-              : 'A compact view of active queues across resident operations.'
-          }
+          title="Current Workload"
+          subtitle="Active items by category"
         >
           {workloadRingData.length === 0 ? (
             <StatePanel 
@@ -313,29 +305,29 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
         </Surface>
 
         {/* Quick actions */}
-        <Surface title="Quick actions" subtitle="Common tasks for this account.">
+        <Surface title="Quick Actions" subtitle="Common tasks">
           <div className="grid grid-cols-1 gap-2">
             {isResident ? (
               <>
                 <QuickLink 
                   to="/app/schedule-collection" 
                   icon={<Calendar className="h-4 w-4" />} 
-                  label="Schedule refuse collection" 
+                  label="Schedule Collection" 
                 />
                 <QuickLink 
                   to="/app/recyclables" 
                   icon={<Recycle className="h-4 w-4" />} 
-                  label="Log recyclables" 
+                  label="Log Items" 
                 />
                 <QuickLink 
                   to="/app/locations" 
                   icon={<MapPin className="h-4 w-4" />} 
-                  label="Find nearby refuse points" 
+                  label="Find Locations" 
                 />
                 <QuickLink 
                   to="/app/wallet" 
                   icon={<Wallet className="h-4 w-4" />} 
-                  label="Review wallet" 
+                  label="View Wallet" 
                 />
               </>
             ) : (
@@ -343,17 +335,17 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                 <QuickLink 
                   to="/app/operations" 
                   icon={<Truck className="h-4 w-4" />} 
-                  label="Open refuse operations" 
+                  label="Operations" 
                 />
                 <QuickLink 
                   to="/app/reports" 
                   icon={<ArrowRight className="h-4 w-4" />} 
-                  label="Review complaints" 
+                  label="Complaints" 
                 />
                 <QuickLink 
                   to="/app/service-requests" 
                   icon={<Clock className="h-4 w-4" />} 
-                  label="Manage resident requests" 
+                  label="Requests" 
                 />
               </>
             )}

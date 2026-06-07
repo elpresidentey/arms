@@ -115,10 +115,10 @@ const CollectionRequests: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, type: e.target.value as CollectionRequestType })}
                   className="input"
                 >
-                  <option value="routine">Routine collection</option>
-                  <option value="urgent">Urgent collection</option>
-                  <option value="bulky">Bulky waste pickup</option>
-                  <option value="special">Special request</option>
+                  <option value="routine">Routine Collection</option>
+                  <option value="urgent">Urgent Collection</option>
+                  <option value="bulky">Bulky Waste Pickup</option>
+                  <option value="special">Special Request</option>
                 </select>
               </div>
 
@@ -184,11 +184,11 @@ const CollectionRequests: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-2">
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold ${typeColors[request.type]}`}>
-                        {request.type.replace('_', ' ')}
+                        {request.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                       </span>
                       <span className={`rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1 ${statusColors[request.status]}`}>
                         {statusIcons[request.status]}
-                        {request.status.replace('_', ' ')}
+                        {request.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                       </span>
                     </div>
 

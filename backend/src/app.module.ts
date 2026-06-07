@@ -23,6 +23,7 @@ import { AdminInvitesModule } from './admin-invites/admin-invites.module';
 import { LogisticsModule } from './logistics/logistics.module';
 import { ServiceSchedulesModule } from './service-schedules/service-schedules.module';
 import { BillingModule } from './billing/billing.module';
+import { SchedulerModule } from './scheduler/scheduler.module';
 import { SecurityLoggerMiddleware } from './common/middleware/security-logger.middleware';
 import { HealthModule } from './health/health.module';
 
@@ -101,6 +102,7 @@ import { HealthModule } from './health/health.module';
     LogisticsModule,
     ServiceSchedulesModule,
     BillingModule,
+    SchedulerModule,
     HealthModule,
   ],
   providers: [

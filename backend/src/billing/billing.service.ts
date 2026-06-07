@@ -460,6 +460,31 @@ export class BillingService {
     return `BILL-${period}-${sequence}`;
   }
 
+  /**
+   * Generate monthly bill for a specific user (used by scheduler)
+   */
+  async generateMonthlyBill(userId: string): Promise<Bill> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId, isActive: true, role: UserRole.RESIDENT },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found or not eligible for billing');
+    }
+
+    const period = this.getCurrentBillingPeriod();
+    const existingBill = await this.billRepository.findOne({
+      where: { userId: user.id, billingPeriod: period },
+    });
+
+    if (existingBill) {
+      this.logger.warn(`Bill already exists for user ${userId} in period ${period}`);
+      return existingBill;
+    }
+
+    return this.createMonthlyBill(user, period);
+  }
+
   private async createMonthlyBill(user: User, period: string): Promise<Bill> {
     const propertyType = this.getBillPropertyType(user);
     const amount = this.getMonthlyRate(propertyType);

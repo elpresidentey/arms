@@ -35,36 +35,36 @@ const Layout: React.FC = () => {
   const navigation = isResident
     ? [
         { name: 'Dashboard', href: '/app', icon: Home },
-        { name: 'Pay bills', href: '/app/bills', icon: Receipt, badge: pendingBillCount },
-        { name: 'Collection history', href: '/app/waste-history', icon: History },
-        { name: 'My recyclables', href: '/app/recyclables', icon: Recycle },
+        { name: 'Pay Bills', href: '/app/bills', icon: Receipt, badge: pendingBillCount },
+        { name: 'Collection History', href: '/app/waste-history', icon: History },
+        { name: 'My Recyclables', href: '/app/recyclables', icon: Recycle },
         { name: 'Wallet', href: '/app/wallet', icon: Wallet },
         { name: 'Complaints', href: '/app/reports', icon: FileText },
-        { name: 'Nearby points', href: '/app/locations', icon: MapPin },
+        { name: 'Nearby Points', href: '/app/locations', icon: MapPin },
         { name: 'Schedules', href: '/app/schedules', icon: CalendarClock },
         { name: 'Service schedules', href: '/app/service-schedules', icon: CalendarClock },
-        { name: 'Request collection', href: '/app/collection-requests', icon: Truck },
-        { name: 'My requests', href: '/app/service-requests', icon: ClipboardList },
+        { name: 'Request Collection', href: '/app/collection-requests', icon: Truck },
+        { name: 'My Requests', href: '/app/service-requests', icon: ClipboardList },
         { name: 'Edit Profile', href: '/app/profile', icon: User },
       ]
     : [
         { name: 'Dashboard', href: PATHS.app, icon: Home },
         { name: 'Operations', href: PATHS.appOperations, icon: Activity },
         ...(showBillingAdmin
-          ? [{ name: 'Bill payments', href: PATHS.appBillingAdmin, icon: Receipt }]
+          ? [{ name: 'Bill Payments', href: PATHS.appBillingAdmin, icon: Receipt }]
           : []),
         ...(showFinance
           ? [{ name: 'Finance', href: PATHS.appFinance, icon: DollarSign }]
           : []),
         { name: 'Collections', href: '/app/waste-history', icon: History },
         { name: 'Complaints', href: '/app/reports', icon: FileText },
-        { name: 'Resident requests', href: '/app/service-requests', icon: ClipboardList },
-        { name: 'Route schedules', href: '/app/schedules', icon: CalendarClock },
-        { name: 'Service schedules', href: '/app/service-schedules', icon: CalendarClock },
-        { name: 'Collection requests', href: '/app/collection-requests-queue', icon: Truck },
+        { name: 'Resident Requests', href: '/app/service-requests', icon: ClipboardList },
+        { name: 'Route Schedules', href: '/app/schedules', icon: CalendarClock },
+        { name: 'Service Schedules', href: '/app/service-schedules', icon: CalendarClock },
+        { name: 'Collection Requests', href: '/app/collection-requests-queue', icon: Truck },
         { name: 'Locations', href: '/app/locations', icon: MapPin },
-        { name: 'Recycling oversight', href: '/app/recyclables', icon: Recycle },
-        { name: 'Withdrawal approvals', href: '/app/withdrawal-approvals', icon: DollarSign },
+        { name: 'Recycling Oversight', href: '/app/recyclables', icon: Recycle },
+        { name: 'Withdrawal Approvals', href: '/app/withdrawal-approvals', icon: DollarSign },
         { name: 'Edit Profile', href: '/app/profile', icon: User },
       ]
 
@@ -86,13 +86,13 @@ const Layout: React.FC = () => {
 
   const navigationSections = useMemo(() => {
     const essentials = navigation.filter((item) =>
-      ['Dashboard', 'Pay bills', 'Collection history', 'Schedules', 'Service schedules', 'Nearby points', 'Request collection'].includes(item.name),
+      ['Dashboard', 'Pay Bills', 'Collection History', 'Schedules', 'Service Schedules', 'Nearby Points', 'Request Collection'].includes(item.name),
     )
     const residentServices = navigation.filter((item) =>
-      ['Complaints', 'My requests', 'My recyclables', 'Wallet'].includes(item.name),
+      ['Complaints', 'My Requests', 'My Recyclables', 'Wallet'].includes(item.name),
     )
     const operations = navigation.filter((item) =>
-      ['Operations', 'Bill payments', 'Finance', 'Collections', 'Resident requests', 'Route schedules', 'Service schedules', 'Collection requests', 'Locations', 'Recycling oversight', 'Withdrawal approvals'].includes(item.name),
+      ['Operations', 'Bill Payments', 'Finance', 'Collections', 'Resident Requests', 'Route Schedules', 'Service Schedules', 'Collection Requests', 'Locations', 'Recycling Oversight', 'Withdrawal Approvals'].includes(item.name),
     )
     const adminQueues = navigation.filter((item) => ['Complaints'].includes(item.name) && !isResident)
     const account = navigation.filter((item) => ['Edit Profile'].includes(item.name))

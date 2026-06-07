@@ -102,7 +102,9 @@ export class AuthService {
     });
 
     if (error || !data.session) {
-      throw new UnauthorizedException(error?.message || 'Invalid credentials');
+      // Log the actual error for debugging but return a generic message
+      this.logger.warn(`Login failed for ${loginDto.email}: ${error?.message || 'No session returned'}`);
+      throw new UnauthorizedException('Invalid email or password. Please check your credentials and try again.');
     }
 
     const user = await this.getProfileByAuthIdentity(data.user.id, data.user.email);

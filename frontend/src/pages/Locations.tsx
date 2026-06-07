@@ -36,8 +36,8 @@ const formatDistance = (meters: number) => {
 }
 
 const getLocationStatusLabel = (status?: LocationPoi['liveStatus']) => {
-  if (!status) return 'listed'
-  return status.replace(/_/g, ' ')
+  if (!status) return 'Listed'
+  return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
 }
 
 const getRouteTrackingState = (route: CollectionRoute) => {
@@ -130,16 +130,27 @@ const Locations: React.FC = () => {
 
       <Surface title="Location finder" subtitle="Filter public bins and larger drop-off points near Amuwo Odofin.">
         <div className="mb-4 flex flex-wrap gap-2">
-          {(['all', 'bin', 'collection_point'] as const).map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              onClick={() => setLocationType(filter)}
-              className={`btn h-9 px-3 ${locationType === filter ? 'btn-primary' : 'btn-secondary'}`}
-            >
-              {filter === 'all' ? 'All locations' : filter.replace('_', ' ')}
-            </button>
-          ))}
+          {(['all', 'bin', 'collection_point'] as const).map((filter) => {
+            const getFilterLabel = (filterType: string) => {
+              switch (filterType) {
+                case 'all': return 'All Locations'
+                case 'bin': return 'Bins'
+                case 'collection_point': return 'Collection Points'
+                default: return filterType
+              }
+            }
+            
+            return (
+              <button
+                key={filter}
+                type="button"
+                onClick={() => setLocationType(filter)}
+                className={`btn h-9 px-3 ${locationType === filter ? 'btn-primary' : 'btn-secondary'}`}
+              >
+                {getFilterLabel(filter)}
+              </button>
+            )
+          })}
           <a
             href={buildGoogleMapsUrl(center.latitude, center.longitude, center.label)}
             target="_blank"

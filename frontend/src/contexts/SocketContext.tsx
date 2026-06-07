@@ -67,7 +67,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setNotifications((prev) => [entry, ...prev].slice(0, 50))
   }
 
-  const formatStatus = (value: unknown) => String(value ?? '').replace(/_/g, ' ')
+  const formatStatus = (value: unknown) => String(value ?? '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
 
   const isRelevantToCurrentUser = (payload: unknown) => {
     if (!user || typeof payload !== 'object' || payload === null) return true
