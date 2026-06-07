@@ -1,21 +1,19 @@
-# Deploy ARMS - Final Steps
+# Deploy ARMS - Quick Guide
 
-## ✅ Completed
-- [x] Code pushed to GitHub
-- [x] Auth sync issues fixed for all existing users
-- [x] Text contrast fix applied
-- [x] Backend running on Render
+## System Status
+✅ **Backend**: Live at https://arms-c56l.onrender.com  
+✅ **Database**: 9 active users, all data synced  
+✅ **Auth**: All accounts working  
+⚠️ **Frontend**: Needs Vercel environment variables
 
-## ⚠️ CRITICAL: Configure Vercel Environment Variables
+## ONE STEP TO COMPLETE DEPLOYMENT
 
-**This is the ONLY step blocking deployment.**
+### Configure Vercel Environment Variables
 
-### 1. Go to Vercel Dashboard
-Visit: https://vercel.com/ekenes-projects-c08862f30/frontend/settings/environment-variables
+1. **Go to Vercel Dashboard**:  
+   https://vercel.com/ekenes-projects-c08862f30/frontend/settings/environment-variables
 
-### 2. Add These 7 Variables
-
-For **Production**, **Preview**, AND **Development** environments:
+2. **Add these 7 variables** for Production, Preview, and Development:
 
 ```
 VITE_SUPABASE_URL
@@ -40,68 +38,30 @@ VITE_ENABLE_PAYOUTS
 true
 ```
 
-### 3. Save and Redeploy
-1. Click **Save** after adding each variable
-2. Go to **Deployments** tab
-3. Click **Redeploy** on the latest deployment
-4. Wait ~2 minutes for deployment to complete
-
-## Quick Status Check
-
-### Backend (Render)
-```bash
-curl https://arms-c56l.onrender.com/health
-```
-Expected: `{"status":"ok","timestamp":"..."}`
-
-### Frontend (Vercel)
-After adding env vars and redeploying:
-- Visit your Vercel URL
-- Should load without "Missing Supabase" error
-- Try logging in with: `conceptsandcontexts@gmail.com`
-
-## Deployment URLs
-
-- **Frontend**: https://[your-project].vercel.app (check Vercel dashboard)
-- **Backend**: https://arms-c56l.onrender.com
-- **Database**: Supabase PostgreSQL (connected)
-- **Auth**: Supabase Auth (working)
+3. **Save and Redeploy**:
+   - Save each variable
+   - Go to Deployments tab
+   - Click Redeploy
+   - Wait ~2 minutes
 
 ## Test Accounts
 
-After deployment, test with these existing accounts:
+After deployment, test with:
+- **Admin**: admin@arms.com (go to `/admin/login`)
+- **Resident**: conceptsandcontexts@gmail.com (go to `/login`)
 
-1. **Admin Account**
-   - Email: `admin@arms.com`
-   - Go to: `/admin/login`
+## Deployment URLs
 
-2. **Resident Accounts**
-   - Email: `conceptsandcontexts@gmail.com`
-   - Email: `iduweekeneleonard@gmail.com` (fresh start, data cleared)
-   - Go to: `/login`
+- **Frontend**: https://[your-vercel-url].vercel.app
+- **Backend**: https://arms-c56l.onrender.com
+- **Health Check**: https://arms-c56l.onrender.com/health
 
-## Post-Deployment Verification
+## That's It!
 
-1. ✅ Frontend loads without errors
-2. ✅ Users can log in successfully
-3. ✅ Dashboard displays correctly
-4. ✅ No "out of sync" errors
-5. ✅ No "Missing Supabase" errors
+Once you add the Vercel environment variables and redeploy:
+- ✅ All 9 users can log in
+- ✅ New users can register
+- ✅ System is fully operational
+- ✅ Ready for production
 
-## If You Need Help
-
-- **Missing env vars**: Error will show in browser console
-- **Backend down**: Check Render logs at dashboard.render.com
-- **Login fails**: Verify auth sync by running `node scripts/fix-auth-sync.js` in backend
-
-## Success! 🎉
-
-Once Vercel environment variables are configured and the frontend redeploys:
-- All 3 existing users can log in
-- New users can register
-- Full system is operational
-- Ready for production use
-
----
-
-**Time to complete**: ~5 minutes (just Vercel config)
+**Time to complete**: 5 minutes
