@@ -151,7 +151,7 @@ const Wallet: React.FC = () => {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-primary-100 bg-primary-700 px-4 py-3 text-white shadow-sm">
               <p className="label text-primary-200">Balance</p>
-              <p className="mt-2 heading-3">{isBalanceLoading ? 'Loading...' : formatCurrency(currentBalance)}</p>
+              <p className="mt-2 heading-3 text-white">{isBalanceLoading ? 'Loading...' : formatCurrency(currentBalance)}</p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
               <p className="label text-slate-500">Total earned</p>
