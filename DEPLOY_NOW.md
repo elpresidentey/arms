@@ -1,5 +1,7 @@
 # Deploy ARMS - Quick Guide
 
+**📚 For detailed Vercel setup**: See [frontend/VERCEL_ENV_SETUP.md](frontend/VERCEL_ENV_SETUP.md)
+
 ## System Status
 ✅ **Backend**: Live at https://arms-c56l.onrender.com  
 ✅ **Database**: 9 active users, all data synced  
@@ -9,6 +11,8 @@
 ## ONE STEP TO COMPLETE DEPLOYMENT
 
 ### Configure Vercel Environment Variables
+
+**Quick Instructions** (or see [detailed guide](frontend/VERCEL_ENV_SETUP.md)):
 
 1. **Go to Vercel Dashboard**:  
    https://vercel.com/ekenes-projects-c08862f30/frontend/settings/environment-variables
