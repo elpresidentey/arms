@@ -81,18 +81,21 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return
     }
 
-    // Check if we're in production and disable socket connections on Vercel
+    // Check if we're in production and the backend supports WebSockets
     const isProduction = import.meta.env.PROD
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
     const isVercelBackend = apiUrl.includes('vercel.app')
+    const isRenderBackend = apiUrl.includes('onrender.com')
 
-    if (isProduction && isVercelBackend) {
-      // Vercel doesn't support WebSocket connections in serverless functions
-      // Set connected to false and skip socket initialization
+    if (isProduction && (isVercelBackend || (!apiUrl || apiUrl.includes('backend-seven-chi-51')))) {
+      // Vercel backend has issues - disable WebSocket connections
       setIsConnected(false)
-      console.warn('Real-time notifications disabled: Vercel backend does not support WebSocket connections')
+      console.warn('Real-time notifications disabled: Backend deployment issue detected')
       return
     }
+
+    // Render backend supports WebSockets, so we can connect
+    console.log(`Initializing socket connection to: ${apiUrl}`)
 
     const newSocket = io(apiUrl, {
       auth: {
@@ -115,8 +118,8 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     newSocket.on('connect_error', (error) => {
       setIsConnected(false)
       console.warn('Socket connection failed:', error.message)
-      // Don't retry on Vercel backend to prevent spam
-      if (apiUrl.includes('vercel.app')) {
+      // Don't retry on problematic backends to prevent spam
+      if (apiUrl.includes('vercel.app') || apiUrl.includes('backend-seven-chi-51')) {
         newSocket.disconnect()
       }
     })
