@@ -69,9 +69,19 @@ export function configureApp(app: INestApplication) {
 
   const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 5,
+    max: parseInt(process.env.AUTH_RATE_LIMIT || (process.env.NODE_ENV === 'production' ? '10' : '50')),
     skipSuccessfulRequests: true,
     message: 'Too many authentication attempts, please try again later.',
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res) => {
+      res.status(429).json({
+        message: 'Too many authentication attempts',
+        error: 'Too Many Requests',
+        statusCode: 429,
+        retryAfter: '15 minutes',
+      });
+    },
   });
   app.use('/auth/login', authLimiter);
   app.use('/auth/register', authLimiter);
