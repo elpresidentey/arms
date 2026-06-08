@@ -10,6 +10,7 @@ import Register from '../pages/Register'
 import ForgotPassword from '../pages/ForgotPassword'
 import ResetPassword from '../pages/ResetPassword'
 import AuthCallback from '../pages/AuthCallback'
+import DiagnosticPage from '../pages/DiagnosticPage'
 import FooterInfoPage from '../pages/FooterInfoPage'
 import WasteHistory from '../pages/WasteHistory'
 import Recyclables from '../pages/Recyclables'
@@ -86,6 +87,7 @@ export const AppRoutes = () => (
         <Route path={PATHS.forgotPassword} element={<ForgotPassword />} />
         <Route path={PATHS.resetPassword} element={<ResetPassword />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/diagnostic" element={<DiagnosticPage />} />
 
         {/* Static info pages (must stay after /app and /resident/*) */}
         {INFO_PAGE_SLUGS.map((slug) => (
