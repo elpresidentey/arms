@@ -15,7 +15,8 @@
 **Quick Instructions** (or see [detailed guide](frontend/VERCEL_ENV_SETUP.md)):
 
 1. **Go to Vercel Dashboard**:  
-   https://vercel.com/ekenes-projects-c08862f30/frontend/settings/environment-variables
+   https://vercel.com/ekenes-projects-c0862f30/arms/settings/environment-variables  
+   *(Or use project "frontend" if you prefer)*
 
 2. **Add these 7 variables** for Production, Preview, and Development:
 
@@ -40,7 +41,6 @@ false
 
 VITE_ENABLE_PAYOUTS
 true
-```
 
 3. **Save and Redeploy**:
    - Save each variable
@@ -56,9 +56,13 @@ After deployment, test with:
 
 ## Deployment URLs
 
-- **Frontend**: https://[your-vercel-url].vercel.app
+### Stable Production URLs (Never Change)
+- **Frontend**: https://arms-roan.vercel.app ⭐ (Recommended)
+  - Alternative: https://frontend-psi-weld-dh3z0pv6q4.vercel.app
 - **Backend**: https://arms-c56l.onrender.com
 - **Health Check**: https://arms-c56l.onrender.com/health
+
+**Note**: These URLs are permanent and always point to your latest deployment.
 
 ## That's It!
 
