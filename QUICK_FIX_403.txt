@@ -1,0 +1,36 @@
+================================================================================
+QUICK FIX FOR 403 ERROR
+================================================================================
+
+PROBLEM: 403 Forbidden when trying to login/register
+
+CAUSE: Backend doesn't recognize frontend URL (CORS issue)
+
+SOLUTION (5 minutes):
+
+1. Get Your Vercel Frontend URL:
+   - Go to: https://vercel.com/ekenes-projects-c08862f30
+   - Find your project URL (e.g., https://arms-frontend.vercel.app)
+
+2. Update Render Backend Environment:
+   - Go to: https://dashboard.render.com
+   - Select your backend service
+   - Go to Environment tab
+   - Add/Update:
+     
+     FRONTEND_URL = https://your-frontend-url.vercel.app
+     ALLOWED_ORIGINS = https://your-frontend-url.vercel.app
+     NODE_ENV = production
+
+3. Save and Wait:
+   - Click "Save Changes"
+   - Wait 2-3 minutes for automatic redeploy
+   - Try login again
+
+That's it!
+
+NOTE: The backend already accepts *.vercel.app domains by default, but setting
+FRONTEND_URL explicitly ensures proper CORS headers.
+
+Full details in: FIX_403_CORS.md
+================================================================================

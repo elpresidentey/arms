@@ -9,6 +9,7 @@ import Login from '../pages/Login'
 import Register from '../pages/Register'
 import ForgotPassword from '../pages/ForgotPassword'
 import ResetPassword from '../pages/ResetPassword'
+import AuthCallback from '../pages/AuthCallback'
 import FooterInfoPage from '../pages/FooterInfoPage'
 import WasteHistory from '../pages/WasteHistory'
 import Recyclables from '../pages/Recyclables'
@@ -84,6 +85,7 @@ export const AppRoutes = () => (
         />
         <Route path={PATHS.forgotPassword} element={<ForgotPassword />} />
         <Route path={PATHS.resetPassword} element={<ResetPassword />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
 
         {/* Static info pages (must stay after /app and /resident/*) */}
         {INFO_PAGE_SLUGS.map((slug) => (

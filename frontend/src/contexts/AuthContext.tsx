@@ -319,16 +319,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password,
         options: {
           data: supabaseMetadata,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       })
 
       if (error) {
+        console.error('Supabase signup error:', error)
         throw error
       }
 
-      if (!authData.session) {
-        toast.success('Account created. Check your email to confirm it, then sign in.')
+      // Check if email confirmation is required
+      const emailConfirmationRequired = !authData.session && authData.user
+
+      if (emailConfirmationRequired) {
+        toast.success(
+          pendingRegistration.role === 'admin'
+            ? 'Admin account created. Check your email to confirm it, then sign in.'
+            : 'Account created. Check your email to confirm it, then sign in.',
+          { duration: 6000 }
+        )
         return
+      }
+
+      if (!authData.session) {
+        toast.error('Registration failed. Please try again or contact support.')
+        throw new Error('No session created during registration')
       }
 
       const profile = await completeBackendProfile(authData.session.access_token, pendingRegistration)
