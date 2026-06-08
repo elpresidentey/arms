@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ArrowRight, Eye, EyeOff, ShieldCheck, Truck, Waves, CheckCircle } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff, ShieldCheck, Truck, Waves } from 'lucide-react'
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { resolvePostLoginPath } from '../routes/guards'
