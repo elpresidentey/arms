@@ -4,12 +4,48 @@ import {
   CheckCircle2,
   Circle,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   User,
   Calendar,
   Recycle,
   FileText,
   Wallet,
   Receipt,
+  Minimize2,
+} from 'lucide-react'
+
+interface OnboardingChecklistProps {
+  completedSteps: string[]
+  onStepClick?: (stepId: string) => void
+  onDismiss?: () => void
+}
+
+interface ChecklistItem {
+  id: string
+  icon: React.ElementType
+  title: string
+  description: string
+  link: string
+  linkText: string
+  completesOnClick?: boolean
+}
+
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import {
+  CheckCircle2,
+  Circle,
+  ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  User,
+  Calendar,
+  Recycle,
+  FileText,
+  Wallet,
+  Receipt,
+  Minimize2,
 } from 'lucide-react'
 
 interface OnboardingChecklistProps {
@@ -29,6 +65,8 @@ interface ChecklistItem {
 }
 
 const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ completedSteps, onStepClick, onDismiss }) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+
   const checklistItems: ChecklistItem[] = [
     {
       id: 'profile',
@@ -86,121 +124,172 @@ const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ completedStep
   const completedCount = completedSteps.length
   const totalCount = checklistItems.length
   const progress = (completedCount / totalCount) * 100
+  const allCompleted = completedCount === totalCount
 
   return (
-    <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-white p-6 shadow-sm">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-slate-950">Getting Started</h3>
-          <p className="mt-1 text-sm text-slate-600">
-            Complete these steps to get the most out of ARMS
-          </p>
-        </div>
-        {onDismiss && completedCount === totalCount && (
-          <button
-            onClick={onDismiss}
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-          >
-            Dismiss
-          </button>
-        )}
-      </div>
-
-      {/* Progress Bar */}
-      <div className="mt-4">
-        <div className="flex items-center justify-between text-sm">
-          <span className="font-medium text-slate-700">
-            {completedCount} of {totalCount} completed
-          </span>
-          <span className="text-slate-600">{Math.round(progress)}%</span>
-        </div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200">
-          <div
-            className="h-full rounded-full bg-primary-600 transition-all duration-500"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Checklist Items */}
-      <div className="mt-6 space-y-3">
-        {checklistItems.map((item) => {
-          const Icon = item.icon
-          const isCompleted = completedSteps.includes(item.id)
-
-          return (
-            <Link
-              key={item.id}
-              to={item.link}
-              onClick={() => {
-                if (item.completesOnClick) {
-                  onStepClick?.(item.id)
-                }
-              }}
-              className={`group flex items-start gap-4 rounded-xl border p-4 transition-all ${
-                isCompleted
-                  ? 'border-emerald-200 bg-emerald-50/50'
-                  : 'border-slate-200 bg-white hover:border-primary-200 hover:bg-primary-50/30'
-              }`}
-            >
-              {/* Icon/Checkbox */}
-              <div className="flex-shrink-0 pt-0.5">
-                {isCompleted ? (
-                  <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                ) : (
-                  <Circle className="h-5 w-5 text-slate-400 transition group-hover:text-primary-600" />
-                )}
+    <div className="rounded-2xl border border-primary-200 bg-gradient-to-br from-primary-50 to-white shadow-sm">
+      {/* Minimized Header - Always Visible */}
+      <div
+        className="flex items-center justify-between gap-4 p-4 cursor-pointer hover:bg-primary-50/50 transition-colors rounded-t-2xl"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <div className="h-8 w-8 rounded-full bg-primary-100 flex items-center justify-center">
+                <CheckCircle2 className="h-4 w-4 text-primary-600" />
               </div>
-
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <Icon className={`h-4 w-4 ${isCompleted ? 'text-emerald-600' : 'text-slate-600'}`} />
-                    <h4
-                      className={`text-sm font-semibold ${
-                        isCompleted ? 'text-emerald-900' : 'text-slate-900'
-                      }`}
-                    >
-                      {item.title}
-                    </h4>
-                  </div>
-                  {!isCompleted && (
-                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-primary-600" />
-                  )}
-                </div>
-                <p className={`mt-1 text-xs ${isCompleted ? 'text-emerald-700' : 'text-slate-600'}`}>
-                  {isCompleted ? 'Completed!' : item.description}
-                </p>
-                {!isCompleted && (
-                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary-700 group-hover:text-primary-800">
-                    {item.linkText}
-                    <ChevronRight className="h-3 w-3" />
-                  </span>
-                )}
-              </div>
-            </Link>
-          )
-        })}
-      </div>
-
-      {/* Completion Message */}
-      {completedCount === totalCount && (
-        <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-          <div className="flex items-center gap-3">
-            <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-emerald-600" />
+              {/* Progress ring */}
+              <svg className="absolute inset-0 h-8 w-8 -rotate-90" viewBox="0 0 24 24">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
+                  stroke="rgb(236 254 255)"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  fill="none"
+                  stroke="rgb(37 99 235)"
+                  strokeWidth="2"
+                  strokeDasharray={`${(progress / 100) * 62.8} 62.8`}
+                  strokeLinecap="round"
+                  className="transition-all duration-500"
+                />
+              </svg>
+            </div>
             <div>
-              <p className="text-sm font-semibold text-emerald-900">All set!</p>
-              <p className="text-xs text-emerald-700">
-                You've completed the onboarding checklist. You're ready to use ARMS!
+              <h3 className="text-sm font-semibold text-slate-950">Getting Started</h3>
+              <p className="text-xs text-slate-600">
+                {completedCount}/{totalCount} tasks • {Math.round(progress)}% complete
               </p>
             </div>
           </div>
         </div>
+
+        <div className="flex items-center gap-2">
+          {/* Show next incomplete task */}
+          {!allCompleted && !isExpanded && (
+            <div className="text-right mr-2">
+              <p className="text-xs font-medium text-slate-700">
+                Next: {checklistItems.find(item => !completedSteps.includes(item.id))?.title}
+              </p>
+            </div>
+          )}
+          
+          {/* Dismiss button for completed checklist */}
+          {allCompleted && onDismiss && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onDismiss()
+              }}
+              className="text-xs font-medium text-slate-500 hover:text-slate-700 px-2 py-1 rounded-md hover:bg-white/50"
+            >
+              Dismiss
+            </button>
+          )}
+
+          {/* Expand/Collapse button */}
+          <button className="p-1 rounded-md hover:bg-white/50">
+            {isExpanded ? (
+              <ChevronUp className="h-4 w-4 text-slate-600" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-slate-600" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Expanded Content */}
+      {isExpanded && (
+        <div className="px-4 pb-4">
+          {/* Progress Bar */}
+          <div className="mb-4">
+            <div className="h-2 overflow-hidden rounded-full bg-slate-200">
+              <div
+                className="h-full rounded-full bg-primary-600 transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Checklist Items */}
+          <div className="space-y-2">
+            {checklistItems.map((item) => {
+              const Icon = item.icon
+              const isCompleted = completedSteps.includes(item.id)
+
+              return (
+                <Link
+                  key={item.id}
+                  to={item.link}
+                  onClick={() => {
+                    if (item.completesOnClick) {
+                      onStepClick?.(item.id)
+                    }
+                  }}
+                  className={`group flex items-center gap-3 rounded-lg border p-3 transition-all text-sm ${
+                    isCompleted
+                      ? 'border-emerald-200 bg-emerald-50/50'
+                      : 'border-slate-200 bg-white hover:border-primary-200 hover:bg-primary-50/30'
+                  }`}
+                >
+                  {/* Icon/Checkbox */}
+                  <div className="flex-shrink-0">
+                    {isCompleted ? (
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    ) : (
+                      <Circle className="h-4 w-4 text-slate-400 transition group-hover:text-primary-600" />
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Icon className={`h-3.5 w-3.5 ${isCompleted ? 'text-emerald-600' : 'text-slate-600'}`} />
+                        <span
+                          className={`text-sm font-medium ${
+                            isCompleted ? 'text-emerald-900 line-through' : 'text-slate-900'
+                          }`}
+                        >
+                          {item.title}
+                        </span>
+                      </div>
+                      {!isCompleted && (
+                        <ChevronRight className="h-3.5 w-3.5 flex-shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-primary-600" />
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+
+          {/* Completion Message */}
+          {allCompleted && (
+            <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-emerald-600" />
+                <div>
+                  <p className="text-sm font-semibold text-emerald-900">All set!</p>
+                  <p className="text-xs text-emerald-700">
+                    You've completed the onboarding checklist.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   )
+}
 }
 
 export default OnboardingChecklist

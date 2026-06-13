@@ -104,7 +104,18 @@ export class AuthService {
     if (error || !data.session) {
       // Log the actual error for debugging but return a generic message
       this.logger.warn(`Login failed for ${loginDto.email}: ${error?.message || 'No session returned'}`);
-      throw new UnauthorizedException('Invalid email or password. Please check your credentials and try again.');
+      
+      // Get user to determine if they're admin (for error message customization)
+      const user = await this.usersService.findByEmail(loginDto.email.trim().toLowerCase());
+      const isAdmin = user?.role && user.role !== 'resident';
+      
+      if (isAdmin) {
+        // Silent fail for admin - no detailed error message
+        throw new UnauthorizedException('Access denied');
+      } else {
+        // Detailed error for residents
+        throw new UnauthorizedException('Invalid email or password. Please check your credentials and try again.');
+      }
     }
 
     const user = await this.getProfileByAuthIdentity(data.user.id, data.user.email);

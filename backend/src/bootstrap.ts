@@ -83,7 +83,41 @@ export function configureApp(app: INestApplication) {
       });
     },
   });
+
+  // Progressive rate limiting - stricter limits for failed attempts
+  const progressiveAuthLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour window
+    max: (req) => {
+      // Allow more requests for successful logins
+      const failedAttempts = parseInt(req.headers['x-failed-attempts'] || '0');
+      if (failedAttempts >= 5) return 2; // Very strict after 5 failures
+      if (failedAttempts >= 3) return 5; // Strict after 3 failures
+      return 15; // Normal limit
+    },
+    skipSuccessfulRequests: false, // Count all attempts for progressive limiting
+    keyGenerator: (req) => {
+      // Use IP + User-Agent for better tracking
+      return `${req.ip}-${req.get('User-Agent')?.substring(0, 50) || 'unknown'}`;
+    },
+    message: 'Account temporarily locked due to multiple failed attempts',
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res) => {
+      const failedAttempts = parseInt(req.headers['x-failed-attempts'] || '0');
+      const lockoutTime = failedAttempts >= 5 ? '1 hour' : '15 minutes';
+      
+      res.status(429).json({
+        message: 'Account temporarily locked',
+        error: 'Too Many Requests',
+        statusCode: 429,
+        retryAfter: lockoutTime,
+        progressive: true,
+      });
+    },
+  });
+
   app.use('/auth/login', authLimiter);
+  app.use('/auth/login', progressiveAuthLimiter);
   app.use('/auth/register', authLimiter);
   app.use('/auth/forgot-password', authLimiter);
 

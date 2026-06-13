@@ -1,16 +1,28 @@
-import { Body, Controller, Get, Request, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Request, Post, UseGuards, Res, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { BootstrapAdminDto, ForgotPasswordDto, LoginDto, RegisterProfileDto } from './dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { SupabaseAccessTokenGuard } from './guards/supabase-access-token.guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Req() req: any, @Res({ passthrough: true }) res: Response) {
+    try {
+      const result = await this.authService.login(loginDto);
+      // Reset failed attempts header on successful login
+      res.removeHeader('x-failed-attempts');
+      return result;
+    } catch (error) {
+      // Increment failed attempts for progressive rate limiting
+      const currentFailed = parseInt(req.headers['x-failed-attempts'] || '0');
+      const newFailedCount = currentFailed + 1;
+      res.setHeader('x-failed-attempts', newFailedCount.toString());
+      throw error;
+    }
   }
 
   @UseGuards(SupabaseAccessTokenGuard)

@@ -22,10 +22,24 @@ type Workspace = AuthWorkspace
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase()
 
-const normalizeAuthError = (error: unknown, fallback: string) => {
+const normalizeAuthError = (error: unknown, fallback: string, isAdminWorkspace = false) => {
   const message = getErrorMessage(error, fallback)
   const lowerMessage = message.toLowerCase()
 
+  // For admin, provide minimal error information
+  if (isAdminWorkspace) {
+    if (lowerMessage.includes('access denied') || 
+        lowerMessage.includes('invalid') || 
+        lowerMessage.includes('unauthorized')) {
+      return 'Access denied'
+    }
+    if (lowerMessage.includes('rate limit') || lowerMessage.includes('too many') || lowerMessage.includes('locked')) {
+      return 'Too many attempts. Try again later.'
+    }
+    return 'Access denied'
+  }
+
+  // For residents, provide detailed errors
   if (lowerMessage.includes('invalid login credentials') || lowerMessage.includes('invalid credentials')) {
     return 'The email or password is incorrect.'
   }
@@ -36,6 +50,10 @@ const normalizeAuthError = (error: unknown, fallback: string) => {
 
   if (lowerMessage.includes('rate limit') || lowerMessage.includes('too many')) {
     return 'Too many attempts. Please wait a moment and try again.'
+  }
+
+  if (lowerMessage.includes('locked')) {
+    return 'Account temporarily locked due to multiple failed attempts. Please try again later.'
   }
 
   return message
@@ -285,7 +303,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return recoveredProfile
       }
     } catch (error) {
-      toast.error(normalizeAuthError(error, 'Login failed'))
+      toast.error(normalizeAuthError(error, 'Login failed', workspace === 'admin'))
       throw error
     }
   }

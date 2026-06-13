@@ -408,20 +408,12 @@ const Login: React.FC = () => {
                       )}
                     </>
                   ) : (
-                    <>
-                      <p className="text-sm text-slate-600">
-                        Don't have an account?{' '}
-                        <Link to={PATHS.residentRegister} className="font-semibold text-primary-700 hover:text-primary-800">
-                          Create account
-                        </Link>
-                      </p>
-                      <p className="text-sm text-slate-600">
-                        Staff member?{' '}
-                        <Link to={PATHS.adminLogin} className="font-semibold text-primary-700 hover:text-primary-800">
-                          Admin sign in
-                        </Link>
-                      </p>
-                    </>
+                    <p className="text-sm text-slate-600">
+                      Don't have an account?{' '}
+                      <Link to={PATHS.residentRegister} className="font-semibold text-primary-700 hover:text-primary-800">
+                        Create account
+                      </Link>
+                    </p>
                   )}
                 </div>
               </div>
