@@ -1,36 +1,3 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import {
-  CheckCircle2,
-  Circle,
-  ChevronRight,
-  ChevronDown,
-  ChevronUp,
-  User,
-  Calendar,
-  Recycle,
-  FileText,
-  Wallet,
-  Receipt,
-  Minimize2,
-} from 'lucide-react'
-
-interface OnboardingChecklistProps {
-  completedSteps: string[]
-  onStepClick?: (stepId: string) => void
-  onDismiss?: () => void
-}
-
-interface ChecklistItem {
-  id: string
-  icon: React.ElementType
-  title: string
-  description: string
-  link: string
-  linkText: string
-  completesOnClick?: boolean
-}
-
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -289,7 +256,6 @@ const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ completedStep
       )}
     </div>
   )
-}
 }
 
 export default OnboardingChecklist

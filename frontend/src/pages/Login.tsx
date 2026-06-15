@@ -29,14 +29,13 @@ const loginBackgroundImages = [
 const Login: React.FC = () => {
   const location = useLocation()
   const { login, user, isLoading: authLoading } = useAuth()
-  const isAdminInviteEnabled = import.meta.env.VITE_ENABLE_ADMIN_SIGNUP === 'true'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [backgroundImageIndex, setBackgroundImageIndex] = useState(0)
-  const workspace = location.pathname.startsWith('/admin') ? 'admin' : 'resident'
-  const isAdminWorkspace = workspace === 'admin'
+  const workspace = 'resident' // Always use resident workspace for security
+  const isAdminWorkspace = false // No admin workspace access from login
 
   // Rotate background images every 5 seconds
   useEffect(() => {
@@ -390,31 +389,12 @@ const Login: React.FC = () => {
                 </div>
 
                 <div className="text-center space-y-2">
-                  {isAdminWorkspace ? (
-                    <>
-                      <p className="text-sm text-slate-600">
-                        Need a resident account?{' '}
-                        <Link to={PATHS.residentLogin} className="font-semibold text-primary-700 hover:text-primary-800">
-                          Resident sign in
-                        </Link>
-                      </p>
-                      {isAdminInviteEnabled && (
-                        <p className="text-sm text-slate-600">
-                          Have an invite?{' '}
-                          <Link to={PATHS.adminRegister} className="font-semibold text-primary-700 hover:text-primary-800">
-                            Accept staff invite
-                          </Link>
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <p className="text-sm text-slate-600">
-                      Don't have an account?{' '}
-                      <Link to={PATHS.residentRegister} className="font-semibold text-primary-700 hover:text-primary-800">
-                        Create account
-                      </Link>
-                    </p>
-                  )}
+                  <p className="text-sm text-slate-600">
+                    Don't have an account?{' '}
+                    <Link to={PATHS.residentRegister} className="font-semibold text-primary-700 hover:text-primary-800">
+                      Create account
+                    </Link>
+                  </p>
                 </div>
               </div>
             </div>

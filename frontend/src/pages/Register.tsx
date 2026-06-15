@@ -302,7 +302,7 @@ const Register: React.FC = () => {
                   </Link>
                   {(isAdminInviteEnabled || isAdminRoute || inviteToken) && (
                     <Link
-                      to={PATHS.adminRegister + (inviteToken ? `?token=${inviteToken}&email=${inviteEmail}` : '')}
+                      to={PATHS.residentRegister + (inviteToken ? `?token=${inviteToken}&email=${inviteEmail}` : '')}
                       className={`rounded-xl border px-4 py-3.5 text-left transition-all ${
                         isAdminRoute 
                           ? 'border-primary-500 bg-primary-50 text-primary-900 shadow-sm' 
@@ -559,7 +559,7 @@ const Register: React.FC = () => {
                         </p>
                         <p className="text-sm text-slate-600">
                           Already have an account?{' '}
-                          <Link to={PATHS.adminLogin} className="font-semibold text-primary-700 hover:text-primary-800">
+                          <Link to={PATHS.residentLogin} className="font-semibold text-primary-700 hover:text-primary-800">
                             Sign in
                           </Link>
                         </p>
@@ -572,12 +572,7 @@ const Register: React.FC = () => {
                             Sign in
                           </Link>
                         </p>
-                        <p className="text-sm text-slate-600">
-                          Staff member?{' '}
-                          <Link to={PATHS.adminLogin} className="font-semibold text-primary-700 hover:text-primary-800">
-                            Admin sign in
-                          </Link>
-                        </p>
+
                       </>
                     )}
                   </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Copy, Mail, ShieldCheck, ShieldX, Truck } from 'lucide-react'
+import { Copy, Mail, ShieldCheck, ShieldX, Truck, Users } from 'lucide-react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
@@ -333,23 +333,46 @@ const Operations: React.FC = () => {
                     />
                   </div>
                 </div>
+                
                 <div className="grid grid-cols-2 gap-3">
                   <div className="data-row rounded-2xl border border-slate-200 bg-white/85 px-3 py-3">
-                    <p className="caption font-semibold text-slate-500">Fleet</p>
-                    <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.totalTrucks ?? 0}</p>
+                    <p className="caption font-semibold text-slate-500">Fleet Size</p>
+                    <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.totalVehicles ?? 0}</p>
                   </div>
                   <div className="data-row rounded-2xl border border-slate-200 bg-white/85 px-3 py-3">
                     <p className="caption font-semibold text-slate-500">Deployed</p>
-                    <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.deployedToday ?? 0}</p>
+                    <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.assignedVehicles ?? 0}</p>
                   </div>
                   <div className="data-row rounded-2xl border border-slate-200 bg-white/85 px-3 py-3">
-                    <p className="caption font-semibold text-slate-500">Idle</p>
-                    <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.idleToday ?? 0}</p>
+                    <p className="caption font-semibold text-slate-500">Available</p>
+                    <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.availableVehicles ?? 0}</p>
                   </div>
                   <div className="data-row rounded-2xl border border-slate-200 bg-white/85 px-3 py-3">
-                    <p className="caption font-semibold text-slate-500">No truck</p>
-                    <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.unassignedRoutes ?? 0}</p>
+                    <p className="caption font-semibold text-slate-500">Maintenance</p>
+                    <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.maintenanceVehicles ?? 0}</p>
                   </div>
+                </div>
+
+                {/* Driver Summary */}
+                <div className="metric-panel p-4">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div>
+                      <p className="label text-slate-500">Active Drivers</p>
+                      <p className="mt-1 heading-3 text-slate-950">{logistics?.drivers.activeDrivers ?? 0}</p>
+                    </div>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+                      <Users className="h-5 w-5" />
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-sm text-slate-600">
+                    <span>Assigned: {logistics?.drivers.assignedDrivers ?? 0}</span>
+                    <span>Available: {logistics?.drivers.availableDrivers ?? 0}</span>
+                  </div>
+                </div>
+
+                <div className="data-row rounded-2xl border border-slate-200 bg-white/85 px-3 py-3">
+                  <p className="caption font-semibold text-slate-500">Unassigned Routes</p>
+                  <p className="mt-2 heading-4 text-slate-950">{logistics?.fleet.unassignedRoutes ?? 0}</p>
                 </div>
               </div>
               <div className="space-y-3">

@@ -1,9 +1,12 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, OnModuleInit, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import { createHash, randomBytes } from 'crypto';
 import { DataSource, Repository } from 'typeorm';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { UserRole } from '../users/entities/user.entity';
 import { NotificationsService } from '../notifications/notifications.service';
+import { UsersService } from '../users/users.service';
 import { AdminInvite } from './entities/admin-invite.entity';
 
 export interface AdminInviteView {
@@ -23,12 +26,31 @@ export interface AdminInviteView {
 
 @Injectable()
 export class AdminInvitesService implements OnModuleInit {
+  private readonly logger = new Logger(AdminInvitesService.name);
+  private readonly supabase: SupabaseClient;
+
   constructor(
     @InjectRepository(AdminInvite)
     private readonly adminInvitesRepository: Repository<AdminInvite>,
     private readonly dataSource: DataSource,
     private readonly notificationsService: NotificationsService,
-  ) {}
+    private readonly configService: ConfigService,
+    private readonly usersService: UsersService,
+  ) {
+    const supabaseUrl = this.configService.get<string>('SUPABASE_URL');
+    const supabaseServiceRoleKey = this.configService.get<string>('SUPABASE_SERVICE_ROLE_KEY');
+    
+    if (!supabaseUrl || !supabaseServiceRoleKey) {
+      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+    }
+    
+    this.supabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    });
+  }
 
   async onModuleInit() {
     await this.ensureAdminInvitesTable();
@@ -200,5 +222,78 @@ export class AdminInvitesService implements OnModuleInit {
 
     const savedInvite = await this.adminInvitesRepository.save(invite);
     return this.toView(savedInvite);
+  }
+
+  async acceptInvite(token: string, adminData: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    address: string;
+    ward: string;
+    houseNumber: string;
+    street: string;
+  }) {
+    const email = this.normalizeEmail(adminData.email);
+    
+    // Validate the invite first
+    const invite = await this.validateInvite(email, token);
+    
+    // Create Supabase auth user
+    const { data: authData, error: authError } = await this.supabase.auth.admin.createUser({
+      email,
+      password: adminData.password,
+      email_confirm: true,
+    });
+
+    if (authError || !authData.user) {
+      this.logger.error(`Failed to create Supabase auth user: ${authError?.message}`);
+      throw new BadRequestException('Failed to create authentication user');
+    }
+
+    try {
+      // Create the user profile with admin role
+      const user = await this.usersService.create({
+        id: authData.user.id,
+        email,
+        password: null,
+        firstName: adminData.firstName,
+        lastName: adminData.lastName,
+        phoneNumber: adminData.phoneNumber,
+        address: adminData.address,
+        ward: adminData.ward,
+        houseNumber: adminData.houseNumber,
+        street: adminData.street,
+        role: UserRole.ADMIN,
+      });
+
+      // Consume the invite
+      await this.consumeInvite(email, token, user.id);
+      
+      this.logger.log(`Admin user created via invite: ${user.email}`);
+
+      // Return login credentials
+      const { data: sessionData, error: signInError } = await this.supabase.auth.signInWithPassword({
+        email,
+        password: adminData.password,
+      });
+
+      if (signInError || !sessionData.session) {
+        this.logger.error(`Failed to sign in new admin user: ${signInError?.message}`);
+        throw new BadRequestException('User created but failed to sign in');
+      }
+
+      return {
+        access_token: sessionData.session.access_token,
+        token: sessionData.session.access_token,
+        user,
+        message: 'Admin account created successfully via invite',
+      };
+    } catch (error) {
+      // Clean up auth user if profile creation fails
+      await this.supabase.auth.admin.deleteUser(authData.user.id);
+      throw error;
+    }
   }
 }

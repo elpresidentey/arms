@@ -21,6 +21,9 @@ import { PaystackModule } from './paystack/paystack.module';
 import { PayoutsModule } from './payouts/payouts.module';
 import { AdminInvitesModule } from './admin-invites/admin-invites.module';
 import { LogisticsModule } from './logistics/logistics.module';
+import { DriversModule } from './drivers/drivers.module';
+import { VehiclesModule } from './vehicles/vehicles.module';
+import { RouteExecutionsModule } from './route-executions/route-executions.module';
 import { ServiceSchedulesModule } from './service-schedules/service-schedules.module';
 import { BillingModule } from './billing/billing.module';
 import { SchedulerModule } from './scheduler/scheduler.module';
@@ -100,6 +103,9 @@ import { HealthModule } from './health/health.module';
     PayoutsModule,
     AdminInvitesModule,
     LogisticsModule,
+    DriversModule,
+    VehiclesModule,
+    RouteExecutionsModule,
     ServiceSchedulesModule,
     BillingModule,
     SchedulerModule,

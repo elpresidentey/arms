@@ -310,11 +310,19 @@ export interface ServiceSchedule {
 
 export interface LogisticsSummary {
   fleet: {
+    totalVehicles: number
+    operationalVehicles: number
+    assignedVehicles: number
+    availableVehicles: number
+    maintenanceVehicles: number
+    outOfServiceVehicles: number
+    // Legacy fields for backward compatibility
     totalTrucks: number
     deployedToday: number
     idleToday: number
     unassignedRoutes: number
   }
+  drivers: DriversSummary
   readiness: {
     activeRoutes: number
     dueToday: number
@@ -322,6 +330,9 @@ export interface LogisticsSummary {
     missingTruckToday: number
     disruptedRoutes: number
     readinessPercent: number
+    scheduledExecutions: number
+    inProgressExecutions: number
+    completedExecutions: number
   }
   queues: {
     pendingCollections: number
@@ -330,22 +341,8 @@ export interface LogisticsSummary {
     urgentServiceRequests: number
     urgentComplaints: number
   }
-  truckDeployments: Array<{
-    truckCode: string
-    routeCount: number
-    dueToday: number
-    activeRoutes: number
-    disruptedRoutes: number
-    nextRoute: {
-      id: string
-      routeCode: string
-      name: string
-      ward: string
-      street: string
-      nextCollectionDate: string
-      status: CollectionRoute['status']
-    } | null
-  }>
+  vehicleDeployments: VehicleDeployment[]
+  driverSummary: DriverSummary[]
   attention: {
     unassignedRoutes: Array<{
       id: string
@@ -364,7 +361,220 @@ export interface LogisticsSummary {
       truckCode?: string
       nextCollectionDate: string
     }>
+    maintenanceAlerts: Array<{
+      vehicleCode: string
+      plateNumber: string
+      nextServiceDue?: string
+      currentMileage: number
+    }>
+    expiringLicenses: Array<{
+      driverCode: string
+      name: string
+      licenseExpiryDate: string
+    }>
   }
+}
+
+// Fleet Management Types
+export interface Driver {
+  id: string
+  driverCode: string
+  user: User
+  userId: string
+  licenseNumber: string
+  licenseClass: 'class_a' | 'class_b' | 'class_c'
+  licenseExpiryDate: string
+  emergencyContact?: string
+  emergencyPhone?: string
+  hireDate: string
+  status: 'active' | 'inactive' | 'on_leave' | 'suspended'
+  specializations?: string[]
+  performanceRating: number
+  totalRoutes: number
+  completedRoutes: number
+  averageCompletionTime: number
+  notes?: string
+  currentVehicle?: {
+    id: string
+    vehicleCode: string
+    plateNumber: string
+    vehicleType: string
+    assignedDate: string
+  }
+  createdAt: string
+  updatedAt: string
+}
+
+export interface Vehicle {
+  id: string
+  vehicleCode: string
+  plateNumber: string
+  make: string
+  model: string
+  year: number
+  vehicleType: 'compactor_truck' | 'open_truck' | 'tipper_truck' | 'mini_truck' | 'tricycle'
+  fuelType: 'diesel' | 'petrol' | 'electric' | 'hybrid'
+  capacity: number
+  capacityUnit: string
+  status: 'operational' | 'maintenance' | 'out_of_service' | 'retired'
+  purchaseDate: string
+  purchasePrice?: number
+  insuranceExpiry?: string
+  registrationExpiry?: string
+  lastServiceDate?: string
+  nextServiceDue?: string
+  currentMileage: number
+  fuelEfficiency: number
+  totalRoutes: number
+  averageDowntime: number
+  currentLocation?: string
+  latitude?: number
+  longitude?: number
+  notes?: string
+  currentDriver?: {
+    id: string
+    driverCode: string
+    name: string
+    assignedDate: string
+  }
+  maintenanceStatus?: {
+    overdue: number
+    nextService?: string
+    lastService?: string
+  }
+  createdAt: string
+  updatedAt: string
+}
+
+export interface VehicleAssignment {
+  id: string
+  driver: {
+    id: string
+    driverCode: string
+    name: string
+    performanceRating: number
+  }
+  vehicle: {
+    id: string
+    vehicleCode: string
+    plateNumber: string
+    vehicleType: string
+    status: string
+  }
+  assignedDate: string
+  status: 'active' | 'inactive' | 'temporary'
+}
+
+export interface RouteExecution {
+  id: string
+  route: CollectionRoute
+  driver?: Driver
+  vehicle?: Vehicle
+  scheduledDate: string
+  startedAt?: string
+  completedAt?: string
+  status: 'scheduled' | 'in_progress' | 'completed' | 'disrupted' | 'cancelled'
+  plannedStops: number
+  completedStops: number
+  totalDistance?: number
+  fuelUsed?: number
+  wasteCollected?: number
+  wasteUnit?: string
+  startMileage?: number
+  endMileage?: number
+  startLocation?: string
+  endLocation?: string
+  routeGpsTrace?: string
+  delayReason?: string
+  delayMinutes: number
+  issues?: string
+  notes?: string
+  driverRating?: number
+  residentSatisfaction?: number
+  createdAt: string
+  updatedAt: string
+}
+
+export interface MaintenanceRecord {
+  id: string
+  vehicle: Vehicle
+  maintenanceType: 'preventive' | 'corrective' | 'emergency' | 'inspection'
+  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled' | 'overdue'
+  priority: 'low' | 'medium' | 'high' | 'critical'
+  title: string
+  description: string
+  scheduledDate: string
+  startedDate?: string
+  completedDate?: string
+  mileageAtMaintenance?: number
+  serviceProvider?: string
+  technician?: string
+  estimatedCost?: number
+  actualCost?: number
+  partsUsed?: string
+  workPerformed?: string
+  nextServiceDue?: string
+  nextServiceMileage?: number
+  createdBy?: User
+  attachments?: string
+  notes?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface FleetSummary {
+  totalVehicles: number
+  operationalVehicles: number
+  assignedVehicles: number
+  availableVehicles: number
+  maintenanceVehicles: number
+  outOfServiceVehicles: number
+  maintenanceOverdue: number
+  registrationExpiring: number
+  insuranceExpiring: number
+}
+
+export interface DriversSummary {
+  totalDrivers: number
+  activeDrivers: number
+  assignedDrivers: number
+  availableDrivers: number
+  onLeave: number
+  suspended: number
+}
+
+export interface VehicleDeployment {
+  vehicleCode: string
+  plateNumber: string
+  vehicleType: string
+  status: string
+  driverName: string
+  driverCode: string
+  routesToday: number
+  completedToday: number
+  inProgress: boolean
+  currentLocation?: string
+  nextRoute?: {
+    id: string
+    routeCode: string
+    name: string
+    ward: string
+    street: string
+    scheduledTime: string
+  }
+}
+
+export interface DriverSummary {
+  id: string
+  driverCode: string
+  name: string
+  status: string
+  performanceRating: number
+  totalRoutes: number
+  completedRoutes: number
+  currentVehicle?: string
+  routesToday: number
+  licenseExpiry: string
 }
 
 export interface LocationPoi {

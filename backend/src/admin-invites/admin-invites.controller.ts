@@ -31,6 +31,32 @@ export class AdminInvitesController {
     return this.adminInvitesService.validateInvite(body.email, body.token);
   }
 
+  @Post('accept')
+  acceptInvite(@Body() body: {
+    token: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    address: string;
+    ward: string;
+    houseNumber: string;
+    street: string;
+  }) {
+    return this.adminInvitesService.acceptInvite(body.token, {
+      email: body.email,
+      password: body.password,
+      firstName: body.firstName,
+      lastName: body.lastName,
+      phoneNumber: body.phoneNumber,
+      address: body.address,
+      ward: body.ward,
+      houseNumber: body.houseNumber,
+      street: body.street,
+    });
+  }
+
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
   @Patch(':id/revoke')

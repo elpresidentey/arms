@@ -2,13 +2,13 @@
 export const PATHS = {
   home: '/',
   residentLogin: '/resident/login',
-  adminLogin: '/admin/login',
   login: '/login',
   residentRegister: '/resident/register',
-  adminRegister: '/admin/register',
   register: '/register',
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
+  bootstrap: '/bootstrap',
+  acceptInvite: '/accept-invite',
 
   app: '/app',
   appOperations: '/app/operations',

@@ -11,6 +11,8 @@ import ForgotPassword from '../pages/ForgotPassword'
 import ResetPassword from '../pages/ResetPassword'
 import AuthCallback from '../pages/AuthCallback'
 import DiagnosticPage from '../pages/DiagnosticPage'
+import BootstrapAdmin from '../pages/BootstrapAdmin'
+import AcceptAdminInvite from '../pages/AcceptAdminInvite'
 import FooterInfoPage from '../pages/FooterInfoPage'
 import WasteHistory from '../pages/WasteHistory'
 import Recyclables from '../pages/Recyclables'
@@ -61,14 +63,6 @@ export const AppRoutes = () => (
           }
         />
         <Route
-          path={PATHS.adminLogin}
-          element={
-            <GuestGuard>
-              <Login />
-            </GuestGuard>
-          }
-        />
-        <Route
           path={PATHS.residentRegister}
           element={
             <GuestGuard>
@@ -76,18 +70,13 @@ export const AppRoutes = () => (
             </GuestGuard>
           }
         />
-        <Route
-          path={PATHS.adminRegister}
-          element={
-            <GuestGuard>
-              <Register />
-            </GuestGuard>
-          }
-        />
+
         <Route path={PATHS.forgotPassword} element={<ForgotPassword />} />
         <Route path={PATHS.resetPassword} element={<ResetPassword />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/diagnostic" element={<DiagnosticPage />} />
+        <Route path={PATHS.bootstrap} element={<BootstrapAdmin />} />
+        <Route path={PATHS.acceptInvite} element={<AcceptAdminInvite />} />
 
         {/* Static info pages (must stay after /app and /resident/*) */}
         {INFO_PAGE_SLUGS.map((slug) => (

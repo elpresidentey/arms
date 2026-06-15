@@ -89,7 +89,8 @@ export function configureApp(app: INestApplication) {
     windowMs: 60 * 60 * 1000, // 1 hour window
     max: (req) => {
       // Allow more requests for successful logins
-      const failedAttempts = parseInt(req.headers['x-failed-attempts'] || '0');
+      const failedAttemptsHeader = req.headers['x-failed-attempts'];
+      const failedAttempts = parseInt(Array.isArray(failedAttemptsHeader) ? failedAttemptsHeader[0] : failedAttemptsHeader || '0');
       if (failedAttempts >= 5) return 2; // Very strict after 5 failures
       if (failedAttempts >= 3) return 5; // Strict after 3 failures
       return 15; // Normal limit
@@ -103,7 +104,8 @@ export function configureApp(app: INestApplication) {
     standardHeaders: true,
     legacyHeaders: false,
     handler: (req, res) => {
-      const failedAttempts = parseInt(req.headers['x-failed-attempts'] || '0');
+      const failedAttemptsHeader = req.headers['x-failed-attempts'];
+      const failedAttempts = parseInt(Array.isArray(failedAttemptsHeader) ? failedAttemptsHeader[0] : failedAttemptsHeader || '0');
       const lockoutTime = failedAttempts >= 5 ? '1 hour' : '15 minutes';
       
       res.status(429).json({

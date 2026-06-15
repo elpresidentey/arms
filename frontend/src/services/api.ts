@@ -11,6 +11,12 @@ import {
   CollectionRequest,
   CollectionRequestStatistics,
   CollectionRequestStatus,
+  Driver,
+  Vehicle,
+  VehicleAssignment,
+  RouteExecution,
+  MaintenanceRecord,
+  FleetSummary,
   LoginCredentials,
   LogisticsSummary,
   NearbyLocationsResponse,
@@ -95,6 +101,38 @@ export const authApi = {
 
   validateAdminInvite: async (data: { email: string; token: string }): Promise<AdminInvite> => {
     const response = await api.post('/admin-invites/validate', data)
+    return response.data
+  },
+
+  bootstrapAdmin: async (data: {
+    bootstrapToken: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    address: string
+    ward: string
+    houseNumber: string
+    street: string
+  }): Promise<AuthResponse & { message: string }> => {
+    const response = await api.post('/auth/bootstrap', data)
+    return response.data
+  },
+
+  acceptAdminInvite: async (data: {
+    token: string
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    phoneNumber: string
+    address: string
+    ward: string
+    houseNumber: string
+    street: string
+  }): Promise<AuthResponse & { message: string }> => {
+    const response = await api.post('/admin-invites/accept', data)
     return response.data
   },
 }
@@ -321,6 +359,15 @@ export const collectionRoutesApi = {
 export const logisticsApi = {
   getSummary: async (): Promise<LogisticsSummary> => {
     const response = await api.get('/logistics/summary')
+    return response.data
+  },
+  
+  getFleetDetails: async (): Promise<{
+    vehicles: Vehicle[]
+    drivers: Driver[]
+    assignments: VehicleAssignment[]
+  }> => {
+    const response = await api.get('/logistics/fleet-details')
     return response.data
   },
 }
@@ -597,3 +644,315 @@ export const payoutsApi = {
 }
 
 export default api
+
+// Fleet Management APIs
+export const driversApi = {
+  getAll: async (includeInactive?: boolean): Promise<Driver[]> => {
+    const response = await api.get(`/drivers${includeInactive ? '?includeInactive=true' : ''}`)
+    return response.data
+  },
+  
+  getById: async (id: string): Promise<Driver> => {
+    const response = await api.get(`/drivers/${id}`)
+    return response.data
+  },
+  
+  getByCode: async (driverCode: string): Promise<Driver> => {
+    const response = await api.get(`/drivers/code/${driverCode}`)
+    return response.data
+  },
+  
+  getCurrentVehicle: async (id: string): Promise<Vehicle | null> => {
+    const response = await api.get(`/drivers/${id}/current-vehicle`)
+    return response.data
+  },
+  
+  getPerformanceStats: async (id: string): Promise<{
+    driver: Driver
+    performance: {
+      totalRoutes: number
+      completedRoutes: number
+      completionRate: string
+      averageDuration: number
+      averageRating: number
+      averageSatisfaction: number
+    }
+  }> => {
+    const response = await api.get(`/drivers/${id}/performance`)
+    return response.data
+  },
+  
+  create: async (data: {
+    userId: string
+    licenseNumber: string
+    licenseClass: string
+    licenseExpiryDate: string
+    emergencyContact?: string
+    emergencyPhone?: string
+    hireDate: string
+    status?: string
+    specializations?: string[]
+    notes?: string
+  }): Promise<Driver> => {
+    const response = await api.post('/drivers', data)
+    return response.data
+  },
+  
+  update: async (id: string, data: Partial<Driver>): Promise<Driver> => {
+    const response = await api.patch(`/drivers/${id}`, data)
+    return response.data
+  },
+  
+  assignVehicle: async (id: string, data: {
+    vehicleId: string
+    reason?: string
+    notes?: string
+  }): Promise<Driver> => {
+    const response = await api.post(`/drivers/${id}/assign-vehicle`, data)
+    return response.data
+  },
+  
+  unassignVehicle: async (id: string, reason?: string): Promise<Driver> => {
+    const response = await api.post(`/drivers/${id}/unassign-vehicle`, { reason })
+    return response.data
+  },
+  
+  delete: async (id: string): Promise<Driver> => {
+    const response = await api.delete(`/drivers/${id}`)
+    return response.data
+  },
+}
+
+export const vehiclesApi = {
+  getAll: async (includeRetired?: boolean): Promise<Vehicle[]> => {
+    const response = await api.get(`/vehicles${includeRetired ? '?includeRetired=true' : ''}`)
+    return response.data
+  },
+  
+  getById: async (id: string): Promise<Vehicle> => {
+    const response = await api.get(`/vehicles/${id}`)
+    return response.data
+  },
+  
+  getByCode: async (vehicleCode: string): Promise<Vehicle> => {
+    const response = await api.get(`/vehicles/code/${vehicleCode}`)
+    return response.data
+  },
+  
+  getFleetSummary: async (): Promise<FleetSummary> => {
+    const response = await api.get('/vehicles/fleet-summary')
+    return response.data
+  },
+  
+  getCurrentDriver: async (id: string): Promise<Driver | null> => {
+    const response = await api.get(`/vehicles/${id}/current-driver`)
+    return response.data
+  },
+  
+  getPerformanceStats: async (id: string): Promise<{
+    vehicle: Vehicle
+    performance: {
+      totalRoutes: number
+      completedRoutes: number
+      completionRate: string
+      averageDistance: number
+      averageFuel: number
+      averageWaste: number
+      totalDistance: number
+      totalFuel: number
+      fuelEfficiency: string
+    }
+    maintenance: {
+      totalMaintenance: number
+      completedMaintenance: number
+      averageCost: number
+      totalCost: number
+    }
+  }> => {
+    const response = await api.get(`/vehicles/${id}/performance`)
+    return response.data
+  },
+  
+  getMaintenanceHistory: async (id: string): Promise<MaintenanceRecord[]> => {
+    const response = await api.get(`/vehicles/${id}/maintenance`)
+    return response.data
+  },
+  
+  create: async (data: {
+    plateNumber: string
+    make: string
+    model: string
+    year: number
+    vehicleType: string
+    fuelType?: string
+    capacity: number
+    capacityUnit: string
+    status?: string
+    purchaseDate: string
+    purchasePrice?: number
+    insuranceExpiry?: string
+    registrationExpiry?: string
+    currentMileage?: number
+    currentLocation?: string
+    notes?: string
+  }): Promise<Vehicle> => {
+    const response = await api.post('/vehicles', data)
+    return response.data
+  },
+  
+  update: async (id: string, data: Partial<Vehicle>): Promise<Vehicle> => {
+    const response = await api.patch(`/vehicles/${id}`, data)
+    return response.data
+  },
+  
+  updateLocation: async (id: string, data: {
+    location: string
+    latitude?: number
+    longitude?: number
+  }): Promise<Vehicle> => {
+    const response = await api.patch(`/vehicles/${id}/location`, data)
+    return response.data
+  },
+  
+  scheduleMaintenance: async (id: string, data: {
+    maintenanceType: string
+    status?: string
+    priority?: string
+    title: string
+    description: string
+    scheduledDate: string
+    mileageAtMaintenance?: number
+    serviceProvider?: string
+    technician?: string
+    estimatedCost?: number
+    nextServiceDue?: string
+    nextServiceMileage?: number
+    notes?: string
+  }): Promise<MaintenanceRecord> => {
+    const response = await api.post(`/vehicles/${id}/maintenance`, data)
+    return response.data
+  },
+  
+  delete: async (id: string): Promise<Vehicle> => {
+    const response = await api.delete(`/vehicles/${id}`)
+    return response.data
+  },
+}
+
+export const routeExecutionsApi = {
+  getAll: async (filters?: {
+    driverId?: string
+    vehicleId?: string
+    routeId?: string
+    status?: string
+    dateFrom?: string
+    dateTo?: string
+  }): Promise<RouteExecution[]> => {
+    const params = new URLSearchParams()
+    if (filters?.driverId) params.set('driverId', filters.driverId)
+    if (filters?.vehicleId) params.set('vehicleId', filters.vehicleId)
+    if (filters?.routeId) params.set('routeId', filters.routeId)
+    if (filters?.status) params.set('status', filters.status)
+    if (filters?.dateFrom) params.set('dateFrom', filters.dateFrom)
+    if (filters?.dateTo) params.set('dateTo', filters.dateTo)
+    
+    const response = await api.get(`/route-executions?${params.toString()}`)
+    return response.data
+  },
+  
+  getTodaysExecutions: async (): Promise<RouteExecution[]> => {
+    const response = await api.get('/route-executions/today')
+    return response.data
+  },
+  
+  getPerformanceMetrics: async (filters?: {
+    driverId?: string
+    vehicleId?: string
+    dateFrom?: string
+    dateTo?: string
+  }): Promise<{
+    totalExecutions: number
+    completedExecutions: number
+    completionRate: string
+    averageDuration: number
+    averageDistance: number
+    averageFuel: number
+    averageWaste: number
+    averageRating: number
+    onTimeRate: string
+  }> => {
+    const params = new URLSearchParams()
+    if (filters?.driverId) params.set('driverId', filters.driverId)
+    if (filters?.vehicleId) params.set('vehicleId', filters.vehicleId)
+    if (filters?.dateFrom) params.set('dateFrom', filters.dateFrom)
+    if (filters?.dateTo) params.set('dateTo', filters.dateTo)
+    
+    const response = await api.get(`/route-executions/performance?${params.toString()}`)
+    return response.data
+  },
+  
+  getById: async (id: string): Promise<RouteExecution> => {
+    const response = await api.get(`/route-executions/${id}`)
+    return response.data
+  },
+  
+  create: async (data: {
+    routeId: string
+    driverId?: string
+    vehicleId?: string
+    scheduledDate: string
+    plannedStops?: number
+    notes?: string
+  }): Promise<RouteExecution> => {
+    const response = await api.post('/route-executions', data)
+    return response.data
+  },
+  
+  startRoute: async (id: string, data: {
+    startMileage?: number
+    startLocation?: string
+    startLatitude?: number
+    startLongitude?: number
+    notes?: string
+  }): Promise<RouteExecution> => {
+    const response = await api.post(`/route-executions/${id}/start`, data)
+    return response.data
+  },
+  
+  completeRoute: async (id: string, data: {
+    completedStops: number
+    totalDistance?: number
+    fuelUsed?: number
+    wasteCollected?: number
+    wasteUnit?: string
+    endMileage?: number
+    endLocation?: string
+    endLatitude?: number
+    endLongitude?: number
+    routeGpsTrace?: string
+    driverRating?: number
+    residentSatisfaction?: number
+    notes?: string
+  }): Promise<RouteExecution> => {
+    const response = await api.post(`/route-executions/${id}/complete`, data)
+    return response.data
+  },
+  
+  reportIssue: async (id: string, data: {
+    issue: string
+    delayMinutes?: number
+  }): Promise<RouteExecution> => {
+    const response = await api.post(`/route-executions/${id}/report-issue`, data)
+    return response.data
+  },
+  
+  update: async (id: string, data: Partial<RouteExecution>): Promise<RouteExecution> => {
+    const response = await api.patch(`/route-executions/${id}`, data)
+    return response.data
+  },
+  
+  delete: async (id: string): Promise<void> => {
+    const response = await api.delete(`/route-executions/${id}`)
+    return response.data
+  },
+}

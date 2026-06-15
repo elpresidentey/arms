@@ -15,4 +15,10 @@ export class LogisticsController {
   getSummary() {
     return this.logisticsService.getSummary();
   }
+
+  @Get('fleet-details')
+  @Roles(UserRole.ADMIN, UserRole.SUPERVISOR)
+  getFleetDetails() {
+    return this.logisticsService.getFleetDetails();
+  }
 }
