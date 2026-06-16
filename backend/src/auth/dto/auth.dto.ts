@@ -182,7 +182,7 @@ export class BootstrapAdminDto {
   email: string;
 
   @IsString()
-  @IsStrongPassword()
+  @MinLength(8, { message: 'Password must be at least 8 characters' })
   password: string;
 
   @IsString()
@@ -196,9 +196,7 @@ export class BootstrapAdminDto {
   lastName: string;
 
   @IsString()
-  @Matches(/^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/, { 
-    message: 'Please provide a valid phone number' 
-  })
+  @MinLength(10, { message: 'Please provide a valid phone number' })
   phoneNumber: string;
 
   @IsString()
