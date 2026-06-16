@@ -36,7 +36,8 @@ import {
 } from '../types'
 import { clearAuthSession, getStoredAuthToken, getWorkspaceLoginPath, loadPreferredWorkspace } from './authSession'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://backend-seven-chi-51.vercel.app'
+// Force use of new Vercel backend
+const API_BASE_URL = 'https://backend-seven-chi-51.vercel.app'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
