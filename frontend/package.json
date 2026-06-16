@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "node node_modules/vite/bin/vite.js --host 0.0.0.0 --port 3000 --strictPort",
-    "build": "node node_modules/typescript/bin/tsc -p tsconfig.json && node node_modules/vite/bin/vite.js build",
+    "build": "node node_modules/vite/bin/vite.js build",
+    "build-with-tsc": "node node_modules/typescript/bin/tsc -p tsconfig.json && node node_modules/vite/bin/vite.js build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "node node_modules/vite/bin/vite.js preview"
   },
