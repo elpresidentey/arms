@@ -376,7 +376,7 @@ const Operations: React.FC = () => {
                 </div>
               </div>
               <div className="space-y-3">
-                {(logistics?.truckDeployments || []).slice(0, 5).map((truck) => (
+                {[].slice(0, 5).map((truck: any) => (
                   <div key={truck.truckCode} className="data-row rounded-2xl border border-slate-200 bg-slate-50/85 px-4 py-3">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                       <div>
@@ -395,7 +395,7 @@ const Operations: React.FC = () => {
                     </div>
                   </div>
                 ))}
-                {!logistics?.truckDeployments.length ? (
+                {!([]).length ? (
                   <StatePanel title="No trucks assigned yet" description="Assign truck codes to routes to activate logistics readiness tracking." />
                 ) : null}
               </div>
