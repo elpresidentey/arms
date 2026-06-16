@@ -36,8 +36,8 @@ import {
 } from '../types'
 import { clearAuthSession, getStoredAuthToken, getWorkspaceLoginPath, loadPreferredWorkspace } from './authSession'
 
-// Force use of new Vercel backend
-const API_BASE_URL = 'https://backend-seven-chi-51.vercel.app'
+// Use the working Render backend that has proper environment variables
+const API_BASE_URL = 'https://arms-c56l.onrender.com'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
