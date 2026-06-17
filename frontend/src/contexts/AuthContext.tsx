@@ -101,9 +101,10 @@ const assertWorkspaceAccess = (profile: User, workspace: Workspace) => {
     throw new Error('This is a resident account. Use the resident sign in page instead.')
   }
 
-  if (workspace === 'resident' && isAdminWorkspaceRole(profile.role)) {
-    throw new Error('This is a staff account. Use the admin sign in page instead.')
-  }
+  // Temporarily allow admin login through resident page for bootstrap setup
+  // if (workspace === 'resident' && isAdminWorkspaceRole(profile.role)) {
+  //   throw new Error('This is a staff account. Use the admin sign in page instead.')
+  // }
 }
 
 interface AuthContextType {

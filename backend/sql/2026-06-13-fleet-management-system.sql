@@ -150,14 +150,16 @@ CREATE INDEX IF NOT EXISTS idx_vehicle_assignments_active ON vehicle_assignments
 CREATE INDEX IF NOT EXISTS idx_maintenance_records_vehicle ON maintenance_records(vehicle_id);
 CREATE INDEX IF NOT EXISTS idx_maintenance_records_status ON maintenance_records(status);
 CREATE INDEX IF NOT EXISTS idx_maintenance_records_scheduled_date ON maintenance_records(scheduled_date);
-CREATE INDEX IF NOT EXISTS idx_maintenance_records_overdue ON maintenance_records(scheduled_date) WHERE status = 'scheduled' AND scheduled_date < NOW();
+-- Removed problematic index with NOW() function - can be added with IMMUTABLE function wrapper if needed
+-- CREATE INDEX IF NOT EXISTS idx_maintenance_records_overdue ON maintenance_records(scheduled_date) WHERE status = 'scheduled' AND scheduled_date < NOW();
 
 CREATE INDEX IF NOT EXISTS idx_route_executions_route ON route_executions(route_id);
 CREATE INDEX IF NOT EXISTS idx_route_executions_driver ON route_executions(driver_id);
 CREATE INDEX IF NOT EXISTS idx_route_executions_vehicle ON route_executions(vehicle_id);
 CREATE INDEX IF NOT EXISTS idx_route_executions_status ON route_executions(status);
 CREATE INDEX IF NOT EXISTS idx_route_executions_scheduled_date ON route_executions(scheduled_date);
-CREATE INDEX IF NOT EXISTS idx_route_executions_today ON route_executions(scheduled_date) WHERE DATE(scheduled_date) = CURRENT_DATE;
+-- Removed problematic index with CURRENT_DATE function - can query by date range instead
+-- CREATE INDEX IF NOT EXISTS idx_route_executions_today ON route_executions(scheduled_date) WHERE DATE(scheduled_date) = CURRENT_DATE;
 
 -- Create triggers to update updated_at timestamps
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -199,19 +201,8 @@ VALUES
     ('TR003', 'LAG-789-EF', 'Mercedes', 'Atego', 2023, 'compactor_truck', 'diesel', 18.0, 'm3', '2023-03-10', 'Service Bay', 'New high-capacity vehicle for commercial areas')
 ON CONFLICT (vehicle_code) DO NOTHING;
 
--- Update collection routes to use new vehicle codes instead of truck codes
--- This maintains backward compatibility while transitioning to the new system
-UPDATE collection_routes 
-SET truck_code = 'TR001' 
-WHERE truck_code IS NULL 
-AND status = 'active' 
-AND id IN (SELECT id FROM collection_routes WHERE status = 'active' LIMIT 3);
-
-UPDATE collection_routes 
-SET truck_code = 'TR002' 
-WHERE truck_code IS NULL 
-AND status = 'active' 
-AND id IN (SELECT id FROM collection_routes WHERE status = 'active' AND truck_code IS NULL LIMIT 2);
+-- Legacy truck_code updates removed - collection_routes table structure changed
+-- These updates are no longer needed as the new system uses vehicle assignments
 
 -- Create sample route executions for today
 INSERT INTO route_executions (route_id, scheduled_date, planned_stops, status)
@@ -222,7 +213,6 @@ SELECT
     'scheduled'
 FROM collection_routes cr
 WHERE cr.status = 'active'
-AND cr.truck_code IS NOT NULL
 LIMIT 5
 ON CONFLICT DO NOTHING;
 
@@ -232,11 +222,10 @@ COMMENT ON TABLE vehicle_assignments IS 'Track driver-vehicle assignments over t
 COMMENT ON TABLE maintenance_records IS 'Store vehicle maintenance history and schedules';
 COMMENT ON TABLE route_executions IS 'Track actual route execution with performance metrics';
 
--- Grant appropriate permissions
-GRANT SELECT, INSERT, UPDATE ON drivers TO arms_app;
-GRANT SELECT, INSERT, UPDATE ON vehicles TO arms_app;
-GRANT SELECT, INSERT, UPDATE, DELETE ON vehicle_assignments TO arms_app;
-GRANT SELECT, INSERT, UPDATE ON maintenance_records TO arms_app;
-GRANT SELECT, INSERT, UPDATE ON route_executions TO arms_app;
-
-GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO arms_app;
+-- Grant statements removed - using Supabase default roles instead
+-- GRANT SELECT, INSERT, UPDATE ON drivers TO arms_app;
+-- GRANT SELECT, INSERT, UPDATE ON vehicles TO arms_app;
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON vehicle_assignments TO arms_app;
+-- GRANT SELECT, INSERT, UPDATE ON maintenance_records TO arms_app;
+-- GRANT SELECT, INSERT, UPDATE ON route_executions TO arms_app;
+-- GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO arms_app;

@@ -30,6 +30,7 @@ import PaymentVerification from '../pages/PaymentVerification'
 import AdminBilling from '../pages/AdminBilling'
 import { FinanceDashboard } from '../pages/FinanceDashboard'
 import Operations from '../pages/Operations'
+import FleetManagement from '../pages/FleetManagement'
 import Profile from '../pages/Profile'
 import ScheduleCollection from '../pages/ScheduleCollection'
 import SubmitRecyclable from '../pages/SubmitRecyclable'
@@ -168,6 +169,14 @@ export const AppRoutes = () => (
             element={
               <RoleGuard access="staff">
                 <Operations />
+              </RoleGuard>
+            }
+          />
+          <Route
+            path="fleet"
+            element={
+              <RoleGuard access="staff">
+                <FleetManagement />
               </RoleGuard>
             }
           />

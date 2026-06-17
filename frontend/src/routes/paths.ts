@@ -12,6 +12,7 @@ export const PATHS = {
 
   app: '/app',
   appOperations: '/app/operations',
+  appFleet: '/app/fleet',
   appBills: '/app/bills',
   appBillReceipt: (billId: string) => `/app/bills/${billId}/receipt`,
   appPaymentVerify: '/app/payment/verify',

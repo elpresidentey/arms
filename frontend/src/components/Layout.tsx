@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
-import { Home, History, Recycle, Wallet, FileText, LogOut, Menu, X, CalendarClock, ClipboardList, Activity, ChevronRight, User, Bell, MapPin, Truck, DollarSign, Receipt } from 'lucide-react'
+import { Home, History, Recycle, Wallet, FileText, LogOut, Menu, X, CalendarClock, ClipboardList, Activity, ChevronRight, User, Bell, MapPin, Truck, DollarSign, Receipt, TruckIcon } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useSocket } from '../contexts/SocketContext'
 import BrandLogo from './BrandLogo'
@@ -50,6 +50,7 @@ const Layout: React.FC = () => {
     : [
         { name: 'Dashboard', href: PATHS.app, icon: Home },
         { name: 'Operations', href: PATHS.appOperations, icon: Activity },
+        { name: 'Fleet Management', href: PATHS.appFleet, icon: TruckIcon },
         ...(showBillingAdmin
           ? [{ name: 'Bill Payments', href: PATHS.appBillingAdmin, icon: Receipt }]
           : []),
@@ -92,7 +93,7 @@ const Layout: React.FC = () => {
       ['Complaints', 'My Requests', 'My Recyclables', 'Wallet'].includes(item.name),
     )
     const operations = navigation.filter((item) =>
-      ['Operations', 'Bill Payments', 'Finance', 'Collections', 'Resident Requests', 'Route Schedules', 'Service Schedules', 'Collection Requests', 'Locations', 'Recycling Oversight', 'Withdrawal Approvals'].includes(item.name),
+      ['Operations', 'Fleet Management', 'Bill Payments', 'Finance', 'Collections', 'Resident Requests', 'Route Schedules', 'Service Schedules', 'Collection Requests', 'Locations', 'Recycling Oversight', 'Withdrawal Approvals'].includes(item.name),
     )
     const adminQueues = navigation.filter((item) => ['Complaints'].includes(item.name) && !isResident)
     const account = navigation.filter((item) => ['Edit Profile'].includes(item.name))
