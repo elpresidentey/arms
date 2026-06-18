@@ -1,58 +1,67 @@
-# ARMS - Automated Refuse Management Systems
+# ARMS - Automated Refuse Management System
 
-ARMS is an MVP for resident-facing waste service visibility in Oriade LCDA. The first release focuses on a simple loop: onboard residents, let them schedule or track collection, report issues, submit recyclables, and request wallet payouts for review.
+Modern waste management system for Lagos residents and administrators.
 
-## MVP Features
+## 🚀 Quick Start
 
-- **Resident onboarding**: Register and log in with address, ward, and street.
-- **Personal waste timeline**: Track scheduled and completed collections.
-- **Collection requests**: Request a future waste pickup.
-- **Issue reporting**: Report missed pickups or service issues with location and photos.
-- **Recyclables tracking**: Submit recyclable items and track their status.
-- **Wallet and payout requests**: View balance and request manual payout review.
-- **Operations overview**: Non-resident roles can review route, request, and report queues.
-
-## Tech Stack
-
-- **Frontend**: React + TypeScript + Three.js
-- **Backend**: Node.js + NestJS + PostgreSQL
-- **Real-time**: WebSocket connections
-- **Payments**: Paystack/Flutterwave integration
-
-## Quick Start
-
+### Development
 ```bash
-# Install all dependencies
-npm run install:all
+# Start both frontend and backend
+start-local-dev.bat
 
-# Start development servers
-npm run dev
+# Or individually:
+cd backend && npm run start:dev
+cd frontend && npm run dev
 ```
 
-## Project Structure
+### Production
+See **[DEPLOY_NOW.md](DEPLOY_NOW.md)** for deployment instructions.
 
-```
-arms-waste-management/
-├── frontend/          # React TypeScript app
-├── backend/           # NestJS API server
-├── shared/            # Shared types and utilities
-└── docs/              # Documentation
-```
+## 📚 Documentation
 
-## MVP Scope
+- **[DEPLOY_NOW.md](DEPLOY_NOW.md)** - Deployment guide
+- **[SECURITY.md](SECURITY.md)** - Security guidelines
+- **[PRD.md](PRD.md)** - Product requirements
+- **[docs/](docs/)** - Additional documentation
+- **[docs/MAINTENANCE_GUIDE.md](docs/MAINTENANCE_GUIDE.md)** - Code maintenance standards
 
-See [MVP_PRODUCT_BRIEF.md](./MVP_PRODUCT_BRIEF.md) for the current MVP definition, non-goals, success metrics, and launch checklist.
+## 🔑 Admin Access
 
-## Admin Onboarding
+### First Admin Setup
+1. Set `BOOTSTRAP_ADMIN_TOKEN` in backend/.env
+2. Visit: `http://localhost:3000/bootstrap?token=YOUR_TOKEN`
+3. Complete the registration form
 
-Admin access is invite-only. The first admin is bootstrapped by the system owner, then existing admins issue one-time invite links for additional staff from Operations. See [ADMIN_ONBOARDING.md](./ADMIN_ONBOARDING.md) for the exact flow.
+### Additional Admins
+Use the admin invite system after first admin is created.
 
-## Development
+## 🏗️ Tech Stack
 
-- Frontend runs on http://localhost:3000
-- Backend API runs on http://localhost:3001
-- Database runs on localhost:5432
+**Frontend:** React, TypeScript, TailwindCSS, React Query  
+**Backend:** NestJS, TypeScript, PostgreSQL (Supabase)  
+**Payment:** Paystack  
+**Auth:** Supabase Auth
 
-## License
+## 📦 Key Features
 
-MIT
+- ✅ Waste collection scheduling
+- ✅ Billing & payments (Paystack)
+- ✅ Recyclables tracking & wallet
+- ✅ Fleet management
+- ✅ Service requests & reports
+- ✅ Real-time notifications
+- ✅ Admin dashboard
+
+## 🔗 Links
+
+**Production:**
+- Frontend: https://arms-roan.vercel.app
+- Backend: https://arms-c56l.onrender.com
+
+**Local:**
+- Frontend: http://localhost:3000
+- Backend: http://localhost:3001
+
+## 📞 Support
+
+Check the [docs/](docs/) folder for detailed guides and troubleshooting.
