@@ -137,45 +137,45 @@ const Layout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(61,90,54,0.07),_transparent_20%),radial-gradient(circle_at_top_right,_rgba(194,120,59,0.06),_transparent_22%),linear-gradient(180deg,#f8fafc_0%,#f4f6f2_52%,#eef1ec_100%)] text-slate-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="fixed left-3 top-3 z-50 lg:hidden">
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          className="rounded-xl border border-slate-200 bg-white p-2.5 shadow-md transition-colors hover:bg-slate-50"
+          className="rounded-lg border border-slate-300 bg-white p-2.5 shadow-sm transition-colors hover:bg-slate-50"
         >
           {isMobileMenuOpen ? <X className="w-5 h-5 text-slate-700" /> : <Menu className="w-5 h-5 text-slate-700" />}
         </button>
       </div>
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,280px)] border-r border-slate-200 bg-white shadow-xl transform transition-transform duration-300 ease-smooth-out ${
+      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,260px)] border-r border-slate-200 bg-white shadow-sm transform transition-transform duration-300 ease-smooth-out ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0`}>
         <div className="flex flex-col h-full">
-          <div className="border-b border-slate-200 px-5 py-5 bg-slate-50">
+          <div className="border-b border-slate-200 px-4 py-4">
             <BrandLogo
               to="/app"
               variant="light"
               className="w-full"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <div className="mt-4 rounded-lg border border-slate-200 bg-white px-3 py-3 shadow-sm">
+            <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-slate-900">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="text-xs capitalize text-slate-500 mt-0.5">{user?.role}</p>
+                <p className="text-xs capitalize text-slate-600 mt-0.5">{user?.role}</p>
               </div>
             </div>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-3 py-4 scrollbar-thin bg-slate-50/50">
+          <nav className="flex-1 overflow-y-auto px-3 py-3 scrollbar-thin">
             {navigationSections.map((section, sectionIndex) => (
-              <div key={section.title} className={sectionIndex > 0 ? 'mt-6 pt-5 border-t border-slate-200' : ''}>
-                <p className="px-3 pb-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">
+              <div key={section.title} className={sectionIndex > 0 ? 'mt-5 pt-4 border-t border-slate-200' : ''}>
+                <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                   {section.title}
                 </p>
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {section.items.map((item) => {
                     const Icon = item.icon
                     const active = isActive(item.href)
@@ -184,21 +184,17 @@ const Layout: React.FC = () => {
                         key={item.name}
                         to={item.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 ${
+                        className={`group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-150 ${
                           active
-                            ? 'bg-primary-50 text-primary-900 shadow-sm border border-primary-100'
+                            ? 'bg-slate-900 text-white'
                             : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                         }`}
                         aria-current={active ? 'page' : undefined}
                       >
-                        <span className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
-                          active ? 'bg-primary-100 text-primary-700' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200 group-hover:text-slate-700'
-                        }`}>
-                          <Icon className="h-4 w-4" />
-                        </span>
+                        <Icon className="h-4 w-4 shrink-0" />
                         <span className="min-w-0 flex-1 truncate">{item.name}</span>
                         {'badge' in item && typeof item.badge === 'number' && item.badge > 0 ? (
-                          <span className="rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white">
+                          <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white">
                             {item.badge}
                           </span>
                         ) : null}
@@ -210,60 +206,55 @@ const Layout: React.FC = () => {
             ))}
           </nav>
 
-          <div className="border-t border-slate-200 px-3 py-4 bg-slate-50/50">
+          <div className="border-t border-slate-200 px-3 py-3">
             <button
               onClick={handleLogout}
-              className="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-all hover:bg-rose-50 hover:text-rose-700"
+              className="group flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition-all hover:bg-slate-100 hover:text-slate-900"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors group-hover:bg-rose-100 group-hover:text-rose-700">
-                <LogOut className="h-4 w-4" />
-              </span>
+              <LogOut className="h-4 w-4" />
               <span>Sign out</span>
             </button>
           </div>
         </div>
       </aside>
 
-      <div className="lg:pl-[280px]">
-        <main className="px-3 pb-6 pt-14 sm:px-6 lg:px-8 lg:pt-7">
+      <div className="lg:pl-[260px]">
+        <main className="px-4 pb-8 pt-16 sm:px-6 lg:px-8 lg:pt-6">
           <div className="mx-auto w-full max-w-[1280px]">
-            <div className="panel-shell sticky top-2 z-30 mb-4 overflow-visible rounded-xl border-slate-200 bg-white/95 backdrop-blur-sm px-4 py-3 shadow-sm sm:relative sm:top-auto sm:mb-5 sm:px-6 sm:py-3.5">
+            <div className="sticky top-3 z-30 mb-5 rounded-lg border border-slate-200 bg-white shadow-sm px-5 py-3.5 sm:relative sm:top-auto">
               <div className="flex items-center justify-between gap-3">
                 <div className="ml-12 flex min-w-0 items-center gap-3 lg:ml-0">
-                  <div className="hidden h-11 w-11 items-center justify-center rounded-lg bg-slate-100 text-slate-700 sm:flex border border-slate-200">
+                  <div className="hidden h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 sm:flex">
                     {React.createElement(currentIcon, { className: 'h-5 w-5' })}
                   </div>
                   <div className="min-w-0">
-                    <p className="hidden text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500 sm:block mb-0.5">Current Page</p>
-                    <p className="truncate font-semibold text-slate-900 sm:text-lg">{currentSection}</p>
+                    <p className="truncate text-lg font-semibold text-slate-900">{currentSection}</p>
                   </div>
                 </div>
 
-                <div className="flex shrink-0 items-center gap-2.5 sm:gap-3">
-                  <div className="hidden items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 sm:flex">
+                <div className="flex shrink-0 items-center gap-2">
+                  <div className="hidden items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-600 sm:flex">
                     <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                    <span className="truncate max-w-[180px] font-medium">{user?.street || 'Street unavailable'}</span>
+                    <span className="truncate max-w-[160px] font-medium">{user?.street || 'N/A'}</span>
                     <span className="text-slate-300">•</span>
-                    <span className="text-slate-500 font-medium">{user?.ward || 'Ward unavailable'}</span>
+                    <span className="text-slate-500 font-medium">{user?.ward || 'N/A'}</span>
                   </div>
 
                   <div ref={notificationsRef} className="relative">
                     <button
                       type="button"
                       onClick={() => setIsNotificationsOpen((prev) => !prev)}
-                      className={`relative inline-flex h-10 items-center gap-2 rounded-lg border px-3 text-sm font-semibold transition-all ${
+                      className={`relative inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-sm font-medium transition-all ${
                         isConnected 
-                          ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-sm' 
-                          : 'border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100'
+                          ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50' 
+                          : 'border-slate-200 bg-slate-50 text-slate-500'
                       }`}
                       aria-label="Open updates"
                     >
                       <Bell className={`h-4 w-4 ${isConnected ? 'text-slate-600' : 'text-slate-400'}`} />
-                      <span className="hidden sm:inline">
-                        {isConnected ? 'Updates' : 'Updates (Offline)'}
-                      </span>
+                      <span className="hidden sm:inline">Notifications</span>
                       {unreadCount > 0 ? (
-                        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary-600 px-1.5 text-[10px] font-bold text-white">
+                        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-rose-600 px-1.5 text-[10px] font-bold text-white">
                           {unreadCount > 9 ? '9+' : unreadCount}
                         </span>
                       ) : null}
