@@ -17,6 +17,8 @@
     "test:payment": "node test-recyclables-payment.js",
     "test:wallet": "node test-wallet-flow.js",
     "check:admins": "node check-admins.js",
+    "seed:fleet": "node scripts/seed-fleet-data.js",
+    "seed:fleet-api": "node scripts/seed-fleet-via-api.js",
     "cleanup:db": "node cleanup-postgres.js",
     "cleanup:postgres": "node cleanup-postgres.js",
     "cleanup:auth": "node cleanup-supabase-auth.js",

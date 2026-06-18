@@ -1,0 +1,249 @@
+{
+  "sampleUsers": [
+    {
+      "firstName": "John",
+      "lastName": "Driver",
+      "email": "john.driver@arms.com",
+      "role": "supervisor",
+      "password": "Driver@123"
+    },
+    {
+      "firstName": "Sarah",
+      "lastName": "Wheeler",
+      "email": "sarah.wheeler@arms.com",
+      "role": "supervisor",
+      "password": "Wheeler@123"
+    },
+    {
+      "firstName": "Mike",
+      "lastName": "Collins",
+      "email": "mike.collins@arms.com",
+      "role": "dispatcher",
+      "password": "Collins@123"
+    },
+    {
+      "firstName": "Emma",
+      "lastName": "Rodriguez",
+      "email": "emma.rodriguez@arms.com",
+      "role": "dispatcher",
+      "password": "Rodriguez@123"
+    },
+    {
+      "firstName": "David",
+      "lastName": "Chen",
+      "email": "david.chen@arms.com",
+      "role": "dispatcher",
+      "password": "Chen@123"
+    }
+  ],
+  "drivers": [
+    {
+      "licenseNumber": "DL-A1234567",
+      "licenseClass": "class_a",
+      "licenseExpiryDate": "2027-12-31",
+      "emergencyContact": "Jane Driver",
+      "emergencyPhone": "+2348012345678",
+      "hireDate": "2023-01-15",
+      "specializations": ["Compactor Trucks", "Long Distance"],
+      "notes": "Experienced driver with 10+ years in waste management"
+    },
+    {
+      "licenseNumber": "DL-B2345678",
+      "licenseClass": "class_b",
+      "licenseExpiryDate": "2028-06-30",
+      "emergencyContact": "Robert Wheeler",
+      "emergencyPhone": "+2348123456789",
+      "hireDate": "2023-03-20",
+      "specializations": ["Tipper Trucks", "Urban Routes"],
+      "notes": "Excellent safety record, knows all city routes"
+    },
+    {
+      "licenseNumber": "DL-C3456789",
+      "licenseClass": "class_a",
+      "licenseExpiryDate": "2027-09-15",
+      "emergencyContact": "Lisa Collins",
+      "emergencyPhone": "+2348234567890",
+      "hireDate": "2023-05-10",
+      "specializations": ["Recycling Trucks", "Hazardous Materials"],
+      "notes": "Certified for hazardous waste handling"
+    },
+    {
+      "licenseNumber": "DL-D4567890",
+      "licenseClass": "class_b",
+      "licenseExpiryDate": "2028-03-20",
+      "emergencyContact": "Carlos Rodriguez",
+      "emergencyPhone": "+2348345678901",
+      "hireDate": "2023-07-01",
+      "specializations": ["Compactor Trucks", "Night Shifts"],
+      "notes": "Prefers night shifts, very reliable"
+    },
+    {
+      "licenseNumber": "DL-E5678901",
+      "licenseClass": "class_a",
+      "licenseExpiryDate": "2027-11-30",
+      "emergencyContact": "Wei Chen",
+      "emergencyPhone": "+2348456789012",
+      "hireDate": "2023-09-15",
+      "specializations": ["Roll-off Trucks", "Construction Sites"],
+      "notes": "Specializes in construction waste collection"
+    }
+  ],
+  "vehicles": [
+    {
+      "plateNumber": "LAG-001-TR",
+      "make": "Mercedes-Benz",
+      "model": "Econic 2630",
+      "year": 2022,
+      "vehicleType": "compactor_truck",
+      "fuelType": "diesel",
+      "capacity": 12,
+      "capacityUnit": "tons",
+      "purchaseDate": "2022-01-15",
+      "purchasePrice": 85000,
+      "insuranceExpiry": "2027-01-15",
+      "registrationExpiry": "2027-01-15",
+      "currentMileage": 45000,
+      "currentLocation": "Main Depot - Bay A",
+      "notes": "Primary collection vehicle for Ward 1-5"
+    },
+    {
+      "plateNumber": "LAG-002-TR",
+      "make": "Volvo",
+      "model": "FM 440",
+      "year": 2021,
+      "vehicleType": "tipper_truck",
+      "fuelType": "diesel",
+      "capacity": 15,
+      "capacityUnit": "tons",
+      "purchaseDate": "2021-06-20",
+      "purchasePrice": 78000,
+      "insuranceExpiry": "2026-06-20",
+      "registrationExpiry": "2026-06-20",
+      "currentMileage": 62000,
+      "currentLocation": "Main Depot - Bay B",
+      "notes": "Heavy-duty tipper for landfill transport"
+    },
+    {
+      "plateNumber": "LAG-003-TR",
+      "make": "Isuzu",
+      "model": "FVR 34",
+      "year": 2023,
+      "vehicleType": "compactor_truck",
+      "fuelType": "diesel",
+      "capacity": 10,
+      "capacityUnit": "tons",
+      "purchaseDate": "2023-02-10",
+      "purchasePrice": 65000,
+      "insuranceExpiry": "2028-02-10",
+      "registrationExpiry": "2028-02-10",
+      "currentMileage": 28000,
+      "currentLocation": "Main Depot - Bay C",
+      "notes": "Newest addition to fleet, excellent fuel efficiency"
+    },
+    {
+      "plateNumber": "LAG-004-TR",
+      "make": "MAN",
+      "model": "TGM 18.290",
+      "year": 2020,
+      "vehicleType": "recycling_truck",
+      "fuelType": "diesel",
+      "capacity": 8,
+      "capacityUnit": "tons",
+      "purchaseDate": "2020-09-15",
+      "purchasePrice": 72000,
+      "insuranceExpiry": "2026-09-15",
+      "registrationExpiry": "2026-09-15",
+      "currentMileage": 78000,
+      "currentLocation": "Recycling Center",
+      "notes": "Dedicated recycling collection vehicle"
+    },
+    {
+      "plateNumber": "LAG-005-TR",
+      "make": "Scania",
+      "model": "P 320",
+      "year": 2022,
+      "vehicleType": "roll_off",
+      "fuelType": "diesel",
+      "capacity": 20,
+      "capacityUnit": "cubic_meters",
+      "purchaseDate": "2022-11-05",
+      "purchasePrice": 92000,
+      "insuranceExpiry": "2027-11-05",
+      "registrationExpiry": "2027-11-05",
+      "currentMileage": 35000,
+      "currentLocation": "Main Depot - Bay D",
+      "notes": "Roll-off truck for large containers and construction sites"
+    },
+    {
+      "plateNumber": "LAG-006-TR",
+      "make": "Mercedes-Benz",
+      "model": "Atego 1218",
+      "year": 2021,
+      "vehicleType": "compactor_truck",
+      "fuelType": "diesel",
+      "capacity": 9,
+      "capacityUnit": "tons",
+      "purchaseDate": "2021-04-12",
+      "purchasePrice": 68000,
+      "insuranceExpiry": "2026-04-12",
+      "registrationExpiry": "2026-04-12",
+      "currentMileage": 55000,
+      "currentLocation": "Main Depot - Bay A",
+      "notes": "Backup vehicle for high-demand routes"
+    },
+    {
+      "plateNumber": "LAG-007-TR",
+      "make": "DAF",
+      "model": "LF 180",
+      "year": 2023,
+      "vehicleType": "tipper_truck",
+      "fuelType": "diesel",
+      "capacity": 12,
+      "capacityUnit": "tons",
+      "purchaseDate": "2023-08-20",
+      "purchasePrice": 71000,
+      "insuranceExpiry": "2028-08-20",
+      "registrationExpiry": "2028-08-20",
+      "currentMileage": 15000,
+      "currentLocation": "Main Depot - Bay B",
+      "notes": "Recently acquired, undergoing driver familiarization"
+    },
+    {
+      "plateNumber": "LAG-008-TR",
+      "make": "Iveco",
+      "model": "Eurocargo 150E28",
+      "year": 2020,
+      "vehicleType": "compactor_truck",
+      "fuelType": "diesel",
+      "capacity": 11,
+      "capacityUnit": "tons",
+      "purchaseDate": "2020-03-18",
+      "purchasePrice": 66000,
+      "insuranceExpiry": "2025-03-18",
+      "registrationExpiry": "2025-03-18",
+      "currentMileage": 82000,
+      "currentLocation": "Service Center",
+      "status": "maintenance",
+      "notes": "Scheduled for regular maintenance service"
+    }
+  ],
+  "licenseClasses": {
+    "class_a": "Authorized to drive any combination of vehicles with a GVWR of 26,001 or more pounds",
+    "class_b": "Authorized to drive single vehicles with a GVWR of 26,001 or more pounds",
+    "class_c": "Authorized to drive vehicles designed to transport 16 or more passengers"
+  },
+  "vehicleTypes": {
+    "compactor_truck": "Waste compactor truck for residential collection",
+    "tipper_truck": "Tipper/dump truck for bulk waste transport",
+    "roll_off": "Roll-off truck for large container transport",
+    "recycling_truck": "Specialized truck for recyclable materials",
+    "flatbed": "Flatbed truck for equipment and special items"
+  },
+  "fuelTypes": {
+    "diesel": "Diesel fuel",
+    "gasoline": "Gasoline/Petrol",
+    "electric": "Electric battery-powered",
+    "hybrid": "Hybrid diesel-electric",
+    "cng": "Compressed Natural Gas"
+  }
+}

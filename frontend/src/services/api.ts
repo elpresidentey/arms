@@ -36,8 +36,8 @@ import {
 } from '../types'
 import { clearAuthSession, getStoredAuthToken, getWorkspaceLoginPath, loadPreferredWorkspace } from './authSession'
 
-// Use the working Render backend that has proper environment variables
-const API_BASE_URL = 'https://arms-c56l.onrender.com'
+// Use environment variable for API URL, fallback to local development
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -414,6 +414,11 @@ export const serviceRequestsApi = {
 }
 
 export const usersApi = {
+  getAll: async (): Promise<User[]> => {
+    const response = await api.get('/users')
+    return response.data
+  },
+
   updateProfile: async (data: { street?: string; ward?: string; houseNumber?: string; landmark?: string; propertyType?: string }) => {
     const response = await api.patch('/users/profile', data)
     return response.data

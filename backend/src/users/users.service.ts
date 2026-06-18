@@ -16,6 +16,13 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { email } });
   }
 
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find({
+      order: { createdAt: 'DESC' },
+      select: ['id', 'email', 'firstName', 'lastName', 'role', 'isActive', 'createdAt'],
+    });
+  }
+
   async findById(id: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { id } });
   }
