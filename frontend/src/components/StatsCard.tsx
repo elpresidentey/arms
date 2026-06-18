@@ -1,19 +1,10 @@
 import React from 'react'
 import clsx from 'clsx'
-import {
-  CardIconAccent,
-  CARD_ICON_ACCENTS,
-  legacyStatsCardColorMap,
-  resolveCardAccent,
-} from '../utils/cardIconColors'
-
-export type StatsCardColor = CardIconAccent | keyof typeof legacyStatsCardColorMap
 
 interface StatsCardProps {
   title: string
   value: string
   icon: React.ReactNode
-  color?: StatsCardColor
   trend?: {
     value: number
     isPositive: boolean
@@ -25,7 +16,6 @@ const StatsCard: React.FC<StatsCardProps> = ({
   title,
   value,
   icon,
-  color = 'forest',
   trend,
   subtitle,
 }) => {
@@ -35,14 +25,8 @@ const StatsCard: React.FC<StatsCardProps> = ({
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1 space-y-2.5">
             <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{title}</p>
-            <p className="text-2xl font-bold text-slate-900">
-              {value}
-            </p>
-            {subtitle && (
-              <p className="text-sm text-slate-600">
-                {subtitle}
-              </p>
-            )}
+            <p className="text-2xl font-bold text-slate-900">{value}</p>
+            {subtitle && <p className="text-sm text-slate-600">{subtitle}</p>}
           </div>
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-600 border border-slate-200">
             {icon}

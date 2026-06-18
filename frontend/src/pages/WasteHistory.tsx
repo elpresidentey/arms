@@ -49,25 +49,21 @@ const WasteHistory: React.FC = () => {
           title="Total routes"
           value={isLoading ? 'Loading...' : `${collections?.length || 0}`}
           icon={<Truck className="h-5 w-5" />}
-          color="teal"
         />
         <StatsCard
           title="Completed"
           value={isLoading ? 'Loading...' : `${completedCount}`}
           icon={<CheckCircle2 className="h-5 w-5" />}
-          color="emerald"
         />
         <StatsCard
           title="Scheduled"
           value={isLoading ? 'Loading...' : `${scheduledCount}`}
           icon={<CalendarClock className="h-5 w-5" />}
-          color="sky"
         />
         <StatsCard
           title="Missed"
           value={isLoading ? 'Loading...' : `${missedCount}`}
           icon={<XCircle className="h-5 w-5" />}
-          color="rose"
         />
       </div>
 
