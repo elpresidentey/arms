@@ -148,31 +148,31 @@ const Layout: React.FC = () => {
         </button>
       </div>
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,280px)] border-r border-white/10 bg-[linear-gradient(180deg,#10190f_0%,#172315_54%,#0f172a_100%)] shadow-2xl shadow-slate-950/20 backdrop-blur-xl transform transition-transform duration-300 ease-smooth-out ${
+      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,280px)] border-r border-slate-200 bg-white shadow-xl transform transition-transform duration-300 ease-smooth-out ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0`}>
         <div className="flex flex-col h-full">
-          <div className="border-b border-white/10 px-5 py-5">
+          <div className="border-b border-slate-200 px-5 py-5 bg-slate-50">
             <BrandLogo
               to="/app"
-              variant="dark"
+              variant="light"
               className="w-full"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.06] px-3 py-3 shadow-sm">
+            <div className="mt-4 rounded-lg border border-slate-200 bg-white px-3 py-3 shadow-sm">
               <div className="min-w-0">
-                <p className="truncate text-xs font-semibold text-white">
+                <p className="truncate text-sm font-semibold text-slate-900">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="text-xs capitalize text-slate-400">{user?.role}</p>
+                <p className="text-xs capitalize text-slate-500 mt-0.5">{user?.role}</p>
               </div>
             </div>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-3 py-4 scrollbar-thin">
+          <nav className="flex-1 overflow-y-auto px-3 py-4 scrollbar-thin bg-slate-50/50">
             {navigationSections.map((section, sectionIndex) => (
-              <div key={section.title} className={sectionIndex > 0 ? 'mt-5 pt-5 border-t border-white/10' : ''}>
-                <p className="px-3 pb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+              <div key={section.title} className={sectionIndex > 0 ? 'mt-6 pt-5 border-t border-slate-200' : ''}>
+                <p className="px-3 pb-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">
                   {section.title}
                 </p>
                 <div className="space-y-1">
@@ -184,18 +184,15 @@ const Layout: React.FC = () => {
                         key={item.name}
                         to={item.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`group relative flex items-center gap-2.5 rounded-xl px-2.5 py-2.5 text-sm font-medium transition-all duration-200 ease-smooth-out ${
+                        className={`group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 ${
                           active
-                            ? 'bg-white text-slate-950 shadow-lg shadow-slate-950/20'
-                            : 'text-slate-300 hover:bg-white/[0.08] hover:text-white active:scale-[0.99]'
+                            ? 'bg-primary-50 text-primary-900 shadow-sm border border-primary-100'
+                            : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                         }`}
                         aria-current={active ? 'page' : undefined}
                       >
-                        {active && (
-                          <span className="absolute inset-y-2 left-0 w-1 rounded-r-full bg-primary-600" />
-                        )}
                         <span className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
-                          active ? 'bg-primary-100 text-primary-700' : 'bg-white/[0.08] text-slate-400 group-hover:bg-white/[0.12] group-hover:text-white'
+                          active ? 'bg-primary-100 text-primary-700' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200 group-hover:text-slate-700'
                         }`}>
                           <Icon className="h-4 w-4" />
                         </span>
@@ -205,7 +202,6 @@ const Layout: React.FC = () => {
                             {item.badge}
                           </span>
                         ) : null}
-                        {active && <ChevronRight className="h-4 w-4 text-primary-600" />}
                       </Link>
                     )
                   })}
@@ -214,12 +210,12 @@ const Layout: React.FC = () => {
             ))}
           </nav>
 
-          <div className="border-t border-white/10 px-3 py-4">
+          <div className="border-t border-slate-200 px-3 py-4 bg-slate-50/50">
             <button
               onClick={handleLogout}
-              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition-all hover:bg-rose-500/10 hover:text-rose-100"
+              className="group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-all hover:bg-rose-50 hover:text-rose-700"
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.08] text-slate-400 transition-colors group-hover:bg-rose-500/15 group-hover:text-rose-100">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition-colors group-hover:bg-rose-100 group-hover:text-rose-700">
                 <LogOut className="h-4 w-4" />
               </span>
               <span>Sign out</span>
@@ -231,38 +227,38 @@ const Layout: React.FC = () => {
       <div className="lg:pl-[280px]">
         <main className="px-3 pb-6 pt-14 sm:px-6 lg:px-8 lg:pt-7">
           <div className="mx-auto w-full max-w-[1280px]">
-            <div className="panel-shell sticky top-2 z-30 mb-4 overflow-visible rounded-xl px-3 py-2.5 sm:relative sm:top-auto sm:mb-5 sm:px-5 sm:py-3">
+            <div className="panel-shell sticky top-2 z-30 mb-4 overflow-visible rounded-xl border-slate-200 bg-white/95 backdrop-blur-sm px-4 py-3 shadow-sm sm:relative sm:top-auto sm:mb-5 sm:px-6 sm:py-3.5">
               <div className="flex items-center justify-between gap-3">
                 <div className="ml-12 flex min-w-0 items-center gap-3 lg:ml-0">
-                  <div className="hidden h-10 w-10 items-center justify-center rounded-xl bg-primary-50 text-primary-700 sm:flex">
+                  <div className="hidden h-11 w-11 items-center justify-center rounded-lg bg-slate-100 text-slate-700 sm:flex border border-slate-200">
                     {React.createElement(currentIcon, { className: 'h-5 w-5' })}
                   </div>
                   <div className="min-w-0">
-                    <p className="hidden text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 sm:block">Workspace</p>
-                    <p className="truncate font-display text-base font-semibold tracking-tight text-slate-900 sm:text-lg">{currentSection}</p>
+                    <p className="hidden text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500 sm:block mb-0.5">Current Page</p>
+                    <p className="truncate font-semibold text-slate-900 sm:text-lg">{currentSection}</p>
                   </div>
                 </div>
 
-                <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-                  <div className="hidden items-center gap-2 rounded-full border border-slate-200/80 bg-white/76 px-3 py-1.5 text-sm text-slate-600 backdrop-blur-sm sm:flex">
-                    <MapPin className="h-4 w-4 text-slate-400" />
-                    <span className="truncate max-w-[200px]">{user?.street || 'Street unavailable'}</span>
-                    <span className="text-slate-300">|</span>
-                    <span className="text-slate-500">{user?.ward || 'Ward unavailable'}</span>
+                <div className="flex shrink-0 items-center gap-2.5 sm:gap-3">
+                  <div className="hidden items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 sm:flex">
+                    <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                    <span className="truncate max-w-[180px] font-medium">{user?.street || 'Street unavailable'}</span>
+                    <span className="text-slate-300">•</span>
+                    <span className="text-slate-500 font-medium">{user?.ward || 'Ward unavailable'}</span>
                   </div>
 
                   <div ref={notificationsRef} className="relative">
                     <button
                       type="button"
                       onClick={() => setIsNotificationsOpen((prev) => !prev)}
-                      className={`relative inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200/80 px-3 text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md ${
+                      className={`relative inline-flex h-10 items-center gap-2 rounded-lg border px-3 text-sm font-semibold transition-all ${
                         isConnected 
-                          ? 'bg-white/85 text-slate-700 hover:bg-white' 
-                          : 'bg-slate-100/85 text-slate-500 hover:bg-slate-200'
+                          ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-sm' 
+                          : 'border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100'
                       }`}
                       aria-label="Open updates"
                     >
-                      <Bell className={`h-4 w-4 ${isConnected ? 'text-slate-500' : 'text-slate-400'}`} />
+                      <Bell className={`h-4 w-4 ${isConnected ? 'text-slate-600' : 'text-slate-400'}`} />
                       <span className="hidden sm:inline">
                         {isConnected ? 'Updates' : 'Updates (Offline)'}
                       </span>

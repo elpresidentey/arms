@@ -46,49 +46,40 @@ const MetricCard: React.FC<{
   label: string
   value: string
   detail: string
-  gradient: string
+  iconColor: string
   delay: string
-}> = ({ icon, label, value, detail, gradient, delay }) => {
+}> = ({ icon, label, value, detail, iconColor, delay }) => {
   return (
     <div 
-      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${gradient} p-6 shadow-xl transition-all duration-500 hover:shadow-2xl hover:scale-105 animate-fade-in-up`}
+      className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md hover:border-slate-300 animate-fade-in-up"
       style={{ animationDelay: delay }}
     >
-      {/* Glassmorphism overlay */}
-      <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
-      
-      {/* Animated gradient orb */}
-      <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-transform duration-700 group-hover:scale-150"></div>
-      
-      <div className="relative z-10">
-        {/* Icon */}
-        <div className="mb-4 inline-flex items-center justify-center rounded-xl bg-white/20 p-3 backdrop-blur-sm shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-          <div className="text-white">
-            {icon}
-          </div>
-        </div>
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          {/* Label */}
+          <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">
+            {label}
+          </p>
 
-        {/* Label */}
-        <h3 className="text-sm font-semibold text-white/90 mb-2 tracking-wide">
-          {label}
-        </h3>
+          {/* Value */}
+          <p className="text-2xl font-bold text-slate-900 mb-2">
+            {value}
+          </p>
 
-        {/* Value */}
-        <p className="text-3xl font-bold text-white mb-2 drop-shadow-lg">
-          {value}
-        </p>
-
-        {/* Detail */}
-        <div className="flex items-center gap-2">
-          <div className="h-1 w-1 rounded-full bg-white/60"></div>
-          <p className="text-xs text-white/80 font-medium">
+          {/* Detail */}
+          <p className="text-sm text-slate-500 font-medium">
             {detail}
           </p>
         </div>
 
-        {/* Hover effect line */}
-        <div className="absolute bottom-0 left-0 h-1 w-0 bg-white/40 transition-all duration-500 group-hover:w-full"></div>
+        {/* Icon */}
+        <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${iconColor} transition-transform duration-200 group-hover:scale-105`}>
+          {icon}
+        </div>
       </div>
+
+      {/* Bottom accent line */}
+      <div className={`absolute bottom-0 left-0 h-1 w-full ${iconColor.replace('bg-', 'bg-opacity-30 bg-')}`}></div>
     </div>
   )
 }
@@ -109,39 +100,39 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
   const metricsConfig = isResident
     ? [
         {
-          icon: <Truck className="h-6 w-6" />,
+          icon: <Truck className="h-5 w-5 text-primary-700" />,
           label: 'Last Pickup',
           value: isLoading.wasteStats ? 'Loading...' : formatShortDate(wasteStats?.lastPickup),
           detail: `${completedCollections} completed`,
-          gradient: 'from-teal-500 to-cyan-600',
-          delay: '0.1s',
+          iconColor: 'bg-primary-50',
+          delay: '0.05s',
         },
         {
-          icon: <Calendar className="h-6 w-6" />,
+          icon: <Calendar className="h-5 w-5 text-blue-700" />,
           label: 'This Month',
           value: isLoading.wasteStats ? 'Loading...' : `${wasteStats?.thisMonth || 0}`,
           detail: `${pendingCollections} pending`,
-          gradient: 'from-sky-500 to-blue-600',
-          delay: '0.2s',
+          iconColor: 'bg-blue-50',
+          delay: '0.1s',
         },
         {
-          icon: <Wallet className="h-6 w-6" />,
+          icon: <Wallet className="h-5 w-5 text-amber-700" />,
           label: 'Balance',
           value: isLoading.balance ? 'Loading...' : formatCurrency(balance?.balance || 0),
           detail: `${walletSummary?.transactionCount ?? 0} transactions`,
-          gradient: 'from-amber-500 to-orange-600',
-          delay: '0.3s',
+          iconColor: 'bg-amber-50',
+          delay: '0.15s',
         },
         {
-          icon: <Recycle className="h-6 w-6" />,
+          icon: <Recycle className="h-5 w-5 text-emerald-700" />,
           label: 'Recycling',
           value: isLoading.recyclables ? 'Loading...' : formatCurrency(valuationSummary?.totalEstimated || 0),
           detail: `${valuationSummary?.pendingItems ?? pendingRecyclables} pending`,
-          gradient: 'from-emerald-500 to-green-600',
-          delay: '0.4s',
+          iconColor: 'bg-emerald-50',
+          delay: '0.2s',
         },
         {
-          icon: <Receipt className="h-6 w-6" />,
+          icon: <Receipt className="h-5 w-5 text-rose-700" />,
           label: 'Bills',
           value: (billsSummary?.payableBillsCount || 0) > 0 
             ? formatCurrency(billsSummary?.totalDue || 0) 
@@ -149,42 +140,42 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
           detail: (billsSummary?.payableBillsCount || 0) > 0
             ? `${billsSummary?.payableBillsCount} outstanding`
             : `${billsSummary?.paidBillsCount || 0} paid`,
-          gradient: 'from-rose-500 to-pink-600',
-          delay: '0.5s',
+          iconColor: 'bg-rose-50',
+          delay: '0.25s',
         },
       ]
     : [
         {
-          icon: <Truck className="h-6 w-6" />,
+          icon: <Truck className="h-5 w-5 text-primary-700" />,
           label: 'Last Pickup',
           value: isLoading.wasteStats ? 'Loading...' : formatShortDate(wasteStats?.lastPickup),
           detail: `${completedCollections} completed`,
-          gradient: 'from-teal-500 to-cyan-600',
-          delay: '0.1s',
+          iconColor: 'bg-primary-50',
+          delay: '0.05s',
         },
         {
-          icon: <Calendar className="h-6 w-6" />,
+          icon: <Calendar className="h-5 w-5 text-blue-700" />,
           label: 'This Month',
           value: isLoading.wasteStats ? 'Loading...' : `${wasteStats?.thisMonth || 0}`,
           detail: `${pendingCollections} pending`,
-          gradient: 'from-sky-500 to-blue-600',
-          delay: '0.2s',
+          iconColor: 'bg-blue-50',
+          delay: '0.1s',
         },
         {
-          icon: <RouteIcon className="h-6 w-6" />,
+          icon: <RouteIcon className="h-5 w-5 text-indigo-700" />,
           label: 'Routes Today',
           value: `${routeSummary?.dueToday ?? 0}`,
           detail: `${routeSummary?.disruptedRoutes ?? 0} disrupted`,
-          gradient: 'from-indigo-500 to-purple-600',
-          delay: '0.3s',
+          iconColor: 'bg-indigo-50',
+          delay: '0.15s',
         },
         {
-          icon: <Recycle className="h-6 w-6" />,
+          icon: <Recycle className="h-5 w-5 text-emerald-700" />,
           label: 'Recycling',
           value: isLoading.recyclables ? 'Loading...' : `${pendingRecyclables}`,
           detail: 'awaiting pickup',
-          gradient: 'from-violet-500 to-purple-600',
-          delay: '0.4s',
+          iconColor: 'bg-emerald-50',
+          delay: '0.2s',
         },
       ]
 
@@ -201,7 +192,7 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
           label={metric.label}
           value={metric.value}
           detail={metric.detail}
-          gradient={metric.gradient}
+          iconColor={metric.iconColor}
           delay={metric.delay}
         />
       ))}
