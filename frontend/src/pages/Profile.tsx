@@ -7,6 +7,9 @@ import Input from '../components/Input'
 import Select from '../components/Select'
 import Button from '../components/Button'
 import ErrorBoundary from '../components/ErrorBoundary'
+import MapLocationPicker from '../components/MapLocationPicker'
+import toast from 'react-hot-toast'
+import { usersApi } from '../services/api'
 
 // Ward/Area options
 const wardOptions = [
@@ -22,7 +25,6 @@ const propertyTypeOptions = [
   { value: 'Institutional', label: 'Institutional' },
   { value: 'Mixed Use', label: 'Mixed Use' }
 ]
-import { usersApi } from '../services/api'
 
 const Profile: React.FC = () => {
   const { user, updateUser } = useAuth()
@@ -36,6 +38,8 @@ const Profile: React.FC = () => {
     houseNumber: user?.houseNumber || '',
     landmark: user?.landmark || '',
     propertyType: user?.propertyType || '',
+    latitude: user?.latitude || 6.4478, // Default to Amuwo Odofin
+    longitude: user?.longitude || 3.2945,
   })
 
   const validateField = (name: string, value: string) => {
@@ -102,12 +106,15 @@ const Profile: React.FC = () => {
         houseNumber: formData.houseNumber.trim(),
         landmark: formData.landmark.trim(),
         propertyType: formData.propertyType.trim(),
+        latitude: formData.latitude,
+        longitude: formData.longitude,
       })
       updateUser(updatedUser)
       
       // Invalidate user cache to refresh the data
       queryClient.invalidateQueries({ queryKey: ['user'] })
       
+      toast.success('Profile updated successfully!')
       navigate('/app', { replace: true })
     } catch (error) {
       console.error('Profile update error:', error)
@@ -204,6 +211,29 @@ const Profile: React.FC = () => {
                   error={errors.propertyType}
                   leftIcon={<Building2 className="h-4 w-4" />}
                   options={propertyTypeOptions}
+                />
+              </div>
+              
+              {/* Precise Location Map */}
+              <div className="border-t border-slate-200 pt-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-primary-600" />
+                    Precise Location
+                  </h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Click on the map to pinpoint your exact location, or use GPS for automatic detection
+                  </p>
+                </div>
+                
+                <MapLocationPicker
+                  latitude={formData.latitude}
+                  longitude={formData.longitude}
+                  onLocationChange={(lat, lon) => {
+                    setFormData(prev => ({ ...prev, latitude: lat, longitude: lon }))
+                  }}
+                  height="450px"
+                  zoom={16}
                 />
               </div>
               
