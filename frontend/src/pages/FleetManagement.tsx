@@ -297,77 +297,73 @@ const FleetManagement: React.FC = () => {
       </div>
 
       {/* Fleet Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Vehicles Card */}
-        <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-blue-50/30 p-6 shadow-sm transition-all hover:shadow-md hover:border-blue-200">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-slate-600">Total Vehicles</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{logistics?.fleet.totalVehicles || vehicles.length || 0}</p>
-              <p className="mt-1 text-xs text-slate-500">
-                {logistics?.fleet.operationalVehicles || vehicles.filter(v => v.status === 'operational').length || 0} operational
-              </p>
-            </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-600 transition-transform group-hover:scale-110">
+        <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
               <Truck className="h-6 w-6" />
             </div>
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Vehicles</span>
           </div>
-          <div className="absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r from-blue-500 to-blue-600" />
+          <div className="space-y-1">
+            <p className="text-3xl font-bold text-slate-900">{logistics?.fleet.totalVehicles || vehicles.length || 0}</p>
+            <p className="text-sm text-slate-600">
+              <span className="font-medium text-green-600">{logistics?.fleet.operationalVehicles || vehicles.filter(v => v.status === 'operational').length || 0}</span> operational
+            </p>
+          </div>
         </div>
 
         {/* Active Drivers Card */}
-        <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-green-50/30 p-6 shadow-sm transition-all hover:shadow-md hover:border-green-200">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-slate-600">Active Drivers</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{logistics?.drivers.activeDrivers || drivers.length || 0}</p>
-              <p className="mt-1 text-xs text-slate-500">
-                {logistics?.drivers.assignedDrivers || 0} assigned today
-              </p>
-            </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-600 transition-transform group-hover:scale-110">
+        <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 text-green-600">
               <Users className="h-6 w-6" />
             </div>
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Drivers</span>
           </div>
-          <div className="absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r from-green-500 to-green-600" />
+          <div className="space-y-1">
+            <p className="text-3xl font-bold text-slate-900">{logistics?.drivers.activeDrivers || drivers.length || 0}</p>
+            <p className="text-sm text-slate-600">
+              <span className="font-medium text-green-600">{logistics?.drivers.assignedDrivers || 0}</span> assigned today
+            </p>
+          </div>
         </div>
 
         {/* Fleet Utilization Card */}
-        <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-purple-50/30 p-6 shadow-sm transition-all hover:shadow-md hover:border-purple-200">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-slate-600">Fleet Utilization</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">
-                {logistics?.fleet.totalVehicles > 0 
-                  ? Math.round((logistics.fleet.assignedVehicles / logistics.fleet.totalVehicles) * 100)
-                  : 0}%
-              </p>
-              <p className="mt-1 text-xs text-slate-500">
-                {logistics?.fleet.assignedVehicles || 0} vehicles assigned
-              </p>
-            </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100 text-purple-600 transition-transform group-hover:scale-110">
+        <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
               <CheckCircle className="h-6 w-6" />
             </div>
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Utilization</span>
           </div>
-          <div className="absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r from-purple-500 to-purple-600" />
+          <div className="space-y-1">
+            <p className="text-3xl font-bold text-slate-900">
+              {logistics?.fleet.totalVehicles > 0 
+                ? Math.round((logistics.fleet.assignedVehicles / logistics.fleet.totalVehicles) * 100)
+                : 0}%
+            </p>
+            <p className="text-sm text-slate-600">
+              {logistics?.fleet.assignedVehicles || 0} of {logistics?.fleet.totalVehicles || 0} in use
+            </p>
+          </div>
         </div>
 
         {/* Maintenance Due Card */}
-        <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-amber-50/30 p-6 shadow-sm transition-all hover:shadow-md hover:border-amber-200">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-slate-600">Maintenance Due</p>
-              <p className="mt-2 text-3xl font-bold text-slate-900">{logistics?.attention.maintenanceAlerts?.length || vehicles.filter(v => v.status === 'maintenance').length || 0}</p>
-              <p className="mt-1 text-xs text-slate-500">
-                Vehicles need attention
-              </p>
-            </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600 transition-transform group-hover:scale-110">
+        <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
               <AlertTriangle className="h-6 w-6" />
             </div>
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Maintenance</span>
           </div>
-          <div className="absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r from-amber-500 to-amber-600" />
+          <div className="space-y-1">
+            <p className="text-3xl font-bold text-slate-900">{logistics?.attention.maintenanceAlerts?.length || vehicles.filter(v => v.status === 'maintenance').length || 0}</p>
+            <p className="text-sm text-slate-600">
+              {logistics?.attention.maintenanceAlerts?.length || 0} need attention
+            </p>
+          </div>
         </div>
       </div>
 
