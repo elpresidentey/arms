@@ -11,6 +11,7 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
+import { FleetAlertsService } from './fleet-alerts.service';
 import { CreateVehicleDto, UpdateVehicleDto, ScheduleMaintenanceDto } from './dto/vehicle.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -21,7 +22,10 @@ import { UserRole } from '../users/entities/user.entity';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN, UserRole.SUPERVISOR, UserRole.DISPATCHER)
 export class VehiclesController {
-  constructor(private readonly vehiclesService: VehiclesService) {}
+  constructor(
+    private readonly vehiclesService: VehiclesService,
+    private readonly fleetAlertsService: FleetAlertsService,
+  ) {}
 
   @Post()
   @Roles(UserRole.ADMIN, UserRole.SUPERVISOR)
@@ -103,5 +107,30 @@ export class VehiclesController {
   @Roles(UserRole.ADMIN)
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.vehiclesService.delete(id);
+  }
+
+  // Fleet Alerts Endpoints
+  @Get('alerts/check')
+  @Roles(UserRole.ADMIN, UserRole.SUPERVISOR)
+  async checkFleetAlerts() {
+    return this.fleetAlertsService.runImmediateCheck();
+  }
+
+  @Post('alerts/maintenance-check')
+  @Roles(UserRole.ADMIN)
+  async triggerMaintenanceCheck() {
+    return this.fleetAlertsService.checkMaintenanceDue();
+  }
+
+  @Post('alerts/document-check')
+  @Roles(UserRole.ADMIN)
+  async triggerDocumentCheck() {
+    return this.fleetAlertsService.checkExpiringDocuments();
+  }
+
+  @Post('alerts/weekly-report')
+  @Roles(UserRole.ADMIN)
+  async triggerWeeklyReport() {
+    return this.fleetAlertsService.sendWeeklyFleetReport();
   }
 }

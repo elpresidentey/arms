@@ -37,10 +37,10 @@ export class Vehicle {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column({ name: 'vehicle_code', unique: true })
   vehicleCode: string; // TR001, TR002, etc. (replaces truckCode)
 
-  @Column()
+  @Column({ name: 'plate_number' })
   plateNumber: string;
 
   @Column()
@@ -53,12 +53,14 @@ export class Vehicle {
   year: number;
 
   @Column({
+    name: 'vehicle_type',
     type: 'text',
     default: VehicleType.OPEN_TRUCK,
   })
   vehicleType: VehicleType;
 
   @Column({
+    name: 'fuel_type',
     type: 'text',
     default: FuelType.DIESEL,
   })
@@ -67,7 +69,7 @@ export class Vehicle {
   @Column({ type: 'decimal', precision: 8, scale: 2 })
   capacity: number; // In cubic meters or tons
 
-  @Column()
+  @Column({ name: 'capacity_unit' })
   capacityUnit: string; // 'm3', 'tons', etc.
 
   @Column({
@@ -76,37 +78,37 @@ export class Vehicle {
   })
   status: VehicleStatus;
 
-  @Column()
+  @Column({ name: 'purchase_date' })
   purchaseDate: Date;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2, nullable: true })
+  @Column({ name: 'purchase_price', type: 'decimal', precision: 12, scale: 2, nullable: true })
   purchasePrice: number;
 
-  @Column({ nullable: true })
+  @Column({ name: 'insurance_expiry', nullable: true })
   insuranceExpiry: Date;
 
-  @Column({ nullable: true })
+  @Column({ name: 'registration_expiry', nullable: true })
   registrationExpiry: Date;
 
-  @Column({ nullable: true })
+  @Column({ name: 'last_service_date', nullable: true })
   lastServiceDate: Date;
 
-  @Column({ nullable: true })
+  @Column({ name: 'next_service_due', nullable: true })
   nextServiceDue: Date;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'current_mileage', type: 'int', default: 0 })
   currentMileage: number;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+  @Column({ name: 'fuel_efficiency', type: 'decimal', precision: 5, scale: 2, default: 0 })
   fuelEfficiency: number; // km per liter or equivalent
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'total_routes', type: 'int', default: 0 })
   totalRoutes: number;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+  @Column({ name: 'average_downtime', type: 'decimal', precision: 5, scale: 2, default: 0 })
   averageDowntime: number; // Average days in maintenance
 
-  @Column({ nullable: true })
+  @Column({ name: 'current_location', nullable: true })
   currentLocation: string; // Last known location or depot
 
   @Column({ type: 'decimal', precision: 10, scale: 6, nullable: true })
@@ -127,9 +129,9 @@ export class Vehicle {
   @OneToMany(() => RouteExecution, execution => execution.vehicle)
   routeExecutions: RouteExecution[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

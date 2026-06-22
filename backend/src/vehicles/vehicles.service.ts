@@ -126,6 +126,7 @@ export class VehiclesService {
   async create(createVehicleDto: CreateVehicleDto) {
     // Generate vehicle code
     const lastVehicle = await this.vehiclesRepository.findOne({
+      where: {},
       order: { createdAt: 'DESC' },
     });
 
