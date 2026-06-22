@@ -375,7 +375,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const logout = async () => {
-    await supabase.auth.signOut()
+    try {
+      // Use local scope to avoid 403 errors with global scope
+      await supabase.auth.signOut({ scope: 'local' })
+    } catch (error) {
+      // Ignore Supabase logout errors - we'll clear local session anyway
+      console.warn('Supabase logout warning (ignored):', error)
+    }
     clearSessionState()
     toast.success('Logged out successfully')
   }
