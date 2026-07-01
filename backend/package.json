@@ -9,6 +9,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "postinstall": "npm run build",
     "apply:sql": "node scripts/apply-sql.js",
     "apply:billing": "node scripts/apply-sql.js sql/2026-05-24-billing-system.sql",
     "setup:billing": "node scripts/apply-sql.js sql/2026-05-24-billing-system.sql && node scripts/generate-sample-bills.js",
