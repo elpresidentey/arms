@@ -37,7 +37,8 @@ import {
 import { clearAuthSession, getStoredAuthToken, getWorkspaceLoginPath, loadPreferredWorkspace } from './authSession'
 
 // Use environment variable for API URL, fallback to local development
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.PROD ? '/api' : 'http://localhost:3001')
 
 const api = axios.create({
   baseURL: API_BASE_URL,

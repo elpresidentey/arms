@@ -1,18 +1,23 @@
 {
-  "name": "arms-waste-management",
+  "name": "arms-monorepo",
   "version": "1.0.0",
-  "description": "Automated Refuse Management Systems - Digital waste tracking and recycling platform",
+  "description": "ARMS - Autonomous Recycling Management System",
+  "private": true,
   "scripts": {
-    "dev": "node ./scripts/dev.mjs",
-    "dev:backend": "node ./scripts/run-npm.mjs backend run start:dev",
-    "dev:frontend": "node ./scripts/run-npm.mjs frontend run dev",
-    "build": "node ./scripts/run-npm.mjs backend run build && node ./scripts/run-npm.mjs frontend run build",
-    "build:backend": "node ./scripts/run-npm.mjs backend run build",
-    "build:frontend": "node ./scripts/run-npm.mjs frontend run build",
-    "bootstrap:admin": "node bootstrap-admin.js",
-    "install:all": "node ./scripts/run-npm.mjs backend install && node ./scripts/run-npm.mjs frontend install"
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "dev:backend": "cd backend && npm run start:dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "start": "cd backend && npm run start:prod"
   },
-  "dependencies": {
-    "@react-google-maps/api": "^2.20.8"
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "devDependencies": {
+    "@vercel/node": "^3.0.0"
   }
 }
