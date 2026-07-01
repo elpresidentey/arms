@@ -4,6 +4,7 @@ import { Home, History, Recycle, Wallet, FileText, LogOut, Menu, X, CalendarCloc
 import { useAuth } from '../contexts/AuthContext'
 import { useSocket } from '../contexts/SocketContext'
 import BrandLogo from './BrandLogo'
+import SecurityMonitor from './SecurityMonitor'
 import { getWorkspaceLoginPath } from '../services/authSession'
 import { billingApi } from '../services/api'
 import { useQuery } from '@tanstack/react-query'
@@ -335,6 +336,12 @@ const Layout: React.FC = () => {
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
+
+      {/* Security Monitor - only shows in development or when explicitly enabled */}
+      <SecurityMonitor 
+        showSessionInfo={process.env.NODE_ENV === 'development' || localStorage.getItem('arms_show_security_info') === 'true'} 
+        enableWarnings={true} 
+      />
     </div>
   )
 }

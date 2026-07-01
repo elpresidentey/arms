@@ -17,6 +17,7 @@ import {
 } from '../services/authSession'
 import { getErrorMessage } from '../utils/errors'
 import { supabase } from '../lib/supabase'
+import { securityService } from '../services/securityService'
 
 type Workspace = AuthWorkspace
 
@@ -115,6 +116,8 @@ interface AuthContextType {
   logout: () => Promise<void>
   updateUser: (nextUser: User) => void
   isLoading: boolean
+  forceLogout: (reason?: string) => Promise<void>
+  isSessionValid: () => boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -137,12 +140,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     saveAuthSession({ token: nextToken, user: nextUser })
     setToken(nextToken)
     setUser(nextUser)
+    
+    // Initialize security monitoring for authenticated sessions
+    securityService.initialize(async () => {
+      console.log('🔐 Security service triggered logout')
+      await performLogout(false) // Don't call security service again
+    })
   }
 
   const clearSessionState = () => {
     clearAuthSession()
     setToken(null)
     setUser(null)
+    
+    // Destroy security monitoring
+    securityService.destroy()
   }
 
   const updateUser = (nextUser: User) => {
@@ -374,7 +386,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
-  const logout = async () => {
+  const performLogout = async (callSecurityService: boolean = true) => {
     try {
       // Use local scope to avoid 403 errors with global scope
       await supabase.auth.signOut({ scope: 'local' })
@@ -382,12 +394,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Ignore Supabase logout errors - we'll clear local session anyway
       console.warn('Supabase logout warning (ignored):', error)
     }
+    
+    if (callSecurityService) {
+      await securityService.forceLogout('User initiated logout')
+    }
+    
     clearSessionState()
     toast.success('Logged out successfully')
   }
 
+  const logout = async () => {
+    await performLogout(true)
+  }
+
+  const forceLogout = async (reason?: string) => {
+    console.log('🚨 Force logout requested:', reason)
+    toast.error(reason || 'Session ended for security')
+    await performLogout(false) // Security service already handled
+  }
+
+  const isSessionValid = (): boolean => {
+    if (!user || !token) return false
+    return securityService.isSessionValid()
+  }
+
+  // Session validation effect
+  useEffect(() => {
+    if (!user || !token) return
+
+    const checkSession = () => {
+      if (!isSessionValid()) {
+        forceLogout('Session expired')
+      }
+    }
+
+    // Check session validity periodically
+    const sessionCheck = setInterval(checkSession, 60000) // Every minute
+
+    return () => {
+      clearInterval(sessionCheck)
+    }
+  }, [user, token])
+
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, updateUser, isLoading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      token, 
+      login, 
+      register, 
+      logout, 
+      updateUser, 
+      isLoading,
+      forceLogout,
+      isSessionValid
+    }}>
       {children}
     </AuthContext.Provider>
   )

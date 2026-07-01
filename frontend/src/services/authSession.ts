@@ -18,7 +18,17 @@ const getSessionStorage = (): Storage | null => {
     return null
   }
 
-  // Use localStorage for persistent sessions instead of sessionStorage
+  // Use sessionStorage for maximum security - data is cleared when tab/browser closes
+  // Only fall back to localStorage for specific items that need persistence across sessions
+  return window.sessionStorage
+}
+
+const getPersistentStorage = (): Storage | null => {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  // Use localStorage only for items that should persist across sessions
   return window.localStorage
 }
 
@@ -97,7 +107,7 @@ export const clearAuthSession = () => {
 }
 
 export const savePreferredWorkspace = (workspace: AuthWorkspace) => {
-  const storage = getSessionStorage()
+  const storage = getPersistentStorage() // Use localStorage for workspace preference
   if (!storage) {
     return
   }
@@ -106,7 +116,7 @@ export const savePreferredWorkspace = (workspace: AuthWorkspace) => {
 }
 
 export const loadPreferredWorkspace = (): AuthWorkspace | null => {
-  const storage = getSessionStorage()
+  const storage = getPersistentStorage() // Use localStorage for workspace preference
   if (!storage) {
     return null
   }
@@ -120,7 +130,7 @@ export const getWorkspaceLoginPath = (workspace?: AuthWorkspace | null) => {
 }
 
 export const savePendingRegistration = (registration: PendingRegistration) => {
-  const storage = getSessionStorage()
+  const storage = getPersistentStorage() // Use localStorage for registration data
   if (!storage) {
     return
   }
@@ -132,7 +142,7 @@ export const savePendingRegistration = (registration: PendingRegistration) => {
 }
 
 export const loadPendingRegistration = (email: string): PendingRegistration | null => {
-  const storage = getSessionStorage()
+  const storage = getPersistentStorage() // Use localStorage for registration data
   if (!storage) {
     return null
   }
@@ -151,7 +161,7 @@ export const loadPendingRegistration = (email: string): PendingRegistration | nu
 }
 
 export const clearPendingRegistration = (email: string) => {
-  const storage = getSessionStorage()
+  const storage = getPersistentStorage() // Use localStorage for registration data
   if (!storage) {
     return
   }
