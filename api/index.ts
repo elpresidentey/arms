@@ -1,8 +1,15 @@
+import * as path from 'path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../backend/src/app.module';
 import { configureApp, initializeSentry } from '../backend/src/bootstrap';
 import { INestApplication } from '@nestjs/common';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+// Ensure Node can resolve the backend's dependency tree from the serverless
+// bundle, where files land at <fn>/backend/node_modules but the entry point
+// lives at <fn>/api/index.js.
+module.paths.unshift(path.resolve(__dirname, '..', 'backend', 'node_modules'));
+module.paths.unshift(path.resolve(__dirname, '..', '..', 'node_modules'));
 
 let app: INestApplication | null = null;
 
