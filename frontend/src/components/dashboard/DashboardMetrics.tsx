@@ -181,8 +181,8 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
 
   return (
     <section 
-      className={`grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 ${
-        isResident ? 'xl:grid-cols-5' : 'xl:grid-cols-4'
+      className={`grid grid-cols-1 gap-4 sm:gap-5 @sm:grid-cols-2 ${
+        isResident ? '@3xl:grid-cols-3 @7xl:grid-cols-5' : '@5xl:grid-cols-4'
       }`}
     >
       {metricsConfig.map((metric, index) => (

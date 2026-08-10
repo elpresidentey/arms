@@ -33,6 +33,11 @@ class SecurityService {
   private lastActivityKey = 'arms_last_activity'
   private logoutCallbacks: Array<() => Promise<void> | void> = []
   private visibilityTimeout: NodeJS.Timeout | null = null
+  private boundHandleBeforeUnload: () => void
+  private boundHandleUnload: () => void
+  private boundHandleUserActivity: () => void
+  private boundHandleWindowFocus: () => void
+  private boundHandleWindowBlur: () => void
 
   constructor() {
     this.config = {
@@ -44,8 +49,13 @@ class SecurityService {
       enableTabVisibilityLogout: false, // Disabled by default as it can be aggressive
       secureHeaders: true,
     }
-    
+
     this.tabId = this.generateTabId()
+    this.boundHandleBeforeUnload = this.handleBeforeUnload.bind(this)
+    this.boundHandleUnload = this.handleUnload.bind(this)
+    this.boundHandleUserActivity = this.handleUserActivity.bind(this)
+    this.boundHandleWindowFocus = this.handleWindowFocus.bind(this)
+    this.boundHandleWindowBlur = this.handleWindowBlur.bind(this)
     this.setupEventListeners()
   }
 
@@ -115,6 +125,13 @@ class SecurityService {
     
     const now = Date.now()
     localStorage.setItem(this.lastActivityKey, now.toString())
+
+    // Update the stored session's activity timestamp so validity checks stay accurate
+    const sessionInfo = this.getSessionInfo()
+    if (sessionInfo) {
+      sessionInfo.lastActivity = now
+      localStorage.setItem(this.sessionStorageKey, JSON.stringify(sessionInfo))
+    }
     
     // Reset inactivity timer
     if (this.config.enableAutoLogoutOnInactivity) {
@@ -188,26 +205,34 @@ class SecurityService {
 
   private registerActiveTab(): void {
     const activeTabs = this.getActiveTabs()
+    const now = Date.now()
+    
+    // Prune stale tab entries (e.g. from crashed tabs or reloads) so they
+    // don't count against the concurrent session limit
+    const freshTabs = activeTabs.filter(tab => now - tab.timestamp < 5 * 60 * 1000)
+    if (freshTabs.length !== activeTabs.length) {
+      localStorage.setItem(this.activeTabsKey, JSON.stringify(freshTabs))
+    }
     
     // Check for concurrent session limit
-    if (activeTabs.length >= this.config.maxConcurrentSessions) {
+    if (freshTabs.length >= this.config.maxConcurrentSessions) {
       console.log('🚫 Maximum concurrent sessions reached')
       // Force logout other tabs
       this.forceLogoutOtherTabs()
     }
     
-    activeTabs.push({
+    freshTabs.push({
       tabId: this.tabId,
-      timestamp: Date.now(),
+      timestamp: now,
       userAgent: navigator.userAgent
     })
     
-    localStorage.setItem(this.activeTabsKey, JSON.stringify(activeTabs))
+    localStorage.setItem(this.activeTabsKey, JSON.stringify(freshTabs))
     
     // Create session info
     const sessionInfo: SessionInfo = {
-      lastActivity: Date.now(),
-      sessionStart: Date.now(),
+      lastActivity: now,
+      sessionStart: now,
       tabId: this.tabId,
       isActive: true
     }
@@ -241,33 +266,33 @@ class SecurityService {
     if (typeof window === 'undefined') return
 
     // Handle page unload - clear session
-    window.addEventListener('beforeunload', this.handleBeforeUnload.bind(this))
-    window.addEventListener('unload', this.handleUnload.bind(this))
-    
+    window.addEventListener('beforeunload', this.boundHandleBeforeUnload)
+    window.addEventListener('unload', this.boundHandleUnload)
+
     // Handle user activity
     const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click']
     activityEvents.forEach(event => {
-      window.addEventListener(event, this.handleUserActivity.bind(this), { passive: true })
+      window.addEventListener(event, this.boundHandleUserActivity, { passive: true })
     })
-    
+
     // Handle focus/blur for tab switching
-    window.addEventListener('focus', this.handleWindowFocus.bind(this))
-    window.addEventListener('blur', this.handleWindowBlur.bind(this))
+    window.addEventListener('focus', this.boundHandleWindowFocus)
+    window.addEventListener('blur', this.boundHandleWindowBlur)
   }
 
   private removeEventListeners(): void {
     if (typeof window === 'undefined') return
 
-    window.removeEventListener('beforeunload', this.handleBeforeUnload.bind(this))
-    window.removeEventListener('unload', this.handleUnload.bind(this))
-    
+    window.removeEventListener('beforeunload', this.boundHandleBeforeUnload)
+    window.removeEventListener('unload', this.boundHandleUnload)
+
     const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click']
     activityEvents.forEach(event => {
-      window.removeEventListener(event, this.handleUserActivity.bind(this))
+      window.removeEventListener(event, this.boundHandleUserActivity)
     })
-    
-    window.removeEventListener('focus', this.handleWindowFocus.bind(this))
-    window.removeEventListener('blur', this.handleWindowBlur.bind(this))
+
+    window.removeEventListener('focus', this.boundHandleWindowFocus)
+    window.removeEventListener('blur', this.boundHandleWindowBlur)
   }
 
   private setupStorageListener(): void {

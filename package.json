@@ -13,10 +13,6 @@
     "dev:frontend": "cd frontend && npm run dev",
     "start": "cd backend && npm run start:prod"
   },
-  "workspaces": [
-    "backend",
-    "frontend"
-  ],
   "devDependencies": {
     "@vercel/node": "^3.0.0"
   }

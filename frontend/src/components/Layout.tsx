@@ -221,7 +221,7 @@ const Layout: React.FC = () => {
 
       <div className="lg:pl-[260px]">
         <main className="px-4 pb-8 pt-16 sm:px-6 lg:px-8 lg:pt-6">
-          <div className="mx-auto w-full max-w-[1280px]">
+          <div className="mx-auto w-full max-w-[1280px] @container">
             <div className="sticky top-3 z-30 mb-5 rounded-lg border border-slate-200 bg-white shadow-sm px-5 py-3.5 sm:relative sm:top-auto">
               <div className="flex items-center justify-between gap-3">
                 <div className="ml-12 flex min-w-0 items-center gap-3 lg:ml-0">

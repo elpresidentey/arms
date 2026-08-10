@@ -3,11 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, LessThanOrEqual, IsNull } from 'typeorm';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Vehicle, VehicleStatus } from './entities/vehicle.entity';
-import { MaintenanceRecord, MaintenanceStatus, MaintenanceType } from './entities/maintenance-record.entity';
-import { Driver } from '../drivers/entities/driver.entity';
+import { MaintenanceRecord, MaintenanceStatus, MaintenanceType, MaintenancePriority } from './entities/maintenance-record.entity';
+import { Driver, DriverStatus } from '../drivers/entities/driver.entity';
 import { NotificationsService } from '../notifications/notifications.service';
 
-interface FleetAlert {
+export interface FleetAlert {
   type: 'maintenance' | 'license' | 'insurance' | 'registration';
   severity: 'low' | 'medium' | 'high' | 'critical';
   vehicleId?: string;
@@ -257,7 +257,7 @@ export class FleetAlertsService {
 
     const drivers = await this.driversRepository.find({
       where: {
-        status: 'active',
+        status: DriverStatus.ACTIVE,
         licenseExpiryDate: LessThanOrEqual(thirtyDaysFromNow),
       },
       relations: ['user'],
@@ -309,7 +309,7 @@ export class FleetAlertsService {
       vehicleId: vehicle.id,
       maintenanceType: MaintenanceType.PREVENTIVE,
       status: MaintenanceStatus.SCHEDULED,
-      priority: 'high',
+      priority: MaintenancePriority.HIGH,
       title: 'Overdue Preventive Maintenance',
       description: `Automated maintenance scheduling for vehicle ${vehicle.vehicleCode} - overdue by more than 7 days`,
       scheduledDate,
@@ -357,7 +357,7 @@ export class FleetAlertsService {
     await this.notificationsService.sendEmail({
       to: process.env.FLEET_MANAGER_EMAIL || 'admin@arms.com',
       subject: `🚨 Fleet Maintenance Alert - ${criticalAlerts.length} Critical`,
-      body: emailBody,
+      html: emailBody,
     });
   }
 
@@ -389,7 +389,7 @@ export class FleetAlertsService {
     await this.notificationsService.sendEmail({
       to: process.env.FLEET_MANAGER_EMAIL || 'admin@arms.com',
       subject: `📄 Document Expiration Alert - ${criticalAlerts.length} Expired`,
-      body: emailBody,
+      html: emailBody,
     });
   }
 
@@ -399,7 +399,7 @@ export class FleetAlertsService {
     });
 
     const drivers = await this.driversRepository.find({
-      where: { status: 'active' },
+      where: { status: DriverStatus.ACTIVE },
     });
 
     const maintenanceDue = vehicles.filter(
@@ -424,7 +424,7 @@ export class FleetAlertsService {
       },
       drivers: {
         total: drivers.length,
-        active: drivers.filter(d => d.status === 'active').length,
+        active: drivers.filter(d => d.status === DriverStatus.ACTIVE).length,
       },
       alerts: {
         maintenanceDue,
@@ -466,7 +466,7 @@ export class FleetAlertsService {
     await this.notificationsService.sendEmail({
       to: process.env.FLEET_MANAGER_EMAIL || 'admin@arms.com',
       subject: `📊 Weekly Fleet Summary - ${summary.date}`,
-      body: emailBody,
+      html: emailBody,
     });
   }
 

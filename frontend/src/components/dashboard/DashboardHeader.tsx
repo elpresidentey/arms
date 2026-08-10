@@ -33,7 +33,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       <div className="absolute top-10 right-20 h-32 w-32 rounded-full bg-white/10 blur-3xl animate-pulse"></div>
       <div className="absolute bottom-10 left-20 h-40 w-40 rounded-full bg-primary-300/20 blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
 
-      <div className="relative z-10 grid gap-6 lg:grid-cols-[1.6fr_0.4fr]">
+      <div className="relative z-10 grid gap-6 @4xl:grid-cols-[1.6fr_0.4fr]">
         {/* Main content */}
         <div>
           {/* Location badge with animation */}

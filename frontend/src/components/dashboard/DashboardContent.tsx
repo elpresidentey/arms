@@ -101,7 +101,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   workloadRingData = [],
 }) => {
   return (
-    <section className="grid grid-cols-1 gap-5 xl:grid-cols-[1.35fr_0.65fr]">
+    <section className="grid grid-cols-1 gap-5 @6xl:grid-cols-[1.35fr_0.65fr]">
       {/* Main timeline */}
       <Surface
         title="Recent Activity"

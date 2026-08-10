@@ -295,10 +295,10 @@ export default function WithdrawalApprovals() {
                         <span>{formatDate(withdrawal.createdAt)}</span>
                       </div>
                       <div className="body-small text-gray-600">
-                        <span className="font-medium">Account:</span> {withdrawal.metadata.accountName}
+                        <span className="font-medium">Account:</span> {withdrawal.metadata?.accountName ?? 'N/A'}
                       </div>
                       <div className="body-small text-gray-600">
-                        <span className="font-medium">Account Number:</span> {withdrawal.metadata.accountNumber}
+                        <span className="font-medium">Account Number:</span> {withdrawal.metadata?.accountNumber ?? 'N/A'}
                       </div>
                     </div>
 
@@ -306,7 +306,7 @@ export default function WithdrawalApprovals() {
                       <p className="body-small text-gray-600 mt-2">{withdrawal.description}</p>
                     )}
 
-                    {withdrawal.status === 'rejected' && withdrawal.metadata.rejectionReason && (
+                    {withdrawal.status === 'rejected' && withdrawal.metadata?.rejectionReason && (
                       <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
                         <p className="text-sm text-red-800">
                           <span className="font-medium">Rejection Reason:</span>{' '}
@@ -320,7 +320,7 @@ export default function WithdrawalApprovals() {
                       </div>
                     )}
 
-                    {withdrawal.status === 'approved' && withdrawal.metadata.approvedAt && (
+                    {withdrawal.status === 'approved' && withdrawal.metadata?.approvedAt && (
                       <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
                         <p className="text-sm text-green-800">
                           <span className="font-medium">Approved:</span>{' '}
@@ -339,7 +339,7 @@ export default function WithdrawalApprovals() {
                       </div>
                     )}
 
-                    {withdrawal.status === 'failed' && withdrawal.metadata.failureReason && (
+                    {withdrawal.status === 'failed' && withdrawal.metadata?.failureReason && (
                       <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
                         <p className="text-sm text-gray-800">
                           <span className="font-medium">Failure Reason:</span>{' '}
@@ -434,13 +434,13 @@ export default function WithdrawalApprovals() {
                 <div>
                   <p className="body-small text-gray-600">Account Name</p>
                   <p className="body font-medium text-gray-900">
-                    {selectedWithdrawal.metadata.accountName}
+                    {selectedWithdrawal.metadata?.accountName ?? 'N/A'}
                   </p>
                 </div>
                 <div>
                   <p className="body-small text-gray-600">Account Number</p>
                   <p className="body font-medium text-gray-900">
-                    {selectedWithdrawal.metadata.accountNumber}
+                    {selectedWithdrawal.metadata?.accountNumber ?? 'N/A'}
                   </p>
                 </div>
               </div>
@@ -467,7 +467,7 @@ export default function WithdrawalApprovals() {
                 </div>
               )}
 
-              {selectedWithdrawal.status === 'completed' && selectedWithdrawal.metadata.approvedAt && (
+              {selectedWithdrawal.status === 'completed' && selectedWithdrawal.metadata?.approvedAt && (
                 <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                   <p className="text-sm font-semibold text-green-900">✓ Withdrawal Completed</p>
                   <p className="text-sm text-green-800 mt-2">
