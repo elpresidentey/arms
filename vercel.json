@@ -1,34 +1,21 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "api/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["backend/dist/**", "backend/node_modules/**"]
-      }
+  "framework": "vite",
+  "outputDirectory": "frontend/dist",
+  "buildCommand": "cd backend && npm run build && cd ../frontend && npm run build",
+  "installCommand": "npm install && cd backend && npm install && cd ../frontend && npm install",
+  "functions": {
+    "api/index.ts": {
+      "maxDuration": 30
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/api/index.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend/dist/$1"
     }
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "installCommand": "npm install && cd backend && npm install && cd ../frontend && npm install",
-  "buildCommand": "cd backend && npm run build && cd ../frontend && npm run build"
+  }
 }
