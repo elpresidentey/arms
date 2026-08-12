@@ -5,7 +5,7 @@ const url = Deno.env.get('SUPABASE_URL') ?? ''
 const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
 
 export function serviceClient(): SupabaseClient {
-  const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+  const key = Deno.env.get('SERVICE_ROLE_KEY') || Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
   if (!key) {
     throw http(503, 'Service role key is not configured')
   }
