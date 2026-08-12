@@ -142,12 +142,22 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: rgb(var(--slate-50));
+    color-scheme: light;
+  }
+
+  /* Brand selection color */
+  ::selection {
+    background: rgb(var(--primary-600));
+    color: #fff;
   }
 
   body {
     @apply font-sans text-slate-900 antialiased;
     min-height: 100vh;
     font-feature-settings: 'rlig' 1, 'calt' 1;
+    background-image: radial-gradient(1100px 500px at 85% -5%, rgba(61, 90, 54, 0.05), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(158, 181, 146, 0.06), transparent 55%);
+    background-attachment: fixed;
   }
 
   #root {

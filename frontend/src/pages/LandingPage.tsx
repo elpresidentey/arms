@@ -340,9 +340,10 @@ const LandingPage: React.FC = () => {
                 return (
                   <article
                     key={feature.title}
-                    className="group rounded-xl border border-slate-200 bg-white p-7 shadow-sm transition hover:shadow-md hover:border-slate-300"
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-lg"
                   >
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${feature.color}`}>
+                    <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary-500/0 via-primary-500/30 to-primary-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${feature.color} transition-transform duration-300 group-hover:scale-110`}>
                       <Icon className="h-6 w-6" />
                     </div>
                     <h3 className="mt-5 text-lg font-semibold text-slate-950">{feature.title}</h3>
@@ -371,14 +372,14 @@ const LandingPage: React.FC = () => {
                 return (
                   <article
                     key={highlight.title}
-                    className="group relative overflow-hidden rounded-2xl border border-primary-200 bg-white p-8 shadow-sm transition hover:shadow-lg hover:border-primary-300"
+                    className="group relative overflow-hidden rounded-2xl border border-primary-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary-300"
                   >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-100 to-transparent rounded-bl-full opacity-50" />
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-100 to-transparent rounded-bl-full opacity-50 transition-opacity duration-300 group-hover:opacity-80" />
                     <div className="relative">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary-100 text-primary-700 transition-transform duration-300 group-hover:scale-110">
                         <Icon className="h-7 w-7" />
                       </div>
-                      <p className="mt-6 text-4xl font-bold text-slate-950">{highlight.stat}</p>
+                      <p className="mt-6 text-4xl font-bold text-slate-950 tabular-nums">{highlight.stat}</p>
                       <h3 className="mt-3 text-lg font-semibold text-slate-950">{highlight.title}</h3>
                       <p className="mt-2 text-sm leading-6 text-slate-600">{highlight.description}</p>
                     </div>

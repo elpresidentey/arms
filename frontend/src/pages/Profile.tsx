@@ -87,7 +87,7 @@ const Profile: React.FC = () => {
     // Validate all fields
     const newErrors: Record<string, string> = {}
     Object.keys(formData).forEach(key => {
-      const error = validateField(key, formData[key as keyof typeof formData])
+      const error = validateField(key, String(formData[key as keyof typeof formData]))
       if (error) {
         newErrors[key] = error
       }

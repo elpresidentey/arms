@@ -149,31 +149,37 @@ const Layout: React.FC = () => {
         </button>
       </div>
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,260px)] border-r border-slate-200 bg-white shadow-sm transform transition-transform duration-300 ease-smooth-out ${
+      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,260px)] border-r border-slate-200/80 bg-white shadow-[0_0_40px_rgba(15,23,42,0.04)] transform transition-transform duration-300 ease-smooth-out ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0`}>
         <div className="flex flex-col h-full">
-          <div className="border-b border-slate-200 px-4 py-4">
+          <div className="border-b border-slate-200/70 px-4 py-4">
             <BrandLogo
               to="/app"
               variant="light"
               className="w-full"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+            <div className="mt-3 flex items-center gap-3 rounded-xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-white px-3 py-2.5 shadow-sm">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-600 to-primary-800 text-xs font-bold text-white shadow-sm">
+                {user?.firstName?.[0] || 'U'}{user?.lastName?.[0] || ''}
+              </div>
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold text-slate-900">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="text-xs capitalize text-slate-600 mt-0.5">{user?.role}</p>
+                <p className="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium capitalize text-slate-500">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  {user?.role?.replace(/_/g, ' ')}
+                </p>
               </div>
             </div>
           </div>
 
           <nav className="flex-1 overflow-y-auto px-3 py-3 scrollbar-thin">
             {navigationSections.map((section, sectionIndex) => (
-              <div key={section.title} className={sectionIndex > 0 ? 'mt-5 pt-4 border-t border-slate-200' : ''}>
-                <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+              <div key={section.title} className={sectionIndex > 0 ? 'mt-5 pt-4 border-t border-slate-200/70' : ''}>
+                <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                   {section.title}
                 </p>
                 <div className="space-y-0.5">
@@ -185,17 +191,20 @@ const Layout: React.FC = () => {
                         key={item.name}
                         to={item.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-150 ${
+                        className={`group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-150 ${
                           active
-                            ? 'bg-slate-900 text-white'
-                            : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                            ? 'bg-primary-50 text-primary-900'
+                            : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
                         }`}
                         aria-current={active ? 'page' : undefined}
                       >
-                        <Icon className="h-4 w-4 shrink-0" />
+                        {active && (
+                          <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-primary-600" />
+                        )}
+                        <Icon className={`h-4 w-4 shrink-0 ${active ? 'text-primary-700' : 'text-slate-400 group-hover:text-slate-600'}`} />
                         <span className="min-w-0 flex-1 truncate">{item.name}</span>
                         {'badge' in item && typeof item.badge === 'number' && item.badge > 0 ? (
-                          <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white">
+                          <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm shadow-rose-500/40">
                             {item.badge}
                           </span>
                         ) : null}
@@ -207,12 +216,12 @@ const Layout: React.FC = () => {
             ))}
           </nav>
 
-          <div className="border-t border-slate-200 px-3 py-3">
+          <div className="border-t border-slate-200/70 px-3 py-3">
             <button
               onClick={handleLogout}
-              className="group flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition-all hover:bg-slate-100 hover:text-slate-900"
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition-all hover:bg-rose-50 hover:text-rose-700"
             >
-              <LogOut className="h-4 w-4" />
+              <LogOut className="h-4 w-4 text-slate-400 group-hover:text-rose-500" />
               <span>Sign out</span>
             </button>
           </div>
@@ -222,23 +231,35 @@ const Layout: React.FC = () => {
       <div className="lg:pl-[260px]">
         <main className="px-4 pb-8 pt-16 sm:px-6 lg:px-8 lg:pt-6">
           <div className="mx-auto w-full max-w-[1280px] @container">
-            <div className="sticky top-3 z-30 mb-5 rounded-lg border border-slate-200 bg-white shadow-sm px-5 py-3.5 sm:relative sm:top-auto">
+            <div className="sticky top-3 z-30 mb-5 rounded-lg border border-slate-200/80 bg-white/80 px-5 py-3.5 shadow-sm backdrop-blur-md sm:relative sm:top-auto sm:-mx-6 sm:rounded-none sm:border-x-0 sm:border-t-0 sm:border-b sm:bg-white/70 sm:px-6 sm:py-3 sm:shadow-none lg:-mx-8 lg:px-8">
               <div className="flex items-center justify-between gap-3">
                 <div className="ml-12 flex min-w-0 items-center gap-3 lg:ml-0">
-                  <div className="hidden h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-slate-700 sm:flex">
+                  <div className="hidden h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shadow-sm sm:flex">
                     {React.createElement(currentIcon, { className: 'h-5 w-5' })}
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-lg font-semibold text-slate-900">{currentSection}</p>
+                    <p className="truncate text-base font-semibold text-slate-900">{currentSection}</p>
                   </div>
                 </div>
 
                 <div className="flex shrink-0 items-center gap-2">
-                  <div className="hidden items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-600 sm:flex">
+                  <div className="hidden items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-600 sm:flex">
                     <MapPin className="h-3.5 w-3.5 text-slate-400" />
                     <span className="truncate max-w-[160px] font-medium">{user?.street || 'N/A'}</span>
                     <span className="text-slate-300">•</span>
                     <span className="text-slate-500 font-medium">{user?.ward || 'N/A'}</span>
+                  </div>
+
+                  <div
+                    className={`hidden items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[11px] font-semibold md:flex ${
+                      isConnected
+                        ? 'border-emerald-200/80 bg-emerald-50 text-emerald-700'
+                        : 'border-slate-200 bg-slate-100 text-slate-500'
+                    }`}
+                    title={isConnected ? 'Live updates connected' : 'Live updates unavailable'}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${isConnected ? 'animate-pulse bg-emerald-500' : 'bg-slate-400'}`} />
+                    {isConnected ? 'Live' : 'Offline'}
                   </div>
 
                   <div ref={notificationsRef} className="relative">

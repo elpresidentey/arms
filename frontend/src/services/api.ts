@@ -1735,7 +1735,7 @@ export const usersApi = {
     return (data || []).map(mapUser)
   },
 
-  updateProfile: async (data: { street?: string; ward?: string; houseNumber?: string; landmark?: string; propertyType?: string }) => {
+  updateProfile: async (data: { street?: string; ward?: string; houseNumber?: string; landmark?: string; propertyType?: string; latitude?: number; longitude?: number }) => {
     const userId = await getCurrentUserId()
     const { data: updated, error } = await supabase
       .from('users')
@@ -1745,8 +1745,8 @@ export const usersApi = {
         houseNumber: data.houseNumber,
         landmark: data.landmark,
         propertyType: data.propertyType,
-        latitude: (data as { latitude?: number }).latitude ?? undefined,
-        longitude: (data as { longitude?: number }).longitude ?? undefined,
+        latitude: data.latitude ?? undefined,
+        longitude: data.longitude ?? undefined,
       })
       .eq('id', userId)
       .select('*')

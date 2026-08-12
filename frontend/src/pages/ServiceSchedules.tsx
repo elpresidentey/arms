@@ -48,7 +48,7 @@ export default function ServiceSchedules() {
       setLoading(true)
       setError(null)
 
-      let data
+      let data: ServiceSchedule[] = []
       if (isStaff) {
         data = await serviceSchedulesApi.getAll({
           ward: filterWard || undefined,
@@ -63,8 +63,8 @@ export default function ServiceSchedules() {
 
       setSchedules(data)
 
-      const uniqueWards = [...new Set(data.map((s: ServiceSchedule) => s.ward))].sort()
-      const uniqueTypes = [...new Set(data.map((s: ServiceSchedule) => s.serviceType))].sort()
+      const uniqueWards = [...new Set(data.map((s) => s.ward))].sort()
+      const uniqueTypes = [...new Set(data.map((s) => s.serviceType))].sort()
       setWards(uniqueWards)
       setServiceTypes(uniqueTypes)
     } catch (err) {
