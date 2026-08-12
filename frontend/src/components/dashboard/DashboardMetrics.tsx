@@ -1,10 +1,11 @@
 /**
- * Dashboard Metrics Component
- * Modern glassmorphism metric cards with animations
+ * Dashboard Metrics — refined metric cards with consistent accents
  */
 import React from 'react'
 import { Truck, Calendar, Wallet, Recycle, Receipt, RouteIcon } from 'lucide-react'
+import MetricCard from '../MetricCard'
 import { formatCurrency, formatShortDate } from '../../utils/format'
+import type { CardIconAccent } from '../../utils/cardIconColors'
 
 interface DashboardMetricsProps {
   isResident: boolean
@@ -42,71 +43,30 @@ interface DashboardMetricsProps {
 }
 
 interface MetricConfig {
+  key: string
   icon: React.ReactNode
   label: string
-  value: string
+  value: React.ReactNode
   detail: string
-  iconColor: string
-  accent: string
-  delay: string
+  accent: CardIconAccent
   loading?: boolean
 }
 
-const MetricCard: React.FC<MetricConfig> = ({
-  icon,
+const LoadingMetric: React.FC<{ label: string; accent: CardIconAccent; icon: React.ReactNode }> = ({
   label,
-  value,
-  detail,
-  iconColor,
   accent,
-  delay,
-  loading = false,
-}) => {
-  return (
-    <div
-      className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-slate-300 animate-fade-in-up"
-      style={{ animationDelay: delay }}
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          {/* Label */}
-          <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-3">
-            {label}
-          </p>
-
-          {loading ? (
-            /* Skeleton loading state */
-            <div className="space-y-2.5">
-              <div className="h-7 w-28 rounded-md bg-slate-100 animate-pulse" />
-              <div className="h-3.5 w-20 rounded-md bg-slate-100 animate-pulse" />
-            </div>
-          ) : (
-            <>
-              {/* Value */}
-              <p className="text-2xl font-bold text-slate-900 tabular-nums mb-2">
-                {value}
-              </p>
-
-              {/* Detail */}
-              <p className="text-sm text-slate-500 font-medium">
-                {detail}
-              </p>
-            </>
-          )}
-        </div>
-
-        {/* Icon */}
-        <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${iconColor} transition-transform duration-200 group-hover:scale-105`}>
-          {icon}
-        </div>
-      </div>
-
-      {/* Bottom accent line - expands on hover */}
-      <div className="absolute bottom-0 left-0 h-[3px] w-full bg-slate-100"></div>
-      <div className={`absolute bottom-0 left-0 h-[3px] w-0 bg-gradient-to-r ${accent} transition-all duration-500 ease-smooth-out group-hover:w-full`}></div>
-    </div>
-  )
-}
+  icon,
+}) => (
+  <MetricCard
+    label={label}
+    value={
+      <span className="inline-block h-8 w-24 animate-pulse rounded-md bg-slate-100" aria-hidden="true" />
+    }
+    detail="Loading…"
+    icon={icon}
+    accent={accent}
+  />
+)
 
 const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
   isResident,
@@ -124,110 +84,119 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
   const metricsConfig: MetricConfig[] = isResident
     ? [
         {
-          icon: <Truck className="h-5 w-5 text-primary-700" />,
-          label: 'Last Pickup',
+          key: 'last-pickup',
+          icon: <Truck className="h-5 w-5" />,
+          label: 'Last pickup',
           value: formatShortDate(wasteStats?.lastPickup),
-          detail: `${completedCollections} completed`,
-          iconColor: 'bg-primary-50',
-          accent: 'from-primary-500 to-primary-300',
-          delay: '0.05s',
+          detail: `${completedCollections} completed records`,
+          accent: 'forest',
           loading: isLoading.wasteStats,
         },
         {
-          icon: <Calendar className="h-5 w-5 text-blue-700" />,
-          label: 'This Month',
+          key: 'this-month',
+          icon: <Calendar className="h-5 w-5" />,
+          label: 'This month',
           value: `${wasteStats?.thisMonth || 0}`,
-          detail: `${pendingCollections} pending`,
-          iconColor: 'bg-blue-50',
-          accent: 'from-blue-500 to-blue-300',
-          delay: '0.1s',
+          detail: `${pendingCollections} scheduled or active`,
+          accent: 'sky',
           loading: isLoading.wasteStats,
         },
         {
-          icon: <Wallet className="h-5 w-5 text-amber-700" />,
-          label: 'Balance',
+          key: 'wallet',
+          icon: <Wallet className="h-5 w-5" />,
+          label: 'Wallet balance',
           value: formatCurrency(balance?.balance || 0),
-          detail: `${walletSummary?.transactionCount ?? 0} transactions`,
-          iconColor: 'bg-amber-50',
-          accent: 'from-amber-500 to-amber-300',
-          delay: '0.15s',
+          detail: `${walletSummary?.transactionCount ?? 0} wallet transactions`,
+          accent: 'amber',
           loading: isLoading.balance,
         },
         {
-          icon: <Recycle className="h-5 w-5 text-emerald-700" />,
-          label: 'Recycling',
+          key: 'recycling',
+          icon: <Recycle className="h-5 w-5" />,
+          label: 'Recycling value',
           value: formatCurrency(valuationSummary?.totalEstimated || 0),
-          detail: `${valuationSummary?.pendingItems ?? pendingRecyclables} pending`,
-          iconColor: 'bg-emerald-50',
-          accent: 'from-emerald-500 to-emerald-300',
-          delay: '0.2s',
+          detail: `${valuationSummary?.pendingItems ?? pendingRecyclables} pending items`,
+          accent: 'emerald',
           loading: isLoading.recyclables,
         },
         {
-          icon: <Receipt className="h-5 w-5 text-rose-700" />,
+          key: 'bills',
+          icon: <Receipt className="h-5 w-5" />,
           label: 'Bills',
-          value: (billsSummary?.payableBillsCount || 0) > 0
-            ? formatCurrency(billsSummary?.totalDue || 0)
-            : 'Paid Up',
-          detail: (billsSummary?.payableBillsCount || 0) > 0
-            ? `${billsSummary?.payableBillsCount} outstanding`
-            : `${billsSummary?.paidBillsCount || 0} paid`,
-          iconColor: 'bg-rose-50',
-          accent: 'from-rose-500 to-rose-300',
-          delay: '0.25s',
+          value:
+            (billsSummary?.payableBillsCount || 0) > 0
+              ? formatCurrency(billsSummary?.totalDue || 0)
+              : 'Paid up',
+          detail:
+            (billsSummary?.payableBillsCount || 0) > 0
+              ? `${billsSummary?.payableBillsCount} outstanding`
+              : `${billsSummary?.paidBillsCount || 0} paid`,
+          accent: 'rose',
         },
       ]
     : [
         {
-          icon: <Truck className="h-5 w-5 text-primary-700" />,
-          label: 'Last Pickup',
+          key: 'last-pickup',
+          icon: <Truck className="h-5 w-5" />,
+          label: 'Last pickup',
           value: formatShortDate(wasteStats?.lastPickup),
-          detail: `${completedCollections} completed`,
-          iconColor: 'bg-primary-50',
-          accent: 'from-primary-500 to-primary-300',
-          delay: '0.05s',
+          detail: `${completedCollections} completed records`,
+          accent: 'forest',
           loading: isLoading.wasteStats,
         },
         {
-          icon: <Calendar className="h-5 w-5 text-blue-700" />,
-          label: 'This Month',
+          key: 'this-month',
+          icon: <Calendar className="h-5 w-5" />,
+          label: 'This month',
           value: `${wasteStats?.thisMonth || 0}`,
-          detail: `${pendingCollections} pending`,
-          iconColor: 'bg-blue-50',
-          accent: 'from-blue-500 to-blue-300',
-          delay: '0.1s',
+          detail: `${pendingCollections} scheduled or active`,
+          accent: 'sky',
           loading: isLoading.wasteStats,
         },
         {
-          icon: <RouteIcon className="h-5 w-5 text-indigo-700" />,
-          label: 'Routes Today',
+          key: 'routes',
+          icon: <RouteIcon className="h-5 w-5" />,
+          label: 'Routes today',
           value: `${routeSummary?.dueToday ?? 0}`,
           detail: `${routeSummary?.disruptedRoutes ?? 0} disrupted`,
-          iconColor: 'bg-indigo-50',
-          accent: 'from-indigo-500 to-indigo-300',
-          delay: '0.15s',
+          accent: 'indigo',
         },
         {
-          icon: <Recycle className="h-5 w-5 text-emerald-700" />,
-          label: 'Recycling',
+          key: 'recycling',
+          icon: <Recycle className="h-5 w-5" />,
+          label: 'Recycling queue',
           value: `${pendingRecyclables}`,
-          detail: 'awaiting pickup',
-          iconColor: 'bg-emerald-50',
-          accent: 'from-emerald-500 to-emerald-300',
-          delay: '0.2s',
+          detail: 'Awaiting pickup',
+          accent: 'emerald',
           loading: isLoading.recyclables,
         },
       ]
 
   return (
     <section
-      className={`grid grid-cols-1 gap-4 sm:gap-5 @sm:grid-cols-2 ${
+      className={`grid grid-cols-1 gap-3.5 sm:gap-4 @sm:grid-cols-2 ${
         isResident ? '@3xl:grid-cols-3 @7xl:grid-cols-5' : '@5xl:grid-cols-4'
       }`}
     >
-      {metricsConfig.map((metric) => (
-        <MetricCard key={metric.label} {...metric} />
-      ))}
+      {metricsConfig.map((metric) =>
+        metric.loading ? (
+          <LoadingMetric
+            key={metric.key}
+            label={metric.label}
+            accent={metric.accent}
+            icon={metric.icon}
+          />
+        ) : (
+          <MetricCard
+            key={metric.key}
+            label={metric.label}
+            value={metric.value}
+            detail={metric.detail}
+            icon={metric.icon}
+            accent={metric.accent}
+          />
+        ),
+      )}
     </section>
   )
 }

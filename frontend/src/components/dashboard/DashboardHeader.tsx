@@ -1,52 +1,49 @@
 /**
- * Dashboard Header Component
- * Modern header with glassmorphism and smooth animations
+ * Dashboard Header — clean service snapshot with next-action panel
  */
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ClipboardList, AlertCircle, RouteIcon, Receipt, MapPin, Sparkles, TrendingUp } from 'lucide-react'
-import { User, Bill } from '../../types'
+import {
+  ArrowRight,
+  ClipboardList,
+  AlertCircle,
+  RouteIcon,
+  Receipt,
+  MapPin,
+  Radio,
+} from 'lucide-react'
+import { User, Bill, WasteCollection } from '../../types'
+import Button from '../Button'
 import PayBillButton from '../billing/PayBillButton'
 import { getResidentDashboardGreeting } from '../../utils/greeting'
-import { formatCurrency } from '../../utils/format'
+import { formatCurrency, formatShortDate } from '../../utils/format'
 
 interface DashboardHeaderProps {
   user: User
   isResident: boolean
   nextBill?: Bill | null
   payableBillsCount: number
+  nextCollection?: WasteCollection | null
+  openRequests?: number
+  pendingItems?: number
+  serviceRhythm?: number
+  isConnected?: boolean
 }
 
-interface HeaderLinkProps {
-  to: string
-  delay?: string
-  solid?: boolean
-  className?: string
-  children: React.ReactNode
-}
-
-/*
- * Single-element action link styled as a button.
- * Uses <Link> directly (no nested <button>) — valid HTML, keyboard accessible.
- */
-const HeaderLink: React.FC<HeaderLinkProps> = ({
-  to,
-  delay = '0.1s',
-  solid = false,
-  className = '',
-  children,
-}) => (
-  <Link
-    to={to}
-    className={`animate-fade-in-up group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3 font-semibold shadow-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl active:scale-95 ${
-      solid
-        ? 'bg-white text-primary-700 hover:bg-primary-50 hover:text-primary-800'
-        : 'border-2 border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20'
-    } ${className}`}
-    style={{ animationDelay: delay }}
-  >
-    {children}
-  </Link>
+const SnapshotStat: React.FC<{
+  label: string
+  value: string | number
+  detail: string
+}> = ({ label, value, detail }) => (
+  <div className="rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-3.5 shadow-sm">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+      {label}
+    </p>
+    <p className="mt-1.5 font-display text-2xl font-bold tracking-tight text-slate-950 tabular-nums">
+      {value}
+    </p>
+    <p className="mt-1 text-xs text-slate-500">{detail}</p>
+  </div>
 )
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -54,142 +51,220 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   isResident,
   nextBill,
   payableBillsCount,
+  nextCollection,
+  openRequests = 0,
+  pendingItems = 0,
+  serviceRhythm = 0,
+  isConnected = false,
 }) => {
+  const firstName = user?.firstName?.trim()
+  const snapshotTitle = isResident
+    ? firstName
+      ? `${firstName}'s service snapshot`
+      : 'Your service snapshot'
+    : 'Operations overview'
+
+  const nextActionPrimary = isResident
+    ? nextCollection
+      ? {
+          title: formatShortDate(nextCollection.scheduledDate),
+          detail: `Scheduled collection for ${nextCollection.street || user?.street || 'your address'}.`,
+        }
+      : nextBill
+        ? {
+            title: formatCurrency(nextBill.totalAmount),
+            detail:
+              nextBill.status === 'overdue'
+                ? 'Overdue refuse bill — settle to keep service active.'
+                : `Refuse bill due ${formatShortDate(nextBill.dueDate)}.`,
+          }
+        : {
+            title: 'All clear',
+            detail: 'No upcoming collection or bill action right now.',
+          }
+    : {
+        title: `${openRequests}`,
+        detail:
+          openRequests > 0
+            ? 'Open resident requests waiting for attention.'
+            : 'No open resident requests in the queue.',
+      }
+
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 p-8 shadow-2xl">
-      {/* Animated background effects */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
+    <section className="panel-shell relative overflow-hidden rounded-2xl">
+      {/* Soft grid texture on main pane */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.45] [mask-image:linear-gradient(120deg,black_40%,transparent_88%)]"
+        aria-hidden="true"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }}
+      />
 
-      {/* Floating orbs */}
-      <div className="absolute top-10 right-20 h-32 w-32 rounded-full bg-white/10 blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-10 left-20 h-40 w-40 rounded-full bg-primary-300/20 blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-
-      <div className="relative z-10 grid gap-6 @4xl:grid-cols-[1.6fr_0.4fr]">
+      <div className="relative grid gap-0 @4xl:grid-cols-[1.55fr_0.45fr]">
         {/* Main content */}
-        <div>
-          {/* Location badge with animation */}
-          <div className="mb-6 inline-flex animate-fade-in-down">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-2 text-xs font-semibold text-white shadow-lg">
-              <MapPin className="h-3.5 w-3.5 animate-pulse" />
-              <span className="truncate">{user?.street || 'Address pending'}</span>
+        <div className="p-5 sm:p-6 lg:p-7">
+          <div className="mb-5 flex flex-wrap items-center gap-2.5">
+            <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary-100 bg-primary-50 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-primary-800">
+              <MapPin className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">{user?.street || user?.address || 'Address pending'}</span>
+            </span>
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold ${
+                isConnected
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                  : 'border-slate-200 bg-slate-50 text-slate-500'
+              }`}
+            >
+              <Radio className={`h-3 w-3 ${isConnected ? 'text-emerald-600' : 'text-slate-400'}`} />
+              {isConnected ? 'Live updates on' : 'Live updates off'}
             </span>
           </div>
 
-          {/* Greeting section */}
-          <div className="mb-8 animate-fade-in">
-            <div className="flex items-center gap-3 mb-3">
-              <h1 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
-                {isResident ? getResidentDashboardGreeting(user) : 'Operations Dashboard'}
-              </h1>
-              <Sparkles className="h-6 w-6 text-amber-300 animate-pulse" />
-            </div>
-            <p className="text-primary-50 text-base flex items-center gap-2">
-              {isResident ? (
-                <>
-                  <TrendingUp className="h-4 w-4" />
-                  Your waste management at a glance
-                </>
-              ) : (
-                'Monitor and control all operations'
-              )}
+          <div className="max-w-2xl">
+            <p className="caption text-slate-400">
+              {isResident ? 'Resident dashboard' : 'Staff dashboard'}
+            </p>
+            <h1 className="heading-1 mt-2 text-balance">
+              {isResident ? snapshotTitle : 'Operations overview'}
+            </h1>
+            {!isResident && (
+              <p className="mt-1 text-sm font-medium text-slate-500">
+                {getResidentDashboardGreeting(user)}
+              </p>
+            )}
+            <p className="body mt-2.5 max-w-xl text-slate-600">
+              {isResident
+                ? 'Track refuse collection status, household requests, complaint updates, wallet activity, and recycling value from one account.'
+                : 'Monitor refuse routes, resident complaints, service requests, truck readiness, and payout activity from one command view.'}
             </p>
           </div>
 
-          {/* Action links with stagger animation */}
-          <div className="flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-2.5">
             {isResident ? (
               <>
-                <HeaderLink to="/app/service-requests" delay="0.1s" solid>
-                  <ClipboardList className="h-5 w-5" />
-                  New Request
-                </HeaderLink>
-
-                <HeaderLink to="/app/reports" delay="0.2s">
-                  <AlertCircle className="h-5 w-5" />
-                  Report Issue
-                </HeaderLink>
-
-                <HeaderLink to="/app/schedules" delay="0.3s">
-                  <RouteIcon className="h-5 w-5" />
-                  Schedule
-                </HeaderLink>
-
-                {nextBill && (
-                  <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                    <PayBillButton bill={nextBill} size="lg" showAmount />
-                  </div>
-                )}
-
-                {payableBillsCount > 0 && (
-                  <HeaderLink
-                    to="/app/bills"
-                    delay="0.5s"
-                    className="border-amber-300/50 bg-amber-400/20 hover:bg-amber-400/30"
-                  >
-                    <Receipt className="h-5 w-5" />
-                    Bills ({payableBillsCount})
-                  </HeaderLink>
+                <Link to="/app/service-requests">
+                  <Button size="lg" className="shadow-md shadow-primary-600/15" rightIcon={<ArrowRight className="h-4 w-4" />}>
+                    <ClipboardList className="h-4 w-4" />
+                    New refuse request
+                  </Button>
+                </Link>
+                <Link to="/app/reports">
+                  <Button size="lg" variant="outline">
+                    <AlertCircle className="h-4 w-4" />
+                    Report refuse issue
+                  </Button>
+                </Link>
+                <Link to="/app/schedules">
+                  <Button size="lg" variant="outline">
+                    <RouteIcon className="h-4 w-4" />
+                    View refuse schedule
+                  </Button>
+                </Link>
+                {nextBill && <PayBillButton bill={nextBill} size="lg" showAmount />}
+                {payableBillsCount > 1 && (
+                  <Link to="/app/bills">
+                    <Button size="lg" variant="outline">
+                      <Receipt className="h-4 w-4" />
+                      All bills ({payableBillsCount})
+                    </Button>
+                  </Link>
                 )}
               </>
             ) : (
               <>
-                <HeaderLink to="/app/operations" delay="0.1s" solid>
-                  <RouteIcon className="h-5 w-5" />
-                  Operations
-                </HeaderLink>
-
-                <HeaderLink to="/app/reports" delay="0.2s">
-                  <AlertCircle className="h-5 w-5" />
-                  Complaints
-                </HeaderLink>
-
-                <HeaderLink to="/app/service-requests" delay="0.3s">
-                  <ClipboardList className="h-5 w-5" />
-                  Requests
-                </HeaderLink>
+                <Link to="/app/operations">
+                  <Button size="lg" className="shadow-md shadow-primary-600/15" rightIcon={<ArrowRight className="h-4 w-4" />}>
+                    <RouteIcon className="h-4 w-4" />
+                    Open operations
+                  </Button>
+                </Link>
+                <Link to="/app/reports">
+                  <Button size="lg" variant="outline">
+                    <AlertCircle className="h-4 w-4" />
+                    Review complaints
+                  </Button>
+                </Link>
+                <Link to="/app/service-requests">
+                  <Button size="lg" variant="outline">
+                    <ClipboardList className="h-4 w-4" />
+                    Manage requests
+                  </Button>
+                </Link>
               </>
             )}
           </div>
-        </div>
 
-        {/* Side panel with glassmorphism */}
-        <div className="relative z-10">
-          {isResident && nextBill ? (
-            <div className={`rounded-2xl backdrop-blur-md p-6 shadow-2xl border-2 animate-fade-in ${
-              nextBill.status === 'overdue'
-                ? 'bg-red-500/20 border-red-300/50'
-                : 'bg-amber-500/20 border-amber-300/50'
-            }`}>
-              <div className="flex items-center gap-2 mb-2">
-                <div className={`h-2 w-2 rounded-full animate-pulse ${
-                  nextBill.status === 'overdue' ? 'bg-red-300' : 'bg-amber-300'
-                }`}></div>
-                <p className="text-xs font-semibold text-white uppercase tracking-wide">
-                  {nextBill.status === 'overdue' ? 'Overdue Payment' : 'Due Soon'}
-                </p>
-              </div>
-              <p className="text-2xl font-bold text-white mb-1 tabular-nums">
-                {formatCurrency(nextBill.totalAmount)}
-              </p>
-              <p className="text-xs text-primary-100 mb-4">
-                {nextBill.status === 'overdue'
-                  ? 'Please settle this bill to keep your refuse service active.'
-                  : `Due ${new Date(nextBill.dueDate).toLocaleDateString('en-NG', { month: 'short', day: 'numeric' })}`}
-              </p>
-              <PayBillButton bill={nextBill} size="sm" fullWidth />
-            </div>
-          ) : (
-            <div className="rounded-2xl backdrop-blur-md bg-white/10 border-2 border-white/20 p-6 text-center shadow-2xl animate-fade-in">
-              <div className="w-16 h-16 bg-emerald-400/30 rounded-full flex items-center justify-center mx-auto mb-3 animate-bounce">
-                <svg className="w-8 h-8 text-emerald-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <p className="text-sm font-semibold text-white">All Caught Up!</p>
-              <p className="text-xs text-primary-100 mt-1">No pending actions</p>
+          {isResident && (
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <SnapshotStat
+                label="Service rhythm"
+                value={serviceRhythm}
+                detail="Scheduled or active stops"
+              />
+              <SnapshotStat
+                label="Open requests"
+                value={openRequests}
+                detail="Items waiting for response"
+              />
+              <SnapshotStat
+                label="Recycling queue"
+                value={pendingItems}
+                detail="Logged or pickup requested"
+              />
             </div>
           )}
         </div>
+
+        {/* Next action side panel */}
+        <aside className="relative border-t border-slate-200/70 bg-[linear-gradient(165deg,#0f1a12_0%,#1f2e1d_48%,#243528_100%)] p-5 text-white sm:p-6 @4xl:border-l @4xl:border-t-0">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-40"
+            aria-hidden="true"
+            style={{
+              background:
+                'radial-gradient(420px 180px at 80% 0%, rgba(109,143,98,0.28), transparent 60%)',
+            }}
+          />
+          <div className="relative z-10 flex h-full flex-col">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Next action
+            </p>
+            <p className="mt-3 font-display text-3xl font-bold tracking-tight text-white">
+              {nextActionPrimary.title}
+            </p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-300">
+              {nextActionPrimary.detail}
+            </p>
+
+            {isResident && nextBill && !nextCollection && (
+              <div className="mt-5">
+                <PayBillButton bill={nextBill} size="md" showAmount fullWidth />
+              </div>
+            )}
+
+            <div className="mt-auto grid grid-cols-2 gap-3 pt-8">
+              <div className="rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm">
+                <p className="text-[11px] text-slate-400">
+                  {isResident ? 'Open requests' : 'Due routes'}
+                </p>
+                <p className="mt-1 text-2xl font-semibold tabular-nums text-white">
+                  {openRequests}
+                </p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm">
+                <p className="text-[11px] text-slate-400">
+                  {isResident ? 'Pending items' : 'Pending items'}
+                </p>
+                <p className="mt-1 text-2xl font-semibold tabular-nums text-white">
+                  {pendingItems}
+                </p>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
   )

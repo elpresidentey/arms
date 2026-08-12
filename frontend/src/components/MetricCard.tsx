@@ -37,42 +37,38 @@ const MetricCard: React.FC<MetricCardProps> = ({
     <article
       className={clsx(
         'metric-panel group stagger-enter',
-        compact ? 'p-4' : 'p-4 sm:p-5',
+        compact ? 'p-3.5 sm:p-4' : 'p-4 sm:p-5',
         className,
       )}
     >
-      <div className="relative flex items-start justify-between gap-4">
-        <div className="min-w-0 flex-1 space-y-2">
+      <div className="relative flex items-start justify-between gap-3.5">
+        <div className="min-w-0 flex-1 space-y-1.5">
           <p className="card-label">{label}</p>
-          <p className={compact ? 'card-value-compact' : 'card-value'}>
+          <p className={clsx(compact ? 'card-value-compact' : 'card-value', 'tabular-nums')}>
             {value}
           </p>
-          {detail && (
-            <p className="card-detail">
-              {detail}
-            </p>
-          )}
+          {detail && <p className="card-detail line-clamp-2">{detail}</p>}
           {trend && (
             <div className="flex items-center gap-1.5 pt-1">
               <span
                 className={clsx(
-                  'inline-flex items-center gap-1 font-semibold px-2.5 py-1 rounded-full badge-text shadow-sm',
-                  trend.isPositive 
-                    ? 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200/50' 
-                    : 'bg-rose-100 text-rose-700 ring-1 ring-rose-200/50',
+                  'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold',
+                  trend.isPositive
+                    ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100'
+                    : 'bg-rose-50 text-rose-700 ring-1 ring-rose-100',
                 )}
               >
-                <span className="text-sm font-bold">{trend.isPositive ? '+' : '-'}</span>
+                <span className="font-bold">{trend.isPositive ? '+' : '−'}</span>
                 {Math.abs(trend.value)}%
               </span>
-              <span className="caption">vs last month</span>
+              <span className="text-[11px] text-slate-400">vs last month</span>
             </div>
           )}
         </div>
         <div
           className={clsx(
-            'flex shrink-0 items-center justify-center rounded-xl border shadow-sm transition-colors duration-200',
-            compact ? 'h-11 w-11' : 'h-12 w-12',
+            'flex shrink-0 items-center justify-center rounded-xl border transition-all duration-200 group-hover:scale-[1.03]',
+            compact ? 'h-10 w-10' : 'h-11 w-11 sm:h-12 sm:w-12',
             styles.container,
             styles.hover,
           )}

@@ -47,7 +47,7 @@ const buildResidentPulseData = (collections: any[], recyclables: any[]) => {
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth()
-  const { notifications } = useSocket()
+  const { notifications, isConnected } = useSocket()
   const queryClient = useQueryClient()
   const isResident = user?.role === 'resident'
   const canIssueBills = hasRole(user?.role, BILLING_ADMIN_ROLES)
@@ -272,6 +272,11 @@ const Dashboard: React.FC = () => {
           isResident={isResident}
           nextBill={nextBill}
           payableBillsCount={payableBills.length}
+          nextCollection={nextCollection}
+          openRequests={requestSummary?.openRequests ?? 0}
+          pendingItems={pendingRecyclables}
+          serviceRhythm={isResident ? (wasteStats?.thisMonth ?? 0) : (routeSummary?.dueToday ?? 0)}
+          isConnected={isConnected}
         />
       )}
 
