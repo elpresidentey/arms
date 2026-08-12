@@ -9,6 +9,7 @@ import DashboardMetrics from '../components/dashboard/DashboardMetrics'
 import DashboardContent from '../components/dashboard/DashboardContent'
 import DashboardBillingWidget from '../components/billing/DashboardBillingWidget'
 import StatePanel from '../components/StatePanel'
+import Skeleton from '../components/Skeleton'
 import OnboardingChecklist from '../components/OnboardingChecklist'
 import AdminBillIssuePanel from '../components/billing/AdminBillIssuePanel'
 import { summarizeBills } from '../utils/bills'
@@ -237,8 +238,15 @@ const Dashboard: React.FC = () => {
       {isResident && (
         <>
           {isBillsLoading ? (
-            <div className="rounded-xl border border-slate-200 bg-white px-5 py-7 text-center text-sm text-slate-500">
-              Loading your refuse bills...
+            <div className="rounded-xl border border-slate-200 bg-white px-5 py-6">
+              <div className="flex items-center gap-3">
+                <Skeleton variant="circular" width={36} height={36} />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <Skeleton variant="text" width="45%" height={16} />
+                  <Skeleton variant="text" width="70%" height={13} />
+                </div>
+              </div>
+              <p className="sr-only">Loading your refuse bills...</p>
             </div>
           ) : myBills ? (
             <DashboardBillingWidget bills={myBills} />

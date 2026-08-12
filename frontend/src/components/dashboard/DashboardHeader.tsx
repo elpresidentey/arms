@@ -5,11 +5,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ClipboardList, AlertCircle, RouteIcon, Receipt, MapPin, Sparkles, TrendingUp } from 'lucide-react'
-import { User } from '../../types'
-import Button from '../Button'
+import { User, Bill } from '../../types'
 import PayBillButton from '../billing/PayBillButton'
 import { getResidentDashboardGreeting } from '../../utils/greeting'
-import { Bill } from '../../types'
+import { formatCurrency } from '../../utils/format'
 
 interface DashboardHeaderProps {
   user: User
@@ -17,6 +16,38 @@ interface DashboardHeaderProps {
   nextBill?: Bill | null
   payableBillsCount: number
 }
+
+interface HeaderLinkProps {
+  to: string
+  delay?: string
+  solid?: boolean
+  className?: string
+  children: React.ReactNode
+}
+
+/*
+ * Single-element action link styled as a button.
+ * Uses <Link> directly (no nested <button>) — valid HTML, keyboard accessible.
+ */
+const HeaderLink: React.FC<HeaderLinkProps> = ({
+  to,
+  delay = '0.1s',
+  solid = false,
+  className = '',
+  children,
+}) => (
+  <Link
+    to={to}
+    className={`animate-fade-in-up group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3 font-semibold shadow-xl transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl active:scale-95 ${
+      solid
+        ? 'bg-white text-primary-700 hover:bg-primary-50 hover:text-primary-800'
+        : 'border-2 border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20'
+    } ${className}`}
+    style={{ animationDelay: delay }}
+  >
+    {children}
+  </Link>
+)
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   user,
@@ -28,7 +59,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 p-8 shadow-2xl">
       {/* Animated background effects */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
-      
+
       {/* Floating orbs */}
       <div className="absolute top-10 right-20 h-32 w-32 rounded-full bg-white/10 blur-3xl animate-pulse"></div>
       <div className="absolute bottom-10 left-20 h-40 w-40 rounded-full bg-primary-300/20 blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -64,37 +95,24 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             </p>
           </div>
 
-          {/* Action buttons with stagger animation */}
+          {/* Action links with stagger animation */}
           <div className="flex flex-wrap gap-3">
             {isResident ? (
               <>
-                <Link to="/app/service-requests" className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                  <button className="group relative overflow-hidden rounded-xl bg-white px-6 py-3 font-semibold text-primary-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 active:scale-95">
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary-50 to-primary-100 opacity-0 transition-opacity group-hover:opacity-100"></div>
-                    <span className="relative flex items-center gap-2">
-                      <ClipboardList className="h-5 w-5" />
-                      New Request
-                    </span>
-                  </button>
-                </Link>
-                
-                <Link to="/app/reports" className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                  <button className="group relative overflow-hidden rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95">
-                    <span className="relative flex items-center gap-2">
-                      <AlertCircle className="h-5 w-5" />
-                      Report Issue
-                    </span>
-                  </button>
-                </Link>
+                <HeaderLink to="/app/service-requests" delay="0.1s" solid>
+                  <ClipboardList className="h-5 w-5" />
+                  New Request
+                </HeaderLink>
 
-                <Link to="/app/schedules" className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                  <button className="group relative overflow-hidden rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95">
-                    <span className="relative flex items-center gap-2">
-                      <RouteIcon className="h-5 w-5" />
-                      Schedule
-                    </span>
-                  </button>
-                </Link>
+                <HeaderLink to="/app/reports" delay="0.2s">
+                  <AlertCircle className="h-5 w-5" />
+                  Report Issue
+                </HeaderLink>
+
+                <HeaderLink to="/app/schedules" delay="0.3s">
+                  <RouteIcon className="h-5 w-5" />
+                  Schedule
+                </HeaderLink>
 
                 {nextBill && (
                   <div className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
@@ -103,45 +121,32 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 )}
 
                 {payableBillsCount > 0 && (
-                  <Link to="/app/bills" className="animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-                    <button className="group relative overflow-hidden rounded-xl border-2 border-amber-300/50 bg-amber-400/20 backdrop-blur-sm px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:bg-amber-400/30 hover:scale-105 active:scale-95">
-                      <span className="relative flex items-center gap-2">
-                        <Receipt className="h-5 w-5" />
-                        Bills ({payableBillsCount})
-                      </span>
-                    </button>
-                  </Link>
+                  <HeaderLink
+                    to="/app/bills"
+                    delay="0.5s"
+                    className="border-amber-300/50 bg-amber-400/20 hover:bg-amber-400/30"
+                  >
+                    <Receipt className="h-5 w-5" />
+                    Bills ({payableBillsCount})
+                  </HeaderLink>
                 )}
               </>
             ) : (
               <>
-                <Link to="/app/operations" className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                  <button className="group relative overflow-hidden rounded-xl bg-white px-6 py-3 font-semibold text-primary-700 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 active:scale-95">
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary-50 to-primary-100 opacity-0 transition-opacity group-hover:opacity-100"></div>
-                    <span className="relative flex items-center gap-2">
-                      <RouteIcon className="h-5 w-5" />
-                      Operations
-                    </span>
-                  </button>
-                </Link>
-                
-                <Link to="/app/reports" className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                  <button className="group relative overflow-hidden rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95">
-                    <span className="relative flex items-center gap-2">
-                      <AlertCircle className="h-5 w-5" />
-                      Complaints
-                    </span>
-                  </button>
-                </Link>
+                <HeaderLink to="/app/operations" delay="0.1s" solid>
+                  <RouteIcon className="h-5 w-5" />
+                  Operations
+                </HeaderLink>
 
-                <Link to="/app/service-requests" className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                  <button className="group relative overflow-hidden rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-6 py-3 font-semibold text-white shadow-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95">
-                    <span className="relative flex items-center gap-2">
-                      <ClipboardList className="h-5 w-5" />
-                      Requests
-                    </span>
-                  </button>
-                </Link>
+                <HeaderLink to="/app/reports" delay="0.2s">
+                  <AlertCircle className="h-5 w-5" />
+                  Complaints
+                </HeaderLink>
+
+                <HeaderLink to="/app/service-requests" delay="0.3s">
+                  <ClipboardList className="h-5 w-5" />
+                  Requests
+                </HeaderLink>
               </>
             )}
           </div>
@@ -163,8 +168,13 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                   {nextBill.status === 'overdue' ? 'Overdue Payment' : 'Due Soon'}
                 </p>
               </div>
-              <p className="text-2xl font-bold text-white mb-4">
-                {/* Format currency here */}
+              <p className="text-2xl font-bold text-white mb-1 tabular-nums">
+                {formatCurrency(nextBill.totalAmount)}
+              </p>
+              <p className="text-xs text-primary-100 mb-4">
+                {nextBill.status === 'overdue'
+                  ? 'Please settle this bill to keep your refuse service active.'
+                  : `Due ${new Date(nextBill.dueDate).toLocaleDateString('en-NG', { month: 'short', day: 'numeric' })}`}
               </p>
               <PayBillButton bill={nextBill} size="sm" fullWidth />
             </div>

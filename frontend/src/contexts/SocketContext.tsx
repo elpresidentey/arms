@@ -81,15 +81,13 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return
     }
 
-    // Check if we're in production and the backend supports WebSockets
-    const isProduction = import.meta.env.PROD
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-    const isVercelBackend = apiUrl.includes('vercel.app')
+    // Check if a real-time backend is configured
+    const apiUrl = import.meta.env.VITE_API_URL
 
-    if (isProduction && (isVercelBackend || (!apiUrl || apiUrl.includes('backend-seven-chi-51')))) {
-      // Vercel backend has issues - disable WebSocket connections
+    if (!apiUrl || apiUrl.trim() === '') {
+      // No backend configured - disable WebSocket connections
       setIsConnected(false)
-      console.warn('Real-time notifications disabled: Backend deployment issue detected')
+      console.warn('Real-time notifications disabled: no backend configured (VITE_API_URL unset)')
       return
     }
 

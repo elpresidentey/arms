@@ -4,7 +4,7 @@
  */
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, CheckCircle2, Truck, Recycle, Clock, Calendar, MapPin, Wallet } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Truck, Recycle, Clock, Calendar, MapPin, Wallet, AlertTriangle } from 'lucide-react'
 import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, PieChart, Pie } from 'recharts'
 import Surface from '../Surface'
 import StatePanel from '../StatePanel'
@@ -35,7 +35,7 @@ const StatusRow: React.FC<StatusRowProps> = ({ icon, label, value, tone = 'neutr
         </div>
         <span className="text-sm font-medium text-slate-700">{label}</span>
       </div>
-      <span className="text-sm font-semibold text-slate-950">{value}</span>
+      <span className="text-sm font-semibold text-slate-950 tabular-nums">{value}</span>
     </div>
   )
 }
@@ -169,6 +169,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                     border: '1px solid #e2e8f0', 
                     boxShadow: '0 18px 40px rgba(15,23,42,0.12)' 
                   }}
+                  labelStyle={{ fontWeight: 600, color: '#0f172a' }}
                   cursor={{ stroke: '#cbd5e1', strokeDasharray: '4 4' }}
                 />
                 <Area 
@@ -178,6 +179,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                   strokeWidth={2} 
                   fill="url(#residentPulse)" 
                   animationDuration={1000} 
+                  activeDot={{ r: 5, strokeWidth: 2, stroke: '#ffffff', fill: '#3d5a36' }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -270,7 +272,9 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                       innerRadius={44}
                       outerRadius={70}
                       paddingAngle={4}
-                      strokeWidth={0}
+                      cornerRadius={6}
+                      stroke="#ffffff"
+                      strokeWidth={2}
                       animationDuration={1100}
                     />
                     <Tooltip
@@ -296,7 +300,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                       />
                       {entry.name}
                     </span>
-                    <span className="text-sm font-semibold text-slate-950">{entry.value}</span>
+                    <span className="text-sm font-semibold text-slate-950 tabular-nums">{entry.value}</span>
                   </div>
                 ))}
               </div>
@@ -339,7 +343,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                 />
                 <QuickLink 
                   to="/app/reports" 
-                  icon={<ArrowRight className="h-4 w-4" />} 
+                  icon={<AlertTriangle className="h-4 w-4" />} 
                   label="Complaints" 
                 />
                 <QuickLink 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, AlertCircle, Eye, DollarSign, User, Calendar } from 'lucide-react';
-import api from '../services/api';
+import { walletApi } from '../services/api';
+import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
 
 interface WithdrawalRequest {
@@ -54,11 +55,11 @@ export default function WithdrawalApprovals() {
     try {
       setLoading(true);
       // Fetch all withdrawals (not just pending)
-      const response = await api.get('/wallet/withdrawals');
-      setWithdrawals(response.data);
+      const rows = await walletApi.getWithdrawals();
+      setWithdrawals(rows as unknown as WithdrawalRequest[]);
     } catch (error: any) {
       console.error('Failed to fetch withdrawals:', error);
-      toast.error(error.response?.data?.message || 'Failed to load withdrawal requests');
+      toast.error(error?.message || 'Failed to load withdrawal requests');
     } finally {
       setLoading(false);
     }
@@ -71,13 +72,16 @@ export default function WithdrawalApprovals() {
 
     try {
       setProcessing(true);
-      await api.post(`/wallet/admin/withdrawals/${withdrawalId}/approve`);
+      const { error } = await supabase.functions.invoke('payouts', {
+        body: { action: 'approve', id: withdrawalId },
+      });
+      if (error) throw error;
       toast.success('Withdrawal approved and transfer initiated successfully');
       fetchWithdrawals();
       setShowModal(false);
     } catch (error: any) {
       console.error('Failed to approve withdrawal:', error);
-      toast.error(error.response?.data?.message || 'Failed to approve withdrawal');
+      toast.error(error?.message || 'This action is being migrated to Supabase and will be available soon.');
     } finally {
       setProcessing(false);
     }
@@ -95,16 +99,17 @@ export default function WithdrawalApprovals() {
 
     try {
       setProcessing(true);
-      await api.post(`/wallet/admin/withdrawals/${withdrawalId}/reject`, {
-        reason: rejectionReason,
+      const { error } = await supabase.functions.invoke('payouts', {
+        body: { action: 'reject', id: withdrawalId, reason: rejectionReason },
       });
+      if (error) throw error;
       toast.success('Withdrawal rejected successfully');
       fetchWithdrawals();
       setShowModal(false);
       setRejectionReason('');
     } catch (error: any) {
       console.error('Failed to reject withdrawal:', error);
-      toast.error(error.response?.data?.message || 'Failed to reject withdrawal');
+      toast.error(error?.message || 'This action is being migrated to Supabase and will be available soon.');
     } finally {
       setProcessing(false);
     }
