@@ -113,7 +113,7 @@ const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ completedStep
                   cy="12"
                   r="10"
                   fill="none"
-                  stroke="rgb(236 254 255)"
+                  stroke="rgb(197 212 190)"
                   strokeWidth="2"
                 />
                 <circle
@@ -121,7 +121,7 @@ const OnboardingChecklist: React.FC<OnboardingChecklistProps> = ({ completedStep
                   cy="12"
                   r="10"
                   fill="none"
-                  stroke="rgb(37 99 235)"
+                  stroke="rgb(61 90 54)"
                   strokeWidth="2"
                   strokeDasharray={`${(progress / 100) * 62.8} 62.8`}
                   strokeLinecap="round"

@@ -1,5 +1,6 @@
 import React from 'react'
 import { AlertCircle, Inbox, Loader2 } from 'lucide-react'
+import clsx from 'clsx'
 
 interface StatePanelProps {
   title: string
@@ -11,18 +12,21 @@ interface StatePanelProps {
 const toneConfig = {
   loading: {
     icon: Loader2,
-    iconClassName: 'text-primary-700 animate-spin',
-    panelClassName: 'border-slate-200 bg-slate-50',
+    chip: 'border-slate-200 bg-white text-primary-700 shadow-sm',
+    panel: 'border-primary-100 bg-primary-50/40',
+    spin: true,
   },
   empty: {
     icon: Inbox,
-    iconClassName: 'text-slate-400',
-    panelClassName: 'border-slate-200 bg-slate-50',
+    chip: 'border-slate-200 bg-white text-slate-400 shadow-sm',
+    panel: 'border-slate-200 bg-slate-50/60',
+    spin: false,
   },
   error: {
     icon: AlertCircle,
-    iconClassName: 'text-rose-600',
-    panelClassName: 'border-rose-200 bg-rose-50',
+    chip: 'border-rose-100 bg-white text-rose-600 shadow-sm',
+    panel: 'border-rose-200 bg-rose-50/50',
+    spin: false,
   },
 }
 
@@ -32,15 +36,25 @@ const StatePanel: React.FC<StatePanelProps> = ({
   tone = 'empty',
   action,
 }) => {
-  const { icon: Icon, iconClassName, panelClassName } = toneConfig[tone]
+  const { icon: Icon, chip, panel, spin } = toneConfig[tone]
 
   return (
-    <div className={`rounded-xl border px-4 py-12 text-center ${panelClassName} transition-colors duration-200`}>
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm">
-        <Icon className={`h-6 w-6 ${iconClassName}`} />
+    <div
+      className={clsx(
+        'rounded-2xl border px-5 py-12 text-center transition-colors duration-200',
+        panel,
+      )}
+    >
+      <div
+        className={clsx(
+          'mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border',
+          chip,
+        )}
+      >
+        <Icon className={clsx('h-6 w-6', spin && 'animate-spin')} />
       </div>
-      <p className="mt-4 text-base font-semibold text-slate-900">{title}</p>
-      <p className="mx-auto mt-1.5 max-w-md text-sm leading-6 text-slate-600">{description}</p>
+      <p className="mt-4 text-sm font-semibold text-slate-900">{title}</p>
+      <p className="mx-auto mt-1.5 max-w-md text-sm leading-6 text-slate-500">{description}</p>
       {action && <div className="mt-5">{action}</div>}
     </div>
   )

@@ -19,14 +19,16 @@ const DashboardBillingWidget = ({ bills }: DashboardBillingWidgetProps) => {
     const hasAnyBills = bills.length > 0
 
     return (
-      <div className="rounded-2xl border border-amber-200 bg-amber-50/80 px-5 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="panel-shell flex flex-col gap-3 rounded-2xl px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <Receipt className="h-6 w-6 text-amber-600 shrink-0" />
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-600">
+            <Receipt className="h-6 w-6" />
+          </div>
           <div>
             <p className="font-semibold text-slate-900">
               {hasAnyBills ? 'Refuse bills - all paid' : 'Pay bills - waiting for your bill'}
             </p>
-            <p className="text-sm text-slate-600">
+            <p className="mt-0.5 text-sm text-slate-600">
               {hasAnyBills
                 ? 'No outstanding bills. View receipts on the Pay bills page.'
                 : 'Your monthly bill will show here once ARMS admin issues it. Then you can pay in one tap.'}
@@ -43,34 +45,41 @@ const DashboardBillingWidget = ({ bills }: DashboardBillingWidgetProps) => {
   }
 
   return (
-    <section className="rounded-[1.25rem] border border-amber-300/80 bg-gradient-to-br from-amber-50 via-white to-primary-50/40 shadow-soft overflow-hidden interactive-lift">
-      <div className="border-b border-amber-200/80 bg-white/60 px-5 py-4 sm:px-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <section className="panel-shell overflow-hidden rounded-2xl">
+      <div className="flex flex-col gap-3 border-b border-slate-200/70 bg-slate-50/40 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div className="flex items-start gap-3">
           <div
-            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
-              overdueCount > 0 ? 'bg-red-600 text-white' : 'bg-primary-600 text-white'
+            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-sm ${
+              overdueCount > 0 ? 'bg-rose-600' : 'bg-primary-600'
             }`}
           >
             <AlertCircle className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-amber-800">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
               Pay from your dashboard
             </p>
-            <h2 className="text-2xl font-bold text-slate-900">{formatCurrency(totalDue)} due</h2>
+            <p className="font-display text-2xl font-bold tracking-tight text-slate-950">
+              {formatCurrency(totalDue)} due
+            </p>
             <p className="mt-1 text-sm text-slate-600">
               {payableBills.length} bill{payableBills.length > 1 ? 's' : ''} to pay
-              {overdueCount > 0 && ` - ${overdueCount} past due or overdue`}
+              {overdueCount > 0 && (
+                <span className="font-medium text-rose-600"> · {overdueCount} past due</span>
+              )}
             </p>
           </div>
         </div>
-        <Link to="/app/bills" className="text-sm font-semibold text-primary-700 hover:text-primary-800 inline-flex items-center gap-1 shrink-0">
+        <Link
+          to="/app/bills"
+          className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary-700 hover:text-primary-800"
+        >
           All bills & receipts
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
 
-      <ul className="divide-y divide-amber-100/80 px-4 py-2 sm:px-5">
+      <ul className="divide-y divide-slate-200/60 px-4 py-1 sm:px-6">
         {payableBills.map((bill) => {
           const expired = bill.status === 'overdue' || isBillPastDue(bill)
 
@@ -78,12 +87,12 @@ const DashboardBillingWidget = ({ bills }: DashboardBillingWidgetProps) => {
             <li
               key={bill.id}
               className={`flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between ${
-                bill.status === 'overdue' ? 'bg-red-50/50 -mx-4 px-4 sm:-mx-5 sm:px-5 rounded-lg' : ''
+                bill.status === 'overdue' ? 'rounded-lg bg-rose-50/40 px-2 sm:px-3 -mx-2 sm:-mx-3' : ''
               }`}
             >
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-xs text-slate-600">{bill.billNumber}</span>
+                  <span className="font-mono text-xs text-slate-500">{bill.billNumber}</span>
                   <BillStatusBadge status={bill.status} />
                   {expired && bill.status !== 'overdue' && (
                     <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
@@ -95,12 +104,12 @@ const DashboardBillingWidget = ({ bills }: DashboardBillingWidgetProps) => {
                 <p className="text-sm text-slate-600">
                   {bill.status === 'overdue' ? 'Overdue' : 'Due'} {formatBillingDate(bill.dueDate)}
                   {bill.lateFee > 0 && (
-                    <span className="text-red-700"> - includes {formatCurrency(bill.lateFee)} late fee</span>
+                    <span className="text-rose-600"> · includes {formatCurrency(bill.lateFee)} late fee</span>
                   )}
                 </p>
               </div>
-              <div className="flex items-center gap-3 shrink-0">
-                <p className="text-lg font-bold text-slate-900">{formatCurrency(bill.totalAmount)}</p>
+              <div className="flex shrink-0 items-center gap-3">
+                <p className="text-lg font-bold text-slate-950 tabular-nums">{formatCurrency(bill.totalAmount)}</p>
                 <PayBillButton bill={bill} showAmount size="md" />
               </div>
             </li>

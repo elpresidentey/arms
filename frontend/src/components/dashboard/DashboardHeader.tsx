@@ -27,6 +27,7 @@ interface DashboardHeaderProps {
   openRequests?: number
   pendingItems?: number
   serviceRhythm?: number
+  completedThisMonth?: number
   isConnected?: boolean
 }
 
@@ -55,6 +56,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   openRequests = 0,
   pendingItems = 0,
   serviceRhythm = 0,
+  completedThisMonth = 0,
   isConnected = false,
 }) => {
   const firstName = user?.firstName?.trim()
@@ -205,14 +207,14 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 detail="Scheduled or active stops"
               />
               <SnapshotStat
+                label="Completed this month"
+                value={completedThisMonth}
+                detail="Verified stop records"
+              />
+              <SnapshotStat
                 label="Open requests"
                 value={openRequests}
                 detail="Items waiting for response"
-              />
-              <SnapshotStat
-                label="Recycling queue"
-                value={pendingItems}
-                detail="Logged or pickup requested"
               />
             </div>
           )}
@@ -246,22 +248,45 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             )}
 
             <div className="mt-auto grid grid-cols-2 gap-3 pt-8">
-              <div className="rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm">
-                <p className="text-[11px] text-slate-400">
-                  {isResident ? 'Open requests' : 'Due routes'}
-                </p>
-                <p className="mt-1 text-2xl font-semibold tabular-nums text-white">
-                  {openRequests}
-                </p>
-              </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm">
-                <p className="text-[11px] text-slate-400">
-                  {isResident ? 'Pending items' : 'Pending items'}
-                </p>
-                <p className="mt-1 text-2xl font-semibold tabular-nums text-white">
-                  {pendingItems}
-                </p>
-              </div>
+              {isResident ? (
+                <>
+                  <div className="rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm">
+                    <p className="text-[11px] text-slate-400">
+                      Bills due
+                    </p>
+                    <p className="mt-1 text-2xl font-semibold tabular-nums text-white">
+                      {payableBillsCount}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm">
+                    <p className="text-[11px] text-slate-400">
+                      Recycling queue
+                    </p>
+                    <p className="mt-1 text-2xl font-semibold tabular-nums text-white">
+                      {pendingItems}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm">
+                    <p className="text-[11px] text-slate-400">
+                      Open requests
+                    </p>
+                    <p className="mt-1 text-2xl font-semibold tabular-nums text-white">
+                      {openRequests}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/5 px-3.5 py-3 backdrop-blur-sm">
+                    <p className="text-[11px] text-slate-400">
+                      Pending items
+                    </p>
+                    <p className="mt-1 text-2xl font-semibold tabular-nums text-white">
+                      {pendingItems}
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </aside>

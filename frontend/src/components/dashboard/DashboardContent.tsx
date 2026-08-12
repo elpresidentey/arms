@@ -5,13 +5,22 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, CheckCircle2, Truck, Recycle, Clock, Calendar, MapPin, Wallet, AlertTriangle } from 'lucide-react'
-import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, PieChart, Pie } from 'recharts'
+import { ResponsiveContainer, AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, PieChart, Pie, Label } from 'recharts'
 import Surface from '../Surface'
 import StatePanel from '../StatePanel'
 import WasteTimeline from '../WasteTimeline'
 import { TimelineSkeleton } from '../Skeleton'
 import { formatDayTime } from '../../utils/format'
 import { WasteCollection } from '../../types'
+
+const chartTooltipStyle: React.CSSProperties = {
+  borderRadius: 14,
+  border: '1px solid #e2e8f0',
+  background: 'rgba(255,255,255,0.97)',
+  boxShadow: '0 18px 40px rgba(15,23,42,0.12)',
+  fontSize: 12,
+  padding: '10px 12px',
+}
 
 interface StatusRowProps {
   icon: React.ReactNode
@@ -109,6 +118,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   servicePulseData = [],
   workloadRingData = [],
 }) => {
+  const workloadTotal = workloadRingData.reduce((sum, entry) => sum + entry.value, 0)
   return (
     <section className="grid grid-cols-1 gap-5 @6xl:grid-cols-[1.35fr_0.65fr]">
       {/* Main timeline */}
@@ -157,40 +167,37 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
               <AreaChart data={servicePulseData} margin={{ top: 10, right: 8, left: -18, bottom: 0 }}>
                 <defs>
                   <linearGradient id="residentPulse" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3d5a36" stopOpacity={0.28} />
-                    <stop offset="95%" stopColor="#3d5a36" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#4a6b41" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#4a6b41" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                <XAxis 
-                  dataKey="label" 
-                  tickLine={false} 
-                  axisLine={false} 
-                  tick={{ fill: '#64748b', fontSize: 12 }} 
+                <CartesianGrid strokeDasharray="3 3" stroke="#eef2f6" vertical={false} />
+                <XAxis
+                  dataKey="label"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fill: '#94a3b8', fontSize: 11 }}
                 />
-                <YAxis 
-                  allowDecimals={false} 
-                  tickLine={false} 
-                  axisLine={false} 
-                  tick={{ fill: '#64748b', fontSize: 12 }} 
+                <YAxis
+                  allowDecimals={false}
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fill: '#94a3b8', fontSize: 11 }}
                 />
                 <Tooltip
-                  contentStyle={{ 
-                    borderRadius: 16, 
-                    border: '1px solid #e2e8f0', 
-                    boxShadow: '0 18px 40px rgba(15,23,42,0.12)' 
-                  }}
+                  contentStyle={chartTooltipStyle}
                   labelStyle={{ fontWeight: 600, color: '#0f172a' }}
                   cursor={{ stroke: '#cbd5e1', strokeDasharray: '4 4' }}
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="activity" 
-                  stroke="#3d5a36" 
-                  strokeWidth={2} 
-                  fill="url(#residentPulse)" 
-                  animationDuration={1000} 
-                  activeDot={{ r: 5, strokeWidth: 2, stroke: '#ffffff', fill: '#3d5a36' }}
+                <Area
+                  type="monotone"
+                  dataKey="activity"
+                  stroke="#4a6b41"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  fill="url(#residentPulse)"
+                  animationDuration={1000}
+                  activeDot={{ r: 5, strokeWidth: 2, stroke: '#ffffff', fill: '#4a6b41' }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -282,20 +289,26 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                       data={workloadRingData}
                       dataKey="value"
                       nameKey="name"
-                      innerRadius={44}
-                      outerRadius={70}
+                      innerRadius={46}
+                      outerRadius={72}
                       paddingAngle={4}
                       cornerRadius={6}
                       stroke="#ffffff"
                       strokeWidth={2}
                       animationDuration={1100}
-                    />
+                    >
+                      <Label
+                        value={String(workloadTotal)}
+                        position="center"
+                        className="font-display"
+                        fill="#0f172a"
+                        fontSize={22}
+                        fontWeight={700}
+                      />
+                    </Pie>
                     <Tooltip
-                      contentStyle={{ 
-                        borderRadius: 16, 
-                        border: '1px solid #e2e8f0', 
-                        boxShadow: '0 18px 40px rgba(15,23,42,0.12)' 
-                      }}
+                      contentStyle={chartTooltipStyle}
+                      cursor={{ fill: 'rgba(148,163,184,0.12)' }}
                     />
                   </PieChart>
                 </ResponsiveContainer>

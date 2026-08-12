@@ -173,30 +173,38 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
       ]
 
   return (
-    <section
-      className={`grid grid-cols-1 gap-3.5 sm:gap-4 @sm:grid-cols-2 ${
-        isResident ? '@3xl:grid-cols-3 @7xl:grid-cols-5' : '@5xl:grid-cols-4'
-      }`}
-    >
-      {metricsConfig.map((metric) =>
-        metric.loading ? (
-          <LoadingMetric
-            key={metric.key}
-            label={metric.label}
-            accent={metric.accent}
-            icon={metric.icon}
-          />
-        ) : (
-          <MetricCard
-            key={metric.key}
-            label={metric.label}
-            value={metric.value}
-            detail={metric.detail}
-            icon={metric.icon}
-            accent={metric.accent}
-          />
-        ),
-      )}
+    <section className="space-y-4">
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <h2 className="heading-3">Overview</h2>
+          <p className="mt-1 caption text-slate-400">Live account summary</p>
+        </div>
+      </div>
+      <div
+        className={`grid grid-cols-1 gap-3.5 sm:gap-4 @sm:grid-cols-2 ${
+          isResident ? '@3xl:grid-cols-3 @7xl:grid-cols-5' : '@5xl:grid-cols-4'
+        }`}
+      >
+        {metricsConfig.map((metric) =>
+          metric.loading ? (
+            <LoadingMetric
+              key={metric.key}
+              label={metric.label}
+              accent={metric.accent}
+              icon={metric.icon}
+            />
+          ) : (
+            <MetricCard
+              key={metric.key}
+              label={metric.label}
+              value={metric.value}
+              detail={metric.detail}
+              icon={metric.icon}
+              accent={metric.accent}
+            />
+          ),
+        )}
+      </div>
     </section>
   )
 }

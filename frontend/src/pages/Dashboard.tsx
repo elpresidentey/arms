@@ -224,7 +224,7 @@ const Dashboard: React.FC = () => {
   }), [billsDue, payableBills.length, paidBills.length])
 
   return (
-    <div className="page-container page-enter">
+    <div className="page-container">
       {/* Onboarding Checklist */}
       {shouldShowChecklist && isResident && (
         <OnboardingChecklist
@@ -276,6 +276,7 @@ const Dashboard: React.FC = () => {
           openRequests={requestSummary?.openRequests ?? 0}
           pendingItems={pendingRecyclables}
           serviceRhythm={isResident ? (wasteStats?.thisMonth ?? 0) : (routeSummary?.dueToday ?? 0)}
+          completedThisMonth={completedCollections}
           isConnected={isConnected}
         />
       )}
