@@ -12,3 +12,5 @@ backend/dist/
 
 .vercel
 .env*.local
+
+supabase/.temp/
