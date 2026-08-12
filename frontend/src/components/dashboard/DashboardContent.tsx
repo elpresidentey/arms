@@ -22,20 +22,29 @@ interface StatusRowProps {
 
 const StatusRow: React.FC<StatusRowProps> = ({ icon, label, value, tone = 'neutral' }) => {
   const toneStyles = {
-    good: 'text-emerald-600 bg-emerald-50 border-emerald-100',
-    warn: 'text-amber-600 bg-amber-50 border-amber-100', 
-    neutral: 'text-slate-600 bg-slate-50 border-slate-100',
+    good: {
+      chip: 'text-emerald-600 bg-emerald-50 border-emerald-100',
+      value: 'text-slate-950',
+    },
+    warn: {
+      chip: 'text-amber-600 bg-amber-50 border-amber-100',
+      value: 'text-amber-700',
+    },
+    neutral: {
+      chip: 'text-primary-700 bg-primary-50 border-primary-100',
+      value: 'text-slate-950',
+    },
   }
 
   return (
-    <div className="flex items-center justify-between py-3">
-      <div className="flex items-center gap-3">
-        <div className={`p-2 rounded-lg border ${toneStyles[tone]}`}>
+    <div className="flex items-center justify-between gap-3 py-3.5 first:pt-1 last:pb-1">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border ${toneStyles[tone].chip}`}>
           {icon}
         </div>
-        <span className="text-sm font-medium text-slate-700">{label}</span>
+        <span className="truncate text-sm font-medium text-slate-700">{label}</span>
       </div>
-      <span className="text-sm font-semibold text-slate-950 tabular-nums">{value}</span>
+      <span className={`shrink-0 text-sm font-semibold tabular-nums ${toneStyles[tone].value}`}>{value}</span>
     </div>
   )
 }
@@ -49,13 +58,13 @@ interface QuickLinkProps {
 const QuickLink: React.FC<QuickLinkProps> = ({ to, icon, label }) => (
   <Link
     to={to}
-    className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white/80 px-4 py-3 text-sm font-medium text-slate-700 transition-all hover:bg-white hover:border-primary-200 hover:text-slate-900 hover:-translate-y-0.5 hover:shadow-sm"
+    className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-200 hover:bg-primary-50/40 hover:text-slate-900 hover:shadow-md hover:shadow-primary-900/5"
   >
-    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition-colors duration-200 group-hover:border-primary-200 group-hover:bg-white group-hover:text-primary-700">
       {icon}
     </div>
-    <span className="flex-1">{label}</span>
-    <ArrowRight className="h-4 w-4 text-slate-400" />
+    <span className="flex-1 truncate">{label}</span>
+    <ArrowRight className="h-4 w-4 text-slate-300 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-primary-600" />
   </Link>
 )
 
@@ -104,6 +113,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
     <section className="grid grid-cols-1 gap-5 @6xl:grid-cols-[1.35fr_0.65fr]">
       {/* Main timeline */}
       <Surface
+        className="stagger-enter"
         title="Recent Activity"
         subtitle="Latest collections and updates"
         action={
@@ -138,12 +148,13 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
       <div className="space-y-5">
         {/* Activity chart */}
         <Surface
+          className="stagger-enter"
           title="Activity Trend"
           subtitle="Last 6 days"
         >
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={servicePulseData} margin={{ top: 10, right: 8, left: -20, bottom: 0 }}>
+              <AreaChart data={servicePulseData} margin={{ top: 10, right: 8, left: -18, bottom: 0 }}>
                 <defs>
                   <linearGradient id="residentPulse" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3d5a36" stopOpacity={0.28} />
@@ -187,11 +198,12 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
         </Surface>
 
         {/* Service status */}
-        <Surface 
-          title="Status Overview" 
+        <Surface
+          className="stagger-enter"
+          title="Status Overview"
           subtitle="Current account status"
         >
-          <div className="space-y-1">
+          <div className="divide-y divide-slate-200/60">
             {isResident ? (
               <>
                 <StatusRow
@@ -252,6 +264,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
 
         {/* Workload distribution */}
         <Surface
+          className="stagger-enter"
           title="Current Workload"
           subtitle="Active items by category"
         >
@@ -287,20 +300,20 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {workloadRingData.map((entry) => (
-                  <div 
-                    key={entry.name} 
-                    className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3"
+                  <div
+                    key={entry.name}
+                    className="group flex items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 transition-colors duration-200 hover:bg-slate-50"
                   >
-                    <span className="inline-flex items-center gap-2 text-sm font-medium text-slate-700">
-                      <span 
-                        className="h-2.5 w-2.5 rounded-full" 
-                        style={{ backgroundColor: entry.fill }} 
+                    <span className="inline-flex min-w-0 items-center gap-2 text-sm font-medium text-slate-700">
+                      <span
+                        className="h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-white"
+                        style={{ backgroundColor: entry.fill }}
                       />
-                      {entry.name}
+                      <span className="truncate">{entry.name}</span>
                     </span>
-                    <span className="text-sm font-semibold text-slate-950 tabular-nums">{entry.value}</span>
+                    <span className="shrink-0 text-sm font-semibold text-slate-950 tabular-nums">{entry.value}</span>
                   </div>
                 ))}
               </div>
@@ -309,8 +322,8 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
         </Surface>
 
         {/* Quick actions */}
-        <Surface title="Quick Actions" subtitle="Common tasks">
-          <div className="grid grid-cols-1 gap-2">
+        <Surface className="stagger-enter" title="Quick Actions" subtitle="Common tasks">
+          <div className="grid grid-cols-1 gap-2.5">
             {isResident ? (
               <>
                 <QuickLink 

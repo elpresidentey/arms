@@ -46,6 +46,20 @@ const WasteTimeline: React.FC<WasteTimelineProps> = ({ collections, canConfirm =
     }
   }
 
+  const getStatusChip = (status: string) => {
+    switch (status) {
+      case 'completed':
+      case 'verified':
+        return 'bg-emerald-50 text-emerald-600 border-emerald-100'
+      case 'in_progress':
+        return 'bg-primary-50 text-primary-700 border-primary-100'
+      case 'missed':
+        return 'bg-rose-50 text-rose-600 border-rose-100'
+      default:
+        return 'bg-slate-50 text-slate-400 border-slate-200'
+    }
+  }
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed':
@@ -78,10 +92,10 @@ const WasteTimeline: React.FC<WasteTimelineProps> = ({ collections, canConfirm =
       {collections.map((collection) => (
         <div
           key={collection.id}
-          className="rounded-lg border border-slate-200 bg-white px-4 py-4 hover:shadow-sm transition-shadow duration-200"
+          className="rounded-xl border border-slate-200 bg-white px-4 py-4 transition-all duration-200 hover:border-primary-200/70 hover:shadow-md hover:shadow-primary-900/5"
         >
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-50 border border-slate-200">
+            <div className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${getStatusChip(collection.status)}`}>
               {getStatusIcon(collection.status)}
             </div>
             <div className="min-w-0 flex-1">

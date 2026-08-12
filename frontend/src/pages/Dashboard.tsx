@@ -224,7 +224,7 @@ const Dashboard: React.FC = () => {
   }), [billsDue, payableBills.length, paidBills.length])
 
   return (
-    <div className="page-container">
+    <div className="page-container page-enter">
       {/* Onboarding Checklist */}
       {shouldShowChecklist && isResident && (
         <OnboardingChecklist
