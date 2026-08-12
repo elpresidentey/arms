@@ -1765,10 +1765,28 @@ export const collectionRequestsApi = {
     description?: string
   }): Promise<CollectionRequest> => {
     const userId = await getCurrentUserId()
+    const { data: profile } = await supabase
+      .from('users')
+      .select('address, ward, street, latitude, longitude')
+      .eq('id', userId)
+      .maybeSingle()
+    const geo = {
+      address: String(profile?.address ?? '').trim(),
+      ward: String(profile?.ward ?? '').trim(),
+      street: String(profile?.street ?? '').trim(),
+    }
+    if (!geo.address || !geo.ward || !geo.street) {
+      throw new Error('Update your profile address, ward, and street before requesting a collection.')
+    }
     const { data: inserted, error } = await supabase
       .from('collection_requests')
       .insert({
         residentId: userId,
+        address: geo.address,
+        ward: geo.ward,
+        street: geo.street,
+        latitude: profile?.latitude ?? null,
+        longitude: profile?.longitude ?? null,
         type: data.type,
         status: 'pending',
         preferredDate: data.preferredDate || null,
