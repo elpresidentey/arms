@@ -8,10 +8,13 @@ import {
   CreditCard,
   FileText,
   Leaf,
+  Lock,
   MapPin,
   Receipt,
   Recycle,
   Route,
+  ShieldCheck,
+  Sparkles,
   Truck,
   Users,
   Wallet,
@@ -38,80 +41,97 @@ const heroImages = [
   },
 ]
 
-const primaryFeatures = [
+type Feature = { icon: React.ComponentType<{ className?: string }>; title: string; description: string; tint: string }
+
+const primaryFeatures: Feature[] = [
   {
     icon: Truck,
     title: 'Collection status',
     description: 'See scheduled pickups, recent collections, and service activity from one resident dashboard.',
-    color: 'bg-primary-50 text-primary-700',
+    tint: 'forest',
   },
   {
     icon: FileText,
     title: 'Refuse complaint reporting',
     description: 'Submit missed pickup, illegal dumping, truck, or bin complaints with your address details connected to your account.',
-    color: 'bg-rose-50 text-rose-700',
+    tint: 'rose',
   },
   {
     icon: Recycle,
     title: 'Recyclables tracking',
     description: 'Log recyclable items, monitor pickup requests, and keep your recycling activity organized.',
-    color: 'bg-emerald-50 text-emerald-700',
+    tint: 'emerald',
   },
   {
     icon: Wallet,
     title: 'Wallet visibility',
     description: 'Review recycling earnings and wallet balances from your dashboard.',
-    color: 'bg-amber-50 text-amber-700',
+    tint: 'amber',
   },
   {
     icon: Receipt,
     title: 'Bill payments',
     description: 'View monthly refuse bills, track payment history, and pay securely online.',
-    color: 'bg-blue-50 text-blue-700',
+    tint: 'sky',
   },
   {
     icon: Calendar,
     title: 'Service schedules',
     description: 'Check collection routes, view pickup schedules, and stay informed about service timing in your area.',
-    color: 'bg-purple-50 text-purple-700',
+    tint: 'violet',
   },
   {
     icon: MapPin,
     title: 'Location finder',
     description: 'Find nearby bins and collection points on an interactive map with distance and directions.',
-    color: 'bg-teal-50 text-teal-700',
+    tint: 'teal',
   },
   {
     icon: Bell,
     title: 'Service updates',
     description: 'Get notices about collections, payments, and service changes.',
-    color: 'bg-indigo-50 text-indigo-700',
+    tint: 'indigo',
   },
 ]
+
+const featureTints: Record<Feature['tint'], string> = {
+  forest: 'bg-primary-50 text-primary-700 ring-primary-100',
+  rose: 'bg-rose-50 text-rose-700 ring-rose-100',
+  emerald: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
+  amber: 'bg-amber-50 text-amber-800 ring-amber-100',
+  sky: 'bg-sky-50 text-sky-700 ring-sky-100',
+  violet: 'bg-violet-50 text-violet-700 ring-violet-100',
+  teal: 'bg-teal-50 text-teal-700 ring-teal-100',
+  indigo: 'bg-indigo-50 text-indigo-700 ring-indigo-100',
+}
 
 const serviceHighlights = [
   {
     icon: Route,
     title: 'Collection routes',
-    stat: '20+ routes',
+    stat: '20+',
+    suffix: 'routes',
     description: 'Collection routes focused on Amuwo Odofin communities.',
   },
   {
     icon: Users,
     title: 'Active residents',
     stat: '1000+',
+    suffix: 'residents',
     description: 'Residents using ARMS to manage waste service.',
   },
   {
     icon: Leaf,
     title: 'Recycling impact',
-    stat: '5 tons+',
+    stat: '5t+',
+    suffix: 'recycled',
     description: 'Recyclable materials logged for collection and processing.',
   },
   {
     icon: CheckCircle2,
     title: 'Service reliability',
     stat: '98%',
+    suffix: 'on-time',
     description: 'Reported on-time collection rate for scheduled routes.',
   },
 ]
@@ -139,19 +159,16 @@ const testimonials = [
     name: 'Adebayo Johnson',
     role: 'Resident, Festac Town',
     content: 'ARMS has made managing my waste service so much easier. I can track collections, pay bills, and even earn from recycling all in one place.',
-    rating: 5,
   },
   {
     name: 'Chioma Okafor',
     role: 'Resident, Festac Town',
     content: 'The service updates help me know when collection is happening and let me track my recycling earnings.',
-    rating: 5,
   },
   {
     name: 'Ibrahim Musa',
     role: 'Resident, Amuwo Odofin',
     content: 'Finally, a proper system for waste management. The bill payment feature is convenient and the location finder helps me find nearby bins.',
-    rating: 5,
   },
 ]
 
@@ -178,6 +195,33 @@ const residentFlow = [
   },
 ]
 
+const SectionHeading: React.FC<{ eyebrow: string; title: React.ReactNode; description: string; tone?: 'light' | 'dark' }> = ({
+  eyebrow,
+  title,
+  description,
+  tone = 'light',
+}) => (
+  <div className="mx-auto max-w-2xl space-y-4 text-center">
+    <span
+      className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider ${
+        tone === 'light' ? 'bg-primary-50 text-primary-800 ring-1 ring-primary-100' : 'bg-white/10 text-primary-100 ring-1 ring-white/15'
+      }`}
+    >
+      {eyebrow}
+    </span>
+    <h2
+      className={`text-3xl font-bold tracking-tight sm:text-4xl ${
+        tone === 'light' ? 'text-slate-950' : 'text-white'
+      }`}
+    >
+      {title}
+    </h2>
+    <p className={`text-base leading-relaxed sm:text-lg ${tone === 'light' ? 'text-slate-600' : 'text-slate-300'}`}>
+      {description}
+    </p>
+  </div>
+)
+
 const LandingPage: React.FC = () => {
   const { user } = useAuth()
   const [heroImageIndex, setHeroImageIndex] = useState(0)
@@ -197,22 +241,22 @@ const LandingPage: React.FC = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white text-slate-950">
+    <div className="min-h-screen bg-white text-slate-950 antialiased">
       {/* Navigation */}
-      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl shadow-sm">
+      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
           <BrandLogo to="/" />
 
           <nav className="hidden items-center gap-1 md:flex">
-            <a href="#features" className="group/nav relative px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg hover:bg-slate-50">
+            <a href="#features" className="group/nav relative rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950">
               Features
               <span className="absolute inset-x-4 bottom-1 h-0.5 origin-left scale-x-0 rounded-full bg-primary-600 transition-transform duration-300 group-hover/nav:scale-x-100" />
             </a>
-            <a href="#services" className="group/nav relative px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg hover:bg-slate-50">
+            <a href="#services" className="group/nav relative rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950">
               Services
               <span className="absolute inset-x-4 bottom-1 h-0.5 origin-left scale-x-0 rounded-full bg-primary-600 transition-transform duration-300 group-hover/nav:scale-x-100" />
             </a>
-            <a href="#how-it-works" className="group/nav relative px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg hover:bg-slate-50">
+            <a href="#how-it-works" className="group/nav relative rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-950">
               How it works
               <span className="absolute inset-x-4 bottom-1 h-0.5 origin-left scale-x-0 rounded-full bg-primary-600 transition-transform duration-300 group-hover/nav:scale-x-100" />
             </a>
@@ -220,12 +264,12 @@ const LandingPage: React.FC = () => {
 
           <div className="flex items-center gap-2">
             <Link to="/login">
-              <Button variant="ghost" size="md" className="hover:bg-slate-100 text-slate-700 hover:text-slate-950 font-medium">
+              <Button variant="ghost" size="md" className="font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-950">
                 Sign in
               </Button>
             </Link>
             <Link to={primaryHref}>
-              <Button size="md" className="shadow-md shadow-primary-600/20 hover:shadow-lg hover:shadow-primary-600/30 font-semibold">
+              <Button size="md" className="font-semibold shadow-md shadow-primary-600/20 hover:shadow-lg hover:shadow-primary-600/30">
                 {primaryLabel}
                 <ArrowRight className="h-4 w-4" />
               </Button>
@@ -235,7 +279,7 @@ const LandingPage: React.FC = () => {
       </header>
 
       <main>
-        {/* Hero Section */}
+        {/* Hero */}
         <section
           className="group/hero relative min-h-[calc(100svh-77px)] overflow-hidden border-b border-slate-200 bg-slate-950"
           onMouseEnter={() => setIsHeroHovered(true)}
@@ -272,8 +316,16 @@ const LandingPage: React.FC = () => {
               <div className="hero-hover-grid absolute inset-0" />
               <div className="hero-sweep absolute inset-y-0 left-[-35%] w-1/2 bg-gradient-to-r from-transparent via-white/24 to-transparent" />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/62 to-slate-950/18" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/42 via-transparent to-slate-950/16" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/92 via-slate-950/65 to-slate-950/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/45 via-transparent to-slate-950/14" />
+            <div
+              className="pointer-events-none absolute inset-0 opacity-60"
+              aria-hidden="true"
+              style={{
+                background:
+                  'radial-gradient(720px 360px at 12% 8%, rgba(74,107,65,0.28), transparent 60%), radial-gradient(560px 300px at 78% 96%, rgba(109,143,98,0.18), transparent 60%)',
+              }}
+            />
             <div className="absolute bottom-5 right-5 hidden items-center gap-3 rounded-full border border-white/15 bg-slate-950/45 px-4 py-2 text-xs font-medium text-white shadow-2xl shadow-slate-950/20 backdrop-blur-md sm:flex">
               <span>{activeHeroImageIndex === 0 ? 'Collection route' : 'Recycling route'}</span>
               <span className="flex gap-1.5" aria-hidden="true">
@@ -297,16 +349,21 @@ const LandingPage: React.FC = () => {
           <div className="relative mx-auto flex min-h-[calc(100svh-77px)] w-full max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
             <div className="max-w-3xl space-y-8 py-10">
               <div className="space-y-6">
-                <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl">
-                  Track collections, report issues, and manage recycling
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-100 backdrop-blur-sm">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Waste service, simplified
+                </span>
+                <h1 className="text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl lg:leading-[1.08]">
+                  Track collections, report issues, and{' '}
+                  <span className="gradient-text">manage recycling</span>
                 </h1>
-                <p className="max-w-2xl text-xl leading-8 text-slate-100">
-                  ARMS brings your waste history, service requests, recyclables, and wallet into one clear dashboard. 
-                  Sign in with your account to stay updated on collection schedules and earnings.
+                <p className="max-w-2xl text-lg leading-8 text-slate-200 sm:text-xl">
+                  ARMS brings your waste history, service requests, recyclables, and wallet into one clear
+                  dashboard. Sign in with your account to stay updated on collection schedules and earnings.
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <Link to={primaryHref}>
                   <Button size="lg">
                     {primaryLabel}
@@ -314,7 +371,7 @@ const LandingPage: React.FC = () => {
                   </Button>
                 </Link>
                 <Link to="/login">
-                  <Button size="lg" variant="secondary">
+                  <Button size="lg" variant="outline" className="border-white/25 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 hover:text-white">
                     Sign in to your account
                   </Button>
                 </Link>
@@ -323,31 +380,63 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section id="features" className="border-b border-slate-200 bg-white">
-          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl space-y-4 text-center mb-16">
-              <p className="text-sm font-semibold uppercase tracking-wider text-primary-700">Features</p>
-              <h2 className="text-4xl font-bold text-slate-950">Core tools for residents</h2>
-              <p className="text-lg text-slate-600">
-                Everything you need to manage your waste service in one place.
-              </p>
+        {/* Service stats band */}
+        <section id="services" className="relative overflow-hidden border-b border-slate-200 bg-[#0f1a12]">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-80"
+            aria-hidden="true"
+            style={{
+              background:
+                'radial-gradient(900px 420px at 12% 0%, rgba(74,107,65,0.4), transparent 60%), radial-gradient(700px 380px at 88% 100%, rgba(109,143,98,0.26), transparent 62%)',
+            }}
+          />
+          <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
+              {serviceHighlights.map((highlight) => {
+                const Icon = highlight.icon
+                return (
+                  <div key={highlight.title} className="group">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-primary-200 ring-1 ring-white/15 transition-colors duration-300 group-hover:bg-primary-400/20 group-hover:text-white">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <p className="mt-5 font-display text-4xl font-bold tracking-tight text-white tabular-nums">
+                      {highlight.stat}
+                      <span className="text-xl font-semibold text-primary-300/90"> {highlight.suffix}</span>
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-slate-200">{highlight.title}</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-400">{highlight.description}</p>
+                  </div>
+                )
+              })}
             </div>
+          </div>
+        </section>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {/* Features */}
+        <section id="features" className="border-b border-slate-200 bg-white">
+          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+            <SectionHeading
+              eyebrow="Features"
+              title="Core tools for residents"
+              description="Everything you need to manage your waste service in one place."
+            />
+
+            <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
               {primaryFeatures.map((feature) => {
                 const Icon = feature.icon
                 return (
                   <article
                     key={feature.title}
-                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-lg"
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-xl hover:shadow-primary-900/5"
                   >
-                    <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary-500/0 via-primary-500/30 to-primary-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${feature.color} transition-transform duration-300 group-hover:scale-110`}>
+                    <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary-500/0 via-primary-500/40 to-primary-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl ring-1 transition-transform duration-300 group-hover:scale-105 ${featureTints[feature.tint]}`}
+                    >
                       <Icon className="h-6 w-6" />
                     </div>
                     <h3 className="mt-5 text-lg font-semibold text-slate-950">{feature.title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-slate-600">{feature.description}</p>
+                    <p className="mt-2.5 text-sm leading-6 text-slate-600">{feature.description}</p>
                   </article>
                 )
               })}
@@ -355,65 +444,33 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Service Highlights Section */}
-        <section id="services" className="border-b border-slate-200 bg-gradient-to-br from-primary-50 to-emerald-50">
-          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl space-y-4 text-center mb-16">
-              <p className="text-sm font-semibold uppercase tracking-wider text-primary-700">Service area</p>
-              <h2 className="text-4xl font-bold text-slate-950">Built for Amuwo Odofin</h2>
-              <p className="text-lg text-slate-600">
-                Clear collection records, nearby bins, and payment tools for local residents.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {serviceHighlights.map((highlight) => {
-                const Icon = highlight.icon
-                return (
-                  <article
-                    key={highlight.title}
-                    className="group relative overflow-hidden rounded-2xl border border-primary-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary-300"
-                  >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-100 to-transparent rounded-bl-full opacity-50 transition-opacity duration-300 group-hover:opacity-80" />
-                    <div className="relative">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary-100 text-primary-700 transition-transform duration-300 group-hover:scale-110">
-                        <Icon className="h-7 w-7" />
-                      </div>
-                      <p className="mt-6 text-4xl font-bold text-slate-950 tabular-nums">{highlight.stat}</p>
-                      <h3 className="mt-3 text-lg font-semibold text-slate-950">{highlight.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">{highlight.description}</p>
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* Billing & Payments Section */}
-        <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-            <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        {/* Billing */}
+        <section className="border-b border-slate-200 bg-slate-50/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+            <div className="grid items-center gap-12 lg:grid-cols-2">
               <div className="space-y-6">
-                <div className="space-y-4">
-                  <p className="text-sm font-semibold uppercase tracking-wider text-primary-700">Billing & Payments</p>
-                  <h2 className="text-4xl font-bold text-slate-950">Pay your bills with ease</h2>
-                  <p className="text-lg text-slate-600">
-                    Monthly refuse bills delivered to your dashboard. Pay securely online with cards, bank transfers, or USSD.
-                  </p>
-                </div>
+                <span className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-800 ring-1 ring-primary-100">
+                  Billing & payments
+                </span>
+                <h2 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+                  Pay your bills with ease
+                </h2>
+                <p className="text-lg leading-relaxed text-slate-600">
+                  Monthly refuse bills delivered to your dashboard. Pay securely online with cards, bank
+                  transfers, or USSD.
+                </p>
 
-                <div className="space-y-4">
+                <div className="space-y-5 pt-2">
                   {billingFeatures.map((feature) => {
                     const Icon = feature.icon
                     return (
                       <div key={feature.title} className="flex gap-4">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-primary-700 ring-1 ring-slate-200 shadow-sm">
                           <Icon className="h-5 w-5" />
                         </div>
                         <div>
                           <h3 className="font-semibold text-slate-950">{feature.title}</h3>
-                          <p className="mt-1 text-sm text-slate-600">{feature.description}</p>
+                          <p className="mt-1 text-sm leading-6 text-slate-600">{feature.description}</p>
                         </div>
                       </div>
                     )
@@ -431,151 +488,172 @@ const LandingPage: React.FC = () => {
               </div>
 
               <div className="relative">
-                <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-8 shadow-xl">
-                  <div className="space-y-6">
+                <div
+                  className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary-100 to-emerald-50 opacity-60 blur-2xl"
+                  aria-hidden="true"
+                />
+                <div className="relative rounded-2xl border border-slate-200 bg-white p-7 shadow-xl shadow-slate-900/5 sm:p-8">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-500">Current billing period</p>
+                      <p className="text-xl font-bold text-slate-950">This month</p>
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3.5 py-1.5 text-sm font-semibold text-emerald-700 ring-1 ring-emerald-100">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Paid
+                    </span>
+                  </div>
+
+                  <div className="mt-6 space-y-3 border-t border-slate-200 pt-6">
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-slate-500">Current billing period</p>
-                        <p className="text-2xl font-bold text-slate-950">May 2026</p>
-                      </div>
-                      <div className="rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
-                        Paid
-                      </div>
+                      <span className="text-sm text-slate-600">Residential rate</span>
+                      <span className="text-sm font-semibold text-slate-950 tabular-nums">NGN 2,000</span>
                     </div>
-
-                    <div className="space-y-3 border-t border-slate-200 pt-6">
-                      <div className="flex justify-between">
-                        <span className="text-slate-600">Residential rate</span>
-                        <span className="font-semibold text-slate-950">NGN 2,000</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-600">Late fee</span>
-                        <span className="font-semibold text-slate-950">NGN 0</span>
-                      </div>
-                      <div className="flex justify-between border-t border-slate-200 pt-3">
-                        <span className="font-semibold text-slate-950">Total amount</span>
-                        <span className="text-2xl font-bold text-primary-700">NGN 2,000</span>
-                      </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-600">Late fee</span>
+                      <span className="text-sm font-semibold text-slate-950 tabular-nums">NGN 0</span>
                     </div>
+                    <div className="flex items-center justify-between border-t border-slate-200 pt-3">
+                      <span className="font-semibold text-slate-950">Total amount</span>
+                      <span className="font-display text-2xl font-bold tracking-tight text-primary-700 tabular-nums">
+                        NGN 2,000
+                      </span>
+                    </div>
+                  </div>
 
-                    <button className="w-full rounded-lg bg-primary-600 px-6 py-3 font-semibold text-white shadow-lg shadow-primary-600/30 transition hover:bg-primary-700">
+                  <div className="mt-6">
+                    <Button size="lg" fullWidth>
+                      <Lock className="h-4 w-4" />
                       Pay with Paystack
-                    </button>
-
-                    <p className="text-center text-xs text-slate-500">
-                      Secure payment handled by Paystack
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Service Updates Section */}
-        <section className="border-b border-slate-200 bg-slate-50">
-          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-            <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-              <div className="order-2 lg:order-1">
-                <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-8 shadow-lg">
-                  <div className="flex items-start gap-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                      <Truck className="h-5 w-5 text-emerald-700" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-emerald-900">Collection completed</p>
-                      <p className="mt-1 text-sm text-emerald-700">Your scheduled pickup for Festac Town has been completed.</p>
-                      <p className="mt-2 text-xs text-emerald-600">2 minutes ago</p>
-                    </div>
+                    </Button>
                   </div>
 
-                  <div className="flex items-start gap-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100">
-                      <Receipt className="h-5 w-5 text-blue-700" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-blue-900">Payment confirmed</p>
-                      <p className="mt-1 text-sm text-blue-700">Your May 2026 refuse bill payment of NGN 2,000 was successful.</p>
-                      <p className="mt-2 text-xs text-blue-600">1 hour ago</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100">
-                      <Recycle className="h-5 w-5 text-amber-700" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-semibold text-amber-900">Recyclables valued</p>
-                      <p className="mt-1 text-sm text-amber-700">Your plastic bottles have been valued at NGN 450. Pickup scheduled.</p>
-                      <p className="mt-2 text-xs text-amber-600">3 hours ago</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="order-1 lg:order-2 space-y-6">
-                <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-indigo-100 px-4 py-2 text-sm font-semibold text-indigo-700">
-                    <Zap className="h-4 w-4" />
-                    Service updates
-                  </div>
-                  <h2 className="text-4xl font-bold text-slate-950">Stay informed every step</h2>
-                  <p className="text-lg text-slate-600">
-                    Get updates about collections, payment confirmations, recyclable values, and service changes.
+                  <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-slate-500">
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                    Secure payment handled by Paystack
                   </p>
                 </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-primary-600" />
-                    <span className="text-slate-700">Collection status updates</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-primary-600" />
-                    <span className="text-slate-700">Payment confirmations</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-primary-600" />
-                    <span className="text-slate-700">Recyclable pickup alerts</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-primary-600" />
-                    <span className="text-slate-700">Service schedule changes</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Testimonials Section */}
+        {/* Service updates */}
         <section className="border-b border-slate-200 bg-white">
-          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl space-y-4 text-center mb-16">
-              <p className="text-sm font-semibold uppercase tracking-wider text-primary-700">Testimonials</p>
-              <h2 className="text-4xl font-bold text-slate-950">Trusted by residents across Amuwo Odofin</h2>
-              <p className="text-lg text-slate-600">
-                See what residents are saying about their experience with ARMS.
-              </p>
-            </div>
+          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <div className="order-2 lg:order-1">
+                <div className="relative mx-auto max-w-md">
+                  <div
+                    className="pointer-events-none absolute -inset-4 rounded-3xl bg-gradient-to-br from-slate-100 to-primary-50 opacity-70 blur-2xl"
+                    aria-hidden="true"
+                  />
+                  <div className="panel-shell relative space-y-3 rounded-2xl p-4">
+                    <div className="flex items-start gap-3.5 rounded-xl border border-emerald-100 bg-emerald-50/70 p-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-emerald-600 shadow-sm ring-1 ring-emerald-100">
+                        <Truck className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-emerald-900">Collection completed</p>
+                        <p className="mt-0.5 text-sm leading-5 text-emerald-700">
+                          Your scheduled pickup for Festac Town has been completed.
+                        </p>
+                      </div>
+                    </div>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    <div className="flex items-start gap-3.5 rounded-xl border border-primary-100 bg-primary-50/50 p-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-primary-700 shadow-sm ring-1 ring-primary-100">
+                        <Receipt className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-primary-900">Payment confirmed</p>
+                        <p className="mt-0.5 text-sm leading-5 text-primary-700">
+                          Your monthly refuse bill payment was successful.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3.5 rounded-xl border border-amber-100 bg-amber-50/70 p-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-amber-700 shadow-sm ring-1 ring-amber-100">
+                        <Recycle className="h-5 w-5" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-amber-900">Recyclables valued</p>
+                        <p className="mt-0.5 text-sm leading-5 text-amber-700">
+                          Your plastic bottles have been valued. Pickup scheduled.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="order-1 space-y-6 lg:order-2">
+                <span className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-indigo-700 ring-1 ring-indigo-100">
+                  <Zap className="h-3.5 w-3.5" />
+                  Service updates
+                </span>
+                <h2 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+                  Stay informed every step
+                </h2>
+                <p className="text-lg leading-relaxed text-slate-600">
+                  Get updates about collections, payment confirmations, recyclable values, and service changes.
+                </p>
+
+                <ul className="space-y-3.5 pt-1">
+                  {[
+                    'Collection status updates',
+                    'Payment confirmations',
+                    'Recyclable pickup alerts',
+                    'Service schedule changes',
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-50 text-primary-700 ring-1 ring-primary-100">
+                        <CheckCircle2 className="h-4 w-4" />
+                      </span>
+                      <span className="text-slate-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="border-b border-slate-200 bg-slate-50/70">
+          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+            <SectionHeading
+              eyebrow="Testimonials"
+              title="Trusted by residents across Amuwo Odofin"
+              description="See what residents are saying about their experience with ARMS."
+            />
+
+            <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3">
               {testimonials.map((testimonial) => (
                 <article
                   key={testimonial.name}
-                  className="rounded-2xl border border-slate-200 bg-slate-50 p-8 shadow-sm transition hover:shadow-md"
+                  className="group relative flex flex-col rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-xl hover:shadow-primary-900/5"
                 >
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <svg key={i} className="h-5 w-5 text-amber-400 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-slate-700 leading-7 mb-6">"{testimonial.content}"</p>
-                  <div>
-                    <p className="font-semibold text-slate-950">{testimonial.name}</p>
-                    <p className="text-sm text-slate-500">{testimonial.role}</p>
+                  <svg className="h-8 w-8 text-primary-200" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                  <p className="mt-4 flex-1 text-[15px] leading-7 text-slate-700">"{testimonial.content}"</p>
+                  <div className="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-50 text-sm font-bold text-primary-800 ring-1 ring-primary-100">
+                      {testimonial.name.split(' ').map((part) => part[0]).join('')}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-slate-950">{testimonial.name}</p>
+                      <p className="truncate text-sm text-slate-500">{testimonial.role}</p>
+                    </div>
+                    <div className="ml-auto flex gap-0.5" aria-hidden="true">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <svg key={i} className="h-4 w-4 text-amber-400 fill-current" viewBox="0 0 20 20">
+                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                        </svg>
+                      ))}
+                    </div>
                   </div>
                 </article>
               ))}
@@ -583,59 +661,72 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* How it Works */}
-        <section id="how-it-works" className="border-b border-slate-200 bg-slate-50">
-          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl space-y-4 text-center mb-16">
-              <p className="text-sm font-semibold uppercase tracking-wider text-primary-700">How it works</p>
-              <h2 className="text-4xl font-bold text-slate-950">Resident journey in four steps</h2>
-              <p className="text-lg text-slate-600">
-                Simple steps that match your actual service experience.
-              </p>
-            </div>
+        {/* How it works */}
+        <section id="how-it-works" className="border-b border-slate-200 bg-white">
+          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+            <SectionHeading
+              eyebrow="How it works"
+              title="Resident journey in four steps"
+              description="Simple steps that match your actual service experience."
+            />
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="relative mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+              <div
+                className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-6 hidden border-t border-dashed border-primary-200 lg:block"
+                aria-hidden="true"
+              />
               {residentFlow.map((step) => (
                 <article
                   key={step.step}
-                  className="group rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md hover:border-primary-200 transition-all duration-200"
+                  className="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-xl hover:shadow-primary-900/5"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-700 font-bold text-lg">
+                  <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600 font-display text-lg font-bold text-white shadow-lg shadow-primary-600/25 transition-transform duration-300 group-hover:scale-105">
                     {step.step}
                   </div>
                   <h3 className="mt-5 text-lg font-semibold text-slate-950">{step.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-600">{step.description}</p>
+                  <p className="mt-2.5 text-sm leading-6 text-slate-600">{step.description}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="border-b border-slate-200 bg-gradient-to-br from-primary-600 to-primary-700">
-          <div className="mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        {/* CTA */}
+        <section className="relative overflow-hidden border-b border-slate-200 bg-[#0f1a12]">
+          <div
+            className="pointer-events-none absolute inset-0"
+            aria-hidden="true"
+            style={{
+              background:
+                'radial-gradient(820px 400px at 18% 20%, rgba(74,107,65,0.45), transparent 62%), radial-gradient(660px 380px at 84% 84%, rgba(109,143,98,0.3), transparent 62%)',
+            }}
+          />
+          <div
+            className="hero-hover-grid pointer-events-none absolute inset-0 opacity-60"
+            aria-hidden="true"
+          />
+          <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
             <div className="mx-auto max-w-2xl space-y-8 text-center">
               <div className="space-y-4">
-                <h2 className="text-4xl font-bold text-white">Ready to get started?</h2>
-                <p className="text-lg text-primary-50">
+                <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                  Ready to get started?
+                </h2>
+                <p className="text-lg leading-relaxed text-slate-300">
                   Join residents who are managing their waste service more effectively.
                 </p>
               </div>
 
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
                 <Link to={primaryHref}>
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                  >
+                  <Button size="lg" variant="secondary">
                     Create your account
                     <ArrowRight className="h-5 w-5" />
                   </Button>
                 </Link>
                 <Link to="/login">
-                  <button className="h-11 w-full rounded-lg border-2 border-white bg-transparent px-6 font-medium text-white transition hover:bg-white/10 sm:w-auto">
+                  <Button size="lg" variant="outline" className="border-white/25 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 hover:text-white">
                     Already have an account?
-                  </button>
+                  </Button>
                 </Link>
               </div>
             </div>

@@ -13,7 +13,7 @@ const Surface: React.FC<SurfaceProps> = ({ title, subtitle, action, children, cl
   return (
     <section
       className={clsx(
-        'panel-shell rounded-xl',
+        'panel-shell rounded-2xl',
         'border border-slate-200/80 bg-white',
         'shadow-sm transition-colors duration-200 hover:border-slate-300/80',
         className,

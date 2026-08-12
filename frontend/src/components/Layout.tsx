@@ -149,7 +149,7 @@ const Layout: React.FC = () => {
         </button>
       </div>
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,260px)] border-r border-slate-200/80 bg-white shadow-[0_0_40px_rgba(15,23,42,0.04)] transform transition-transform duration-300 ease-smooth-out ${
+      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,260px)] border-r border-slate-200/80 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdf6_100%)] shadow-[0_0_40px_rgba(15,23,42,0.04)] transform transition-transform duration-300 ease-smooth-out ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0`}>
         <div className="flex flex-col h-full">
