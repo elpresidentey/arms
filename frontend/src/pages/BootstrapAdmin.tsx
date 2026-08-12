@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Shield, AlertTriangle, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { authApi } from '../services/api'
+import { saveAuthSession } from '../services/authSession'
 import { useAuth } from '../contexts/AuthContext'
 import { PATHS } from '../routes/paths'
 import toast from 'react-hot-toast'
@@ -86,7 +87,7 @@ const BootstrapAdmin: React.FC = () => {
       }
 
       // Create the bootstrap admin
-      await authApi.bootstrapAdmin({
+      const result = await authApi.bootstrapAdmin({
         bootstrapToken: formData.bootstrapToken,
         email: formData.email,
         password: formData.password,
@@ -97,6 +98,11 @@ const BootstrapAdmin: React.FC = () => {
         ward: formData.ward,
         houseNumber: formData.houseNumber,
         street: formData.street
+      })
+
+      saveAuthSession({
+        user: result.user,
+        token: result.token ?? result.access_token ?? ''
       })
 
       toast.success('Bootstrap admin created successfully!')

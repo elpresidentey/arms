@@ -797,9 +797,9 @@ export const walletApi = {
     remainingDaily: number
   }> => {
     const userId = await getCurrentUserId()
-    const minAmount = 10
-    const maxAmount = 1000
-    const dailyLimit = 1000
+    const minAmount = 100
+    const maxAmount = 50000
+    const dailyLimit = 100000
 
     const startOfDay = new Date()
     startOfDay.setHours(0, 0, 0, 0)
