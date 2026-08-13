@@ -45,6 +45,11 @@ const getCurrentUserId = async (): Promise<string> => {
   return data.user.id
 }
 
+const getCurrentUserRole = async (): Promise<string> => {
+  const { data } = await supabase.rpc('get_role')
+  return typeof data === 'string' ? data : ''
+}
+
 const edgeErrorMessage = async (error: unknown, fallback: string): Promise<string> => {
   const e = error as { message?: string; context?: unknown }
   try {
@@ -706,24 +711,26 @@ export const recyclablesApi = {
 
   updateRecyclable: async (id: string, data: Partial<Recyclable>): Promise<Recyclable> => {
     const userId = await getCurrentUserId()
-    const { data: updated, error } = await supabase
-      .from('recyclables')
-      .update({
-        type: data.type,
-        quantity: data.quantity,
-        unit: data.unit,
-        estimatedValue: data.estimatedValue,
-        actualValue: data.actualValue,
-        status: data.status,
-        description: data.description,
-        photoUrl: data.photoUrl,
-        latitude: asOptionalNumber(data.latitude),
-        longitude: asOptionalNumber(data.longitude),
-        pickupDate: data.pickupDate,
-        collectionDate: data.collectionDate,
-      })
+    const role = await getCurrentUserRole()
+    let query = supabase.from('recyclables').update({
+      type: data.type,
+      quantity: data.quantity,
+      unit: data.unit,
+      estimatedValue: data.estimatedValue,
+      actualValue: data.actualValue,
+      status: data.status,
+      description: data.description,
+      photoUrl: data.photoUrl,
+      latitude: asOptionalNumber(data.latitude),
+      longitude: asOptionalNumber(data.longitude),
+      pickupDate: data.pickupDate,
+      collectionDate: data.collectionDate,
+    })
+    if (role === 'resident') {
+      query = query.eq('userId', userId)
+    }
+    const { data: updated, error } = await query
       .eq('id', id)
-      .eq('userId', userId)
       .select('*')
       .single()
     if (error) {
