@@ -7,7 +7,6 @@ import {
   clearAuthSession,
   clearPendingRegistration,
   loadPendingRegistration,
-  loadStoredAuthSession,
   normalizeAuthResponse,
   PendingRegistration,
   saveAuthSession,
@@ -224,17 +223,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       try {
-        const storedSession = loadStoredAuthSession()
-        if (storedSession) {
-          // Use stored user data directly
-          if (isMounted) {
-            setToken(storedSession.token)
-            setUser(storedSession.user)
-            saveAuthToken(storedSession.token)
-          }
-          return
-        }
-
         const { data } = await supabase.auth.getSession()
         const session = data.session
         const accessToken = session?.access_token
