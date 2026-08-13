@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ArrowLeft, Package, DollarSign, Calculator, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Package, Coins, Calculator, AlertCircle } from 'lucide-react'
 import { recyclablesApi } from '../services/api'
 import { RecyclableType } from '../types'
+import { formatCurrency } from '../utils/format'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import Select from '../components/Select'
@@ -163,11 +164,11 @@ const SubmitRecyclable: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-4">
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-5 w-5 text-emerald-600" />
+                      <Coins className="h-5 w-5 text-emerald-600" />
                       <p className="text-sm font-medium text-emerald-900">Total Estimated</p>
                     </div>
                     <p className="mt-1 text-2xl font-bold text-emerald-900">
-                      ${valuationSummary.totalEstimated}
+                      {formatCurrency(valuationSummary.totalEstimated, 2)}
                     </p>
                   </div>
                   
@@ -247,7 +248,7 @@ const SubmitRecyclable: React.FC = () => {
                       <p className="text-sm font-medium text-emerald-900">Estimated Value</p>
                     </div>
                     <p className="text-xl font-bold text-emerald-900">
-                      ${estimatedValue}
+                      {formatCurrency(estimatedValue, 2)}
                     </p>
                   </div>
                   <p className="mt-2 text-xs text-emerald-700">
@@ -302,19 +303,19 @@ const SubmitRecyclable: React.FC = () => {
           <div className="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-6">
             <div className="flex items-start gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mt-0.5">
-                <DollarSign className="h-4 w-4" />
+                <Coins className="h-4 w-4" />
               </div>
               <div>
                 <h3 className="font-semibold text-slate-900 mb-2">Current Pricing (per kg)</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm text-slate-600">
-                  <div>• Plastic Bottles: $0.50</div>
-                  <div>• Glass Bottles: $0.30</div>
-                  <div>• Aluminum Cans: $1.20</div>
-                  <div>• Cardboard: $0.25</div>
-                  <div>• Paper: $0.40</div>
-                  <div>• Metal Scraps: $0.80</div>
-                  <div>• Electronics: $2.50</div>
-                  <div>• Other: $0.20</div>
+                  <div>• Plastic Bottles: ₦0.50</div>
+                  <div>• Glass Bottles: ₦0.30</div>
+                  <div>• Aluminum Cans: ₦1.20</div>
+                  <div>• Cardboard: ₦0.25</div>
+                  <div>• Paper: ₦0.40</div>
+                  <div>• Metal Scraps: ₦0.80</div>
+                  <div>• Electronics: ₦2.50</div>
+                  <div>• Other: ₦0.20</div>
                 </div>
               </div>
             </div>

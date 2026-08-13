@@ -135,31 +135,31 @@ export default function ServiceSchedules() {
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { bg: string; text: string; icon: JSX.Element }> = {
       published: {
-        bg: 'bg-green-100',
-        text: 'text-green-800',
-        icon: <CheckCircle className="w-4 h-4" />,
+        bg: 'bg-emerald-50 text-emerald-700',
+        text: 'text-emerald-700',
+        icon: <CheckCircle className="w-3.5 h-3.5" />,
       },
       draft: {
-        bg: 'bg-gray-100',
-        text: 'text-gray-800',
-        icon: <Clock className="w-4 h-4" />,
+        bg: 'bg-slate-100 text-slate-600',
+        text: 'text-slate-600',
+        icon: <Clock className="w-3.5 h-3.5" />,
       },
       suspended: {
-        bg: 'bg-yellow-100',
-        text: 'text-yellow-800',
-        icon: <AlertCircle className="w-4 h-4" />,
+        bg: 'bg-amber-50 text-amber-700',
+        text: 'text-amber-700',
+        icon: <AlertCircle className="w-3.5 h-3.5" />,
       },
       archived: {
-        bg: 'bg-gray-200',
-        text: 'text-gray-600',
-        icon: <Clock className="w-4 h-4" />,
+        bg: 'bg-slate-100 text-slate-500',
+        text: 'text-slate-500',
+        icon: <Clock className="w-3.5 h-3.5" />,
       },
     }
 
     const config = statusConfig[status] || statusConfig.draft
 
     return (
-      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${config.bg} ${config.text}`}>
+      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold border ${config.bg}`}>
         {config.icon}
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
@@ -196,70 +196,70 @@ export default function ServiceSchedules() {
       />
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+        <div className="bg-rose-50 border border-rose-200 rounded-lg p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
           <div>
-            <h3 className="font-semibold text-red-900">Error loading schedules</h3>
-            <p className="text-red-700 text-sm">{error}</p>
+            <h3 className="font-semibold text-rose-900">Error loading schedules</h3>
+            <p className="text-rose-700 text-sm">{error}</p>
           </div>
         </div>
       )}
 
       {/* Create Form */}
       {isStaff && showForm && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Create Service Schedule</h3>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h3 className="heading-3 text-slate-950 mb-4">Create Service Schedule</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
+                <label className="label block mb-2">Service Type</label>
                 <input
                   type="text"
                   value={formData.serviceType}
                   onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   placeholder="e.g., Waste Collection, Bulky Pickup"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Ward</label>
+                <label className="label block mb-2">Ward</label>
                 <input
                   type="text"
                   value={formData.ward}
                   onChange={(e) => setFormData({ ...formData, ward: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   placeholder="e.g., Festac Town"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Street (Optional)</label>
+                <label className="label block mb-2">Street (Optional)</label>
                 <input
                   type="text"
                   value={formData.street}
                   onChange={(e) => setFormData({ ...formData, street: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   placeholder="e.g., All Streets"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Zone</label>
+                <label className="label block mb-2">Zone</label>
                 <input
                   type="text"
                   value={formData.zone}
                   onChange={(e) => setFormData({ ...formData, zone: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   placeholder="e.g., Phase 1"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Frequency</label>
+                <label className="label block mb-2">Frequency</label>
                 <select
                   value={formData.frequency}
                   onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                 >
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
@@ -271,7 +271,7 @@ export default function ServiceSchedules() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Service Days</label>
+              <label className="label block mb-2">Service Days</label>
               <div className="flex flex-wrap gap-2">
                 {daysOfWeek.map(day => (
                   <button
@@ -280,8 +280,8 @@ export default function ServiceSchedules() {
                     onClick={() => toggleServiceDay(day)}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       formData.serviceDays.includes(day)
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-primary-600 text-white shadow-sm'
+                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     {day}
@@ -292,33 +292,33 @@ export default function ServiceSchedules() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Start Time</label>
+                <label className="label block mb-2">Start Time</label>
                 <input
                   type="time"
                   value={formData.startTimeWindow}
                   onChange={(e) => setFormData({ ...formData, startTimeWindow: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">End Time</label>
+                <label className="label block mb-2">End Time</label>
                 <input
                   type="time"
                   value={formData.endTimeWindow}
                   onChange={(e) => setFormData({ ...formData, endTimeWindow: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <label className="label block mb-2">Description</label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 focus:ring-offset-white min-h-[100px]"
                 placeholder="Describe the service schedule..."
                 required
               />
@@ -326,32 +326,32 @@ export default function ServiceSchedules() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Operator Name</label>
+                <label className="label block mb-2">Operator Name</label>
                 <input
                   type="text"
                   value={formData.operatorName}
                   onChange={(e) => setFormData({ ...formData, operatorName: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   placeholder="e.g., LAWMA"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                <label className="label block mb-2">Phone Number</label>
                 <input
                   type="tel"
                   value={formData.operatorPhoneNumber}
                   onChange={(e) => setFormData({ ...formData, operatorPhoneNumber: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   placeholder="08012345678"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <label className="label block mb-2">Email</label>
                 <input
                   type="email"
                   value={formData.operatorEmail}
                   onChange={(e) => setFormData({ ...formData, operatorEmail: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="input w-full"
                   placeholder="operator@example.com"
                 />
               </div>
@@ -378,15 +378,15 @@ export default function ServiceSchedules() {
       )}
 
       {/* Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
-        <h3 className="font-semibold text-gray-900">Filters</h3>
+      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm space-y-4">
+        <h3 className="font-semibold text-slate-900">Filters</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Ward</label>
+            <label className="label block mb-2">Ward</label>
             <select
               value={filterWard}
               onChange={(e) => setFilterWard(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input w-full"
             >
               <option value="">All Wards</option>
               {wards.map((ward) => (
@@ -398,11 +398,11 @@ export default function ServiceSchedules() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Service Type</label>
+            <label className="label block mb-2">Service Type</label>
             <select
               value={filterServiceType}
               onChange={(e) => setFilterServiceType(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="input w-full"
             >
               <option value="">All Service Types</option>
               {serviceTypes.map((type) => (
@@ -431,14 +431,14 @@ export default function ServiceSchedules() {
       ) : (
         <div className="grid gap-4">
           {schedules.map((schedule) => (
-            <div key={schedule.id} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div key={schedule.id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{schedule.serviceType}</h3>
+                    <h3 className="heading-4 text-slate-950">{schedule.serviceType}</h3>
                     {getStatusBadge(schedule.status)}
                   </div>
-                  <p className="text-sm text-gray-600">{schedule.scheduleCode}</p>
+                  <p className="text-sm text-slate-500">{schedule.scheduleCode}</p>
                 </div>
                 {isStaff && schedule.status === 'draft' && (
                   <button
@@ -453,10 +453,10 @@ export default function ServiceSchedules() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-gray-700">Location</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm font-medium text-slate-700">Location</p>
+                    <p className="text-sm text-slate-600">
                       {schedule.street ? `${schedule.street}, ` : ''}
                       {schedule.ward} - {schedule.zone}
                     </p>
@@ -464,13 +464,13 @@ export default function ServiceSchedules() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                  <Clock className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-gray-700">Schedule</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm font-medium text-slate-700">Schedule</p>
+                    <p className="text-sm text-slate-600">
                       {schedule.frequency} - {schedule.serviceDays.join(', ')}
                     </p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-slate-600">
                       {schedule.startTimeWindow} - {schedule.endTimeWindow}
                     </p>
                   </div>
@@ -478,26 +478,26 @@ export default function ServiceSchedules() {
               </div>
 
               {schedule.description && (
-                <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm text-gray-700">{schedule.description}</p>
+                <div className="mb-4 p-3 bg-slate-50 rounded-lg">
+                  <p className="text-sm text-slate-600">{schedule.description}</p>
                 </div>
               )}
 
               {schedule.operatorName && (
-                <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <p className="text-sm font-medium text-blue-900 mb-1">Contact Information</p>
-                  <p className="text-sm text-blue-800">{schedule.operatorName}</p>
+                <div className="mb-4 p-3 bg-primary-50 rounded-lg border border-primary-100">
+                  <p className="text-sm font-medium text-primary-900 mb-1">Contact Information</p>
+                  <p className="text-sm text-primary-800">{schedule.operatorName}</p>
                   {schedule.operatorPhoneNumber && (
-                    <p className="text-sm text-blue-800">{schedule.operatorPhoneNumber}</p>
+                    <p className="text-sm text-primary-800">{schedule.operatorPhoneNumber}</p>
                   )}
                   {schedule.operatorEmail && (
-                    <p className="text-sm text-blue-800">{schedule.operatorEmail}</p>
+                    <p className="text-sm text-primary-800">{schedule.operatorEmail}</p>
                   )}
                 </div>
               )}
 
-              <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                <div className="text-xs text-gray-500">
+              <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+                <div className="text-xs text-slate-500">
                   Published: {schedule.publishedDate ? formatDate(schedule.publishedDate) : 'Not published'}
                 </div>
               </div>

@@ -87,12 +87,12 @@ const pages = {
   status: {
     eyebrow: 'System',
     title: 'System Status',
-    description: 'Current local development service status.',
+    description: 'Current service availability for resident and operations features.',
     icon: CheckCircle2,
     items: [
-      'Frontend: http://localhost:3000',
-      'Backend API: http://localhost:3001',
-      'Database: Supabase Postgres through the backend connection.',
+      'Resident dashboard, billing, wallet, and collection services are online.',
+      'Payments are processed securely through Paystack.',
+      'Live service updates are pushed to signed-in sessions in real time.',
     ],
     action: { label: 'Open app', href: '/app' },
   },
@@ -158,7 +158,7 @@ const FooterInfoPage: React.FC = () => {
             <Icon className="h-6 w-6" />
           </div>
           <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-primary-700">{page.eyebrow}</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950">{page.title}</h1>
+          <h1 className="mt-3 heading-1 text-balance">{page.title}</h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">{page.description}</p>
 
           <div className="mt-8 divide-y divide-slate-200 rounded-xl border border-slate-200">

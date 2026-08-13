@@ -35,7 +35,6 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [backgroundImageIndex, setBackgroundImageIndex] = useState(0)
   const workspace = 'resident' // Always use resident workspace for security
-  const isAdminWorkspace = false // No admin workspace access from login
 
   // Rotate background images every 5 seconds
   useEffect(() => {
@@ -91,11 +90,11 @@ const Login: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900/85 via-slate-800/80 to-slate-900/90" />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-900/40" />
           </div>
-          
+
           {/* Decorative Elements */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.08),_transparent_50%)] pointer-events-none" />
           <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-          
+
           {/* Image Indicator */}
           <div className="absolute bottom-8 right-8 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-slate-950/40 px-3 py-2 backdrop-blur-md">
             {loginBackgroundImages.map((_, index) => (
@@ -110,7 +109,7 @@ const Login: React.FC = () => {
               />
             ))}
           </div>
-          
+
           <div className="relative z-10 max-w-xl">
             <Link to={PATHS.home} className="inline-flex items-center gap-3 group">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm text-white shadow-lg border border-white/20 transition-transform group-hover:scale-105">
@@ -123,106 +122,62 @@ const Login: React.FC = () => {
                 </p>
               </div>
             </Link>
-            
+
             <div className="mt-24 space-y-10">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur-sm">
                 <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse shadow-lg shadow-green-400/50" />
                 <span className="text-sm font-medium text-white">
-                  {isAdminWorkspace ? 'Staff Access Portal' : 'Resident Services Portal'}
+                  Resident Services Portal
                 </span>
               </div>
-              
+
               <h1 className="font-display max-w-xl text-5xl font-bold leading-[1.15] tracking-tight">
-                {isAdminWorkspace
-                  ? 'Centralized operations control for waste management'
-                  : 'Your complete household waste service dashboard'}
+                Your complete household waste service dashboard
               </h1>
-              
+
               <p className="max-w-lg text-lg leading-[1.8] text-white/90">
-                {isAdminWorkspace
-                  ? 'Manage collection routes, oversee billing operations, handle resident complaints, and coordinate field teams from one unified command center.'
-                  : 'Track your collection schedule, pay bills online, report service issues, manage recyclables, and monitor your wallet earnings - all in one convenient place.'}
+                Track your collection schedule, pay bills online, report service issues, manage recyclables, and monitor your wallet earnings - all in one convenient place.
               </p>
 
               {/* Key Benefits List */}
               <div className="mt-12 space-y-5">
-                {isAdminWorkspace ? (
-                  <>
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
-                        <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-white leading-relaxed">Route updates</p>
-                        <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Track collection routes and field team locations</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
-                        <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-white leading-relaxed">Billing & payment oversight</p>
-                        <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Manage resident bills and track payment status</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
-                        <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-white leading-relaxed">Complaint resolution system</p>
-                        <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Handle and resolve resident service requests efficiently</p>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
-                        <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-white leading-relaxed">Never miss a collection</p>
-                        <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Get notified before scheduled pickups in your area</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
-                        <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-white leading-relaxed">Pay bills securely online</p>
-                        <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Quick and secure payments through Paystack</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
-                        <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-white leading-relaxed">Earn from recyclables</p>
-                        <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Track and monetize your recycling contributions</p>
-                      </div>
-                    </div>
-                  </>
-                )}
+                <div className="flex items-start gap-4">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
+                    <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-white leading-relaxed">Never miss a collection</p>
+                    <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Get notified before scheduled pickups in your area</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
+                    <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-white leading-relaxed">Pay bills securely online</p>
+                    <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Quick and secure payments through Paystack</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-400/20 mt-1 flex-shrink-0">
+                    <svg className="h-3.5 w-3.5 text-primary-300" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-white leading-relaxed">Earn from recyclables</p>
+                    <p className="text-xs text-white/70 mt-1.5 leading-relaxed">Track and monetize your recycling contributions</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          
+
           {/* Feature Cards */}
           <div className="relative z-10 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
@@ -231,12 +186,10 @@ const Login: React.FC = () => {
                   <ShieldCheck className="h-5 w-5 text-primary-300" />
                 </div>
                 <p className="mt-4 text-sm font-semibold text-white">
-                  {isAdminWorkspace ? 'Full Operations Access' : 'Secure Account Access'}
+                  Secure Account Access
                 </p>
                 <p className="mt-2 text-xs leading-relaxed text-white/70">
-                  {isAdminWorkspace
-                    ? 'Complete visibility into routes, billing, and service requests'
-                    : 'Protected access to your household service history and billing'}
+                  Protected access to your household service history and billing
                 </p>
               </div>
               <div className="group rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20">
@@ -249,24 +202,6 @@ const Login: React.FC = () => {
                 </p>
               </div>
             </div>
-
-            {/* Stats Bar */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-5">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-white">20+</p>
-                  <p className="text-xs text-white/70 mt-1">Active Routes</p>
-                </div>
-                <div className="text-center border-x border-white/10">
-                  <p className="text-2xl font-bold text-white">1000+</p>
-                  <p className="text-xs text-white/70 mt-1">Residents</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-white">98%</p>
-                  <p className="text-xs text-white/70 mt-1">On-time Rate</p>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
@@ -275,7 +210,7 @@ const Login: React.FC = () => {
           <div className="w-full max-w-md">
             {/* Back to Home Button */}
             <div className="mb-6">
-              <Link 
+              <Link
                 to={PATHS.home}
                 className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-primary-700 transition-colors rounded-lg px-3 py-2 hover:bg-slate-100"
               >
@@ -292,14 +227,12 @@ const Login: React.FC = () => {
                 <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1.5 mb-4">
                   <div className="h-2 w-2 rounded-full bg-primary-600 animate-pulse" />
                   <span className="text-xs font-semibold uppercase tracking-wider text-primary-700">
-                    {isAdminWorkspace ? 'Staff Portal' : 'Resident Portal'}
+                    Resident Portal
                   </span>
                 </div>
                 <h2 className="heading-2">Welcome back</h2>
                 <p className="mt-2 body text-slate-600">
-                  {isAdminWorkspace
-                    ? 'Sign in to access operations and billing tools'
-                    : 'Sign in to manage your household waste service'}
+                  Sign in to manage your household waste service
                 </p>
               </div>
 
@@ -319,7 +252,7 @@ const Login: React.FC = () => {
                     placeholder="you@example.com"
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="password" className="label mb-2 block">
                     Password
@@ -378,7 +311,7 @@ const Login: React.FC = () => {
                     Forgot your password?
                   </Link>
                 </div>
-                
+
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-slate-200" />

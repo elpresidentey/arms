@@ -289,7 +289,7 @@
   
   /* Caption Text */
   .caption {
-    @apply text-xs text-slate-500 leading-normal;
+    @apply text-[11px] text-slate-400 uppercase tracking-[0.14em] font-semibold;
   }
   
   /* Body Text Variants */
@@ -320,7 +320,7 @@
   
   /* Label Variants */
   .label {
-    @apply text-xs font-medium text-slate-700 leading-normal;
+    @apply text-sm font-medium text-slate-700;
   }
   
   .label-small {
@@ -358,6 +358,21 @@
     @apply bg-white/90 text-slate-800 ring-1 ring-slate-200/90 hover:bg-white hover:text-slate-950 focus-visible:ring-primary-300 focus-visible:ring-offset-white;
     box-shadow: var(--shadow-sm);
   }
+
+  .btn-outline {
+    @apply bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-primary-300 focus-visible:ring-offset-white;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-primary-300 focus-visible:ring-offset-white;
+  }
+
+  .btn-green {
+    background: rgb(var(--success-600));
+    color: white;
+    @apply hover:bg-success-700 focus-visible:ring-success-300;
+  }
   
   .btn-success {
     background: rgb(var(--success-600));
@@ -387,9 +402,14 @@
     font-size: var(--font-xs);
   }
 
-  .btn.h-11,
   .btn.h-10 {
     height: 2.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .btn.h-11 {
+    height: 2.75rem;
     padding-top: 0;
     padding-bottom: 0;
   }
@@ -1063,41 +1083,8 @@
    ============================================ */
 
 @layer components {
-  /* Typography hierarchy */
-  .heading-1 {
-    @apply font-display text-2xl font-bold text-slate-950 tracking-tight sm:text-3xl;
-  }
-
-  .heading-2 {
-    @apply font-display text-xl font-semibold text-slate-950 tracking-tight;
-  }
-
-  .heading-3 {
-    @apply font-display text-base font-semibold text-slate-950;
-  }
-
-  .heading-4 {
-    @apply text-sm font-semibold text-slate-900;
-  }
-
   .body-large {
     @apply text-sm text-slate-700 leading-relaxed;
-  }
-
-  .body {
-    @apply text-sm text-slate-600 leading-relaxed;
-  }
-
-  .body-small {
-    @apply text-xs text-slate-500 leading-relaxed;
-  }
-
-  .caption {
-    @apply text-[11px] text-slate-400 uppercase tracking-[0.14em] font-semibold;
-  }
-
-  .label {
-    @apply text-sm font-medium text-slate-700;
   }
 
   .page-container {
@@ -1168,108 +1155,10 @@
 
 
 /* Modern Dashboard Animations */
-@keyframes fade-in {
-  from {
-    opacity: 0;
+@layer utilities {
+  .animate-scale-in {
+    animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-down {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
-  opacity: 0;
-}
-
-.animate-fade-in-down {
-  animation: fade-in-down 0.6s ease-out forwards;
-  opacity: 0;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 0.6s ease-out forwards;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.4s ease-out forwards;
-}
-
-/* Glassmorphism utilities */
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.glass-dark {
-  background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Smooth scroll */
-html {
-  scroll-behavior: smooth;
 }
 
 /* Custom scrollbar for modern look */
@@ -1291,16 +1180,4 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(100 116 139);
-}
-
-/* Loading shimmer effect */
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.4) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background-size: 1000px 100%;
-  animation: shimmer 2s infinite;
 }

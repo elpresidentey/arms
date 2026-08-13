@@ -80,7 +80,7 @@ const CollectionRequestsQueue: React.FC = () => {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
             <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
               <p className="label text-slate-500">Pending</p>
-              <p className="mt-2 heading-3 text-yellow-600">{stats?.pending || 0}</p>
+              <p className="mt-2 heading-3 text-amber-600">{stats?.pending || 0}</p>
             </div>
             <div className="rounded-2xl border border-red-100 bg-red-50/80 px-4 py-3 shadow-sm">
               <p className="label text-red-700">Urgent</p>
@@ -99,7 +99,7 @@ const CollectionRequestsQueue: React.FC = () => {
       />
 
       {urgentRequests.length > 0 && (
-        <Surface title="⚠️ Urgent requests" subtitle="These requests need immediate attention">
+        <Surface title="Urgent requests" subtitle="These requests need immediate attention">
           <div className="space-y-3">
             {urgentRequests.map((request) => (
               <div key={request.id} className="rounded-2xl border-2 border-red-200 bg-red-50 p-4">

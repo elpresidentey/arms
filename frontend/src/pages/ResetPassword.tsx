@@ -89,9 +89,9 @@ const ResetPassword: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(13,148,136,0.12),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(194,120,59,0.14),_transparent_28%),linear-gradient(180deg,#f6f1e8_0%,#fcfbf8_38%,#f1efe8_100%)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(61,90,54,0.12),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(194,120,59,0.14),_transparent_28%),linear-gradient(180deg,#f6f1e8_0%,#fcfbf8_38%,#f1efe8_100%)]">
       <main className="mx-auto flex min-h-screen w-full max-w-2xl items-center px-4 py-10 sm:px-8">
-        <section className="w-full rounded-[2rem] border border-black/5 bg-white/88 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-10">
+        <section className="w-full rounded-[2rem] border border-slate-200/80 bg-white/90 p-8 shadow-[0_30px_80px_rgba(15,23,42,0.08)] backdrop-blur-sm sm:p-10">
           <Link to="/" className="inline-flex items-center gap-3 text-slate-800">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-primary-700 text-white shadow-lg shadow-primary-600/30">
               <Truck className="h-6 w-6" />
@@ -103,8 +103,8 @@ const ResetPassword: React.FC = () => {
           </Link>
 
           <div className="mt-10">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0f766e]">Password reset</p>
-            <h1 className="font-display mt-3 text-4xl tracking-tight text-slate-950">Create a new password</h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-700">Password reset</p>
+            <h1 className="heading-1 mt-3 tracking-tight text-slate-950">Create a new password</h1>
             <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
               Use the secure recovery link from your email, then choose a fresh password for your account.
             </p>
@@ -151,7 +151,7 @@ const ResetPassword: React.FC = () => {
               </div>
 
               {passwordError ? (
-                <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700">
+                <div className="rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm leading-6 text-rose-700">
                   {passwordError}
                 </div>
               ) : null}
@@ -168,7 +168,7 @@ const ResetPassword: React.FC = () => {
           )}
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link to={`/forgot-password?workspace=${workspace}`} className="inline-flex items-center gap-2 text-sm font-semibold text-[#0f766e] transition hover:text-[#134e4a]">
+            <Link to={`/forgot-password?workspace=${workspace}`} className="inline-flex items-center gap-2 text-sm font-semibold text-primary-700 transition hover:text-primary-800">
               <KeyRound className="h-4 w-4" />
               Request a new link
             </Link>

@@ -509,16 +509,16 @@ const LandingPage: React.FC = () => {
                   <div className="mt-6 space-y-3 border-t border-slate-200 pt-6">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-slate-600">Residential rate</span>
-                      <span className="text-sm font-semibold text-slate-950 tabular-nums">NGN 2,000</span>
+                      <span className="text-sm font-semibold text-slate-950 tabular-nums">₦2,000</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-slate-600">Late fee</span>
-                      <span className="text-sm font-semibold text-slate-950 tabular-nums">NGN 0</span>
+                      <span className="text-sm font-semibold text-slate-950 tabular-nums">₦0</span>
                     </div>
                     <div className="flex items-center justify-between border-t border-slate-200 pt-3">
                       <span className="font-semibold text-slate-950">Total amount</span>
                       <span className="font-display text-2xl font-bold tracking-tight text-primary-700 tabular-nums">
-                        NGN 2,000
+                        ₦2,000
                       </span>
                     </div>
                   </div>

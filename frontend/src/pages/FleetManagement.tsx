@@ -1108,7 +1108,7 @@ const FleetManagement: React.FC = () => {
                 {/* Purchase Price */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Purchase Price ($)
+                    Purchase Price (₦)
                   </label>
                   <input
                     type="number"

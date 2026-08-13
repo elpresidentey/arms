@@ -1,5 +1,5 @@
 export const formatCurrency = (amount: number, maximumFractionDigits = 0) => {
-  return `NGN ${new Intl.NumberFormat('en-NG', {
+  return `₦${new Intl.NumberFormat('en-NG', {
     minimumFractionDigits: 0,
     maximumFractionDigits,
   }).format(amount)}`
