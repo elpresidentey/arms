@@ -21,7 +21,7 @@ const DashboardBillingWidget = ({ bills }: DashboardBillingWidgetProps) => {
     return (
       <div className="panel-shell flex flex-col gap-3 rounded-2xl px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-600">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-emerald-100/70 text-emerald-600 shadow-sm">
             <Receipt className="h-6 w-6" />
           </div>
           <div>
@@ -46,11 +46,13 @@ const DashboardBillingWidget = ({ bills }: DashboardBillingWidgetProps) => {
 
   return (
     <section className="panel-shell overflow-hidden rounded-2xl">
-      <div className="flex flex-col gap-3 border-b border-slate-200/70 bg-slate-50/40 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="flex flex-col gap-3 border-b border-slate-200/70 bg-gradient-to-br from-slate-50/80 to-white/60 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div className="flex items-start gap-3">
           <div
             className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-white shadow-sm ${
-              overdueCount > 0 ? 'bg-rose-600' : 'bg-primary-600'
+              overdueCount > 0
+                ? 'bg-gradient-to-br from-rose-500 to-rose-700 shadow-rose-600/25'
+                : 'bg-gradient-to-br from-primary-500 to-primary-800 shadow-primary-600/25'
             }`}
           >
             <AlertCircle className="h-6 w-6" />
@@ -86,8 +88,10 @@ const DashboardBillingWidget = ({ bills }: DashboardBillingWidgetProps) => {
           return (
             <li
               key={bill.id}
-              className={`flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between ${
-                bill.status === 'overdue' ? 'rounded-lg bg-rose-50/40 px-2 sm:px-3 -mx-2 sm:-mx-3' : ''
+              className={`group flex flex-col gap-3 py-4 transition-colors duration-200 sm:flex-row sm:items-center sm:justify-between ${
+                bill.status === 'overdue'
+                  ? 'rounded-lg bg-rose-50/40 px-2 sm:px-3 -mx-2 sm:-mx-3 hover:bg-rose-50/70'
+                  : 'hover:bg-slate-50/60'
               }`}
             >
               <div className="min-w-0 flex-1">

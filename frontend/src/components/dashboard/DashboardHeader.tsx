@@ -11,6 +11,7 @@ import {
   Receipt,
   MapPin,
   Radio,
+  CalendarClock,
 } from 'lucide-react'
 import { User, Bill, WasteCollection } from '../../types'
 import Button from '../Button'
@@ -35,8 +36,14 @@ const SnapshotStat: React.FC<{
   label: string
   value: string | number
   detail: string
-}> = ({ label, value, detail }) => (
-  <div className="rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-3.5 shadow-sm">
+  accent?: string
+}> = ({ label, value, detail, accent = '#3d5a36' }) => (
+  <div className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-3.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300/80 hover:shadow-md">
+    <span
+      className="absolute inset-x-0 top-0 h-[3px] opacity-70 transition-opacity duration-200 group-hover:opacity-100"
+      style={{ background: `linear-gradient(90deg, ${accent}, transparent 85%)` }}
+      aria-hidden="true"
+    />
     <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
       {label}
     </p>
@@ -65,6 +72,21 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       ? `${firstName}'s service snapshot`
       : 'Your service snapshot'
     : 'Operations overview'
+
+  const daysUntil = (target?: string | null) => {
+    if (!target) return null
+    const targetDate = new Date(target)
+    if (isNaN(targetDate.getTime())) return null
+    const diff = Math.ceil((targetDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    if (diff < 0) return null
+    if (diff === 0) return 'Today'
+    if (diff === 1) return 'Tomorrow'
+    return `${diff} days`
+  }
+
+  const countdown = isResident
+    ? daysUntil(nextCollection?.scheduledDate)
+    : null
 
   const nextActionPrimary = isResident
     ? nextCollection
@@ -123,6 +145,12 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               <Radio className={`h-3 w-3 ${isConnected ? 'text-emerald-600' : 'text-slate-400'}`} />
               {isConnected ? 'Live updates on' : 'Live updates off'}
             </span>
+            {countdown && (
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-600">
+                <CalendarClock className="h-3 w-3 text-slate-400" />
+                {countdown}
+              </span>
+            )}
           </div>
 
           <div className="max-w-2xl">
@@ -132,11 +160,11 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             <h1 className="heading-1 mt-2 text-balance">
               {isResident ? snapshotTitle : 'Operations overview'}
             </h1>
-            {!isResident && (
-              <p className="mt-1 text-sm font-medium text-slate-500">
-                {getResidentDashboardGreeting(user)}
-              </p>
-            )}
+            <p className="mt-1 text-sm font-medium text-slate-500">
+              {isResident
+                ? `${getResidentDashboardGreeting(user)} — here's your service at a glance`
+                : getResidentDashboardGreeting(user)}
+            </p>
             <p className="body mt-2.5 max-w-xl text-slate-600">
               {isResident
                 ? 'Track refuse collection status, household requests, complaint updates, wallet activity, and recycling value from one account.'
@@ -205,16 +233,19 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 label="Service rhythm"
                 value={serviceRhythm}
                 detail="Scheduled or active stops"
+                accent="#4a6b41"
               />
               <SnapshotStat
                 label="Completed this month"
                 value={completedThisMonth}
                 detail="Verified stop records"
+                accent="#059669"
               />
               <SnapshotStat
                 label="Open requests"
                 value={openRequests}
                 detail="Items waiting for response"
+                accent="#d97706"
               />
             </div>
           )}

@@ -216,18 +216,22 @@ const Operations: React.FC = () => {
         meta={
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <div className="metric-panel stagger-enter px-4 py-3">
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-indigo-300 via-indigo-400 to-indigo-600 opacity-70" aria-hidden="true" />
               <p className="label text-slate-500">Trucks deployed</p>
               <p className="mt-2 heading-3 text-slate-950">{deployedTruckCount}</p>
             </div>
             <div className="metric-panel stagger-enter bg-primary-50/70 px-4 py-3">
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-primary-400 via-primary-500 to-primary-700 opacity-70" aria-hidden="true" />
               <p className="label text-primary-700">Pending collection requests</p>
               <p className="mt-2 heading-3 text-primary-900">{pendingCollectionRequests}</p>
             </div>
             <div className="metric-panel stagger-enter bg-amber-50/70 px-4 py-3">
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600 opacity-70" aria-hidden="true" />
               <p className="label text-amber-700">Pending service requests</p>
               <p className="mt-2 heading-3 text-amber-900">{pendingServiceRequests}</p>
             </div>
             <div className="metric-panel stagger-enter bg-emerald-50/70 px-4 py-3">
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-600 opacity-70" aria-hidden="true" />
               <p className="label text-emerald-700">Open complaints</p>
               <p className="mt-2 heading-3 text-emerald-900">{openComplaints}</p>
             </div>

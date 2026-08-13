@@ -179,6 +179,13 @@ const DashboardMetrics: React.FC<DashboardMetricsProps> = ({
           <h2 className="heading-3">Overview</h2>
           <p className="mt-1 caption text-slate-400">Live account summary</p>
         </div>
+        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          </span>
+          Auto-refreshing
+        </span>
       </div>
       <div
         className={`grid grid-cols-1 gap-3.5 sm:gap-4 @sm:grid-cols-2 ${

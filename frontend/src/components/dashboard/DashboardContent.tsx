@@ -62,9 +62,10 @@ interface QuickLinkProps {
   to: string
   icon: React.ReactNode
   label: string
+  description: string
 }
 
-const QuickLink: React.FC<QuickLinkProps> = ({ to, icon, label }) => (
+const QuickLink: React.FC<QuickLinkProps> = ({ to, icon, label, description }) => (
   <Link
     to={to}
     className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-200 hover:bg-primary-50/40 hover:text-slate-900 hover:shadow-md hover:shadow-primary-900/5"
@@ -72,8 +73,11 @@ const QuickLink: React.FC<QuickLinkProps> = ({ to, icon, label }) => (
     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition-colors duration-200 group-hover:border-primary-200 group-hover:bg-white group-hover:text-primary-700">
       {icon}
     </div>
-    <span className="flex-1 truncate">{label}</span>
-    <ArrowRight className="h-4 w-4 text-slate-300 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-primary-600" />
+    <span className="min-w-0 flex-1">
+      <span className="block truncate font-medium text-slate-800">{label}</span>
+      <span className="mt-0.5 block truncate text-xs text-slate-400">{description}</span>
+    </span>
+    <ArrowRight className="h-4 w-4 shrink-0 text-slate-300 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-primary-600" />
   </Link>
 )
 
@@ -119,6 +123,11 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
   workloadRingData = [],
 }) => {
   const workloadTotal = workloadRingData.reduce((sum, entry) => sum + entry.value, 0)
+  const activityTotal = servicePulseData.reduce((sum, entry) => sum + entry.activity, 0)
+  const busiestDay = servicePulseData.reduce(
+    (busiest, entry) => (entry.activity > (busiest?.activity ?? 0) ? entry : busiest),
+    undefined as { label: string; activity: number } | undefined,
+  )
   return (
     <section className="grid grid-cols-1 gap-5 @6xl:grid-cols-[1.35fr_0.65fr]">
       {/* Main timeline */}
@@ -161,6 +170,13 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
           className="stagger-enter"
           title="Activity Trend"
           subtitle="Last 6 days"
+          action={
+            activityTotal > 0 ? (
+              <span className="shrink-0 rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-[11px] font-semibold text-primary-700">
+                {activityTotal} total
+              </span>
+            ) : undefined
+          }
         >
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
@@ -202,6 +218,12 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
               </AreaChart>
             </ResponsiveContainer>
           </div>
+          {busiestDay && busiestDay.activity > 0 && (
+            <p className="mt-3 text-xs text-slate-500">
+              Busiest day: <span className="font-semibold text-slate-700">{busiestDay.label}</span> with{' '}
+              <span className="font-semibold text-slate-700">{busiestDay.activity}</span> activities
+            </p>
+          )}
         </Surface>
 
         {/* Service status */}
@@ -339,43 +361,50 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
           <div className="grid grid-cols-1 gap-2.5">
             {isResident ? (
               <>
-                <QuickLink 
-                  to="/app/schedule-collection" 
-                  icon={<Calendar className="h-4 w-4" />} 
-                  label="Schedule Collection" 
+                <QuickLink
+                  to="/app/schedule-collection"
+                  icon={<Calendar className="h-4 w-4" />}
+                  label="Schedule Collection"
+                  description="Book your next pickup"
                 />
-                <QuickLink 
-                  to="/app/recyclables" 
-                  icon={<Recycle className="h-4 w-4" />} 
-                  label="Log Items" 
+                <QuickLink
+                  to="/app/recyclables"
+                  icon={<Recycle className="h-4 w-4" />}
+                  label="Log Items"
+                  description="Add recyclables and earn"
                 />
-                <QuickLink 
-                  to="/app/locations" 
-                  icon={<MapPin className="h-4 w-4" />} 
-                  label="Find Locations" 
+                <QuickLink
+                  to="/app/locations"
+                  icon={<MapPin className="h-4 w-4" />}
+                  label="Find Locations"
+                  description="Nearby recycling points"
                 />
-                <QuickLink 
-                  to="/app/wallet" 
-                  icon={<Wallet className="h-4 w-4" />} 
-                  label="View Wallet" 
+                <QuickLink
+                  to="/app/wallet"
+                  icon={<Wallet className="h-4 w-4" />}
+                  label="View Wallet"
+                  description="Balance and transactions"
                 />
               </>
             ) : (
               <>
-                <QuickLink 
-                  to="/app/operations" 
-                  icon={<Truck className="h-4 w-4" />} 
-                  label="Operations" 
+                <QuickLink
+                  to="/app/operations"
+                  icon={<Truck className="h-4 w-4" />}
+                  label="Operations"
+                  description="Route and truck status"
                 />
-                <QuickLink 
-                  to="/app/reports" 
-                  icon={<AlertTriangle className="h-4 w-4" />} 
-                  label="Complaints" 
+                <QuickLink
+                  to="/app/reports"
+                  icon={<AlertTriangle className="h-4 w-4" />}
+                  label="Complaints"
+                  description="Review resident reports"
                 />
-                <QuickLink 
-                  to="/app/service-requests" 
-                  icon={<Clock className="h-4 w-4" />} 
-                  label="Requests" 
+                <QuickLink
+                  to="/app/service-requests"
+                  icon={<Clock className="h-4 w-4" />}
+                  label="Requests"
+                  description="Manage the request queue"
                 />
               </>
             )}

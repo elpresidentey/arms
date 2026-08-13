@@ -41,6 +41,13 @@ const MetricCard: React.FC<MetricCardProps> = ({
         className,
       )}
     >
+      <span
+        className={clsx(
+          'pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r opacity-70 transition-opacity duration-200 group-hover:opacity-100',
+          styles.bar,
+        )}
+        aria-hidden="true"
+      />
       <div className="relative flex items-start justify-between gap-3.5">
         <div className="min-w-0 flex-1 space-y-1.5">
           <p className="card-label">{label}</p>

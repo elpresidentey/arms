@@ -182,6 +182,7 @@ const RouteOperations: React.FC = () => {
       {/* Performance Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="metric-panel">
+          <span className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-primary-400 via-primary-500 to-primary-700 opacity-70" aria-hidden="true" />
           <div className="flex items-center justify-between">
             <div>
               <p className="label text-slate-500">Routes Today</p>
@@ -190,13 +191,14 @@ const RouteOperations: React.FC = () => {
                 {todaysExecutions.filter(e => e.status === 'completed').length} completed
               </p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-50 text-primary-700">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-primary-100 bg-gradient-to-br from-primary-50 to-primary-100/70 text-primary-700 shadow-sm">
               <Route className="h-5 w-5" />
             </div>
           </div>
         </div>
 
         <div className="metric-panel">
+          <span className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-teal-300 via-teal-400 to-teal-600 opacity-70" aria-hidden="true" />
           <div className="flex items-center justify-between">
             <div>
               <p className="label text-slate-500">In Progress</p>
@@ -207,13 +209,14 @@ const RouteOperations: React.FC = () => {
                 Active routes
               </p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-700">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-teal-100 bg-gradient-to-br from-teal-50 to-teal-100/70 text-teal-700 shadow-sm">
               <Play className="h-5 w-5" />
             </div>
           </div>
         </div>
 
         <div className="metric-panel">
+          <span className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-600 opacity-70" aria-hidden="true" />
           <div className="flex items-center justify-between">
             <div>
               <p className="label text-slate-500">Completion Rate</p>
@@ -224,13 +227,14 @@ const RouteOperations: React.FC = () => {
                 Last 7 days
               </p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-emerald-100/70 text-emerald-700 shadow-sm">
               <TrendingUp className="h-5 w-5" />
             </div>
           </div>
         </div>
 
         <div className="metric-panel">
+          <span className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-sky-300 via-sky-400 to-sky-600 opacity-70" aria-hidden="true" />
           <div className="flex items-center justify-between">
             <div>
               <p className="label text-slate-500">On-Time Rate</p>
@@ -241,7 +245,7 @@ const RouteOperations: React.FC = () => {
                 Within 15 min schedule
               </p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-sky-100 bg-gradient-to-br from-sky-50 to-sky-100/70 text-sky-700 shadow-sm">
               <Clock className="h-5 w-5" />
             </div>
           </div>

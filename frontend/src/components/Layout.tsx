@@ -143,43 +143,62 @@ const Layout: React.FC = () => {
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-          className="rounded-lg border border-slate-300 bg-white p-2.5 shadow-sm transition-colors hover:bg-slate-50"
+          className="rounded-lg border border-white/15 bg-slate-900/85 p-2.5 text-white shadow-lg shadow-black/20 backdrop-blur-sm transition-colors hover:bg-slate-800"
         >
-          {isMobileMenuOpen ? <X className="w-5 h-5 text-slate-700" /> : <Menu className="w-5 h-5 text-slate-700" />}
+          {isMobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
         </button>
       </div>
 
-      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,260px)] border-r border-slate-200/80 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdf6_100%)] shadow-[0_0_40px_rgba(15,23,42,0.04)] transform transition-transform duration-300 ease-smooth-out ${
+      <aside className={`fixed inset-y-0 left-0 z-40 w-[min(82vw,260px)] border-r border-white/10 bg-[linear-gradient(180deg,#1c2b1f_0%,#122019_46%,#0c1610_100%)] shadow-[0_0_48px_rgba(6,12,8,0.35)] transform transition-transform duration-300 ease-smooth-out ${
         isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0`}>
-        <div className="flex flex-col h-full">
-          <div className="border-b border-slate-200/70 px-4 py-4">
+        {/* Ambient glow + grid texture */}
+        <div
+          className="pointer-events-none absolute inset-0 [mask-image:linear-gradient(180deg,black,transparent_78%)]"
+          aria-hidden="true"
+          style={{
+            background:
+              'radial-gradient(300px 200px at 15% -5%, rgba(109,143,98,0.28), transparent 62%), radial-gradient(260px 220px at 110% 45%, rgba(61,90,54,0.22), transparent 60%)',
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.35] [mask-image:linear-gradient(180deg,black_6%,transparent_70%)]"
+          aria-hidden="true"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)',
+            backgroundSize: '26px 26px',
+          }}
+        />
+
+        <div className="relative flex flex-col h-full">
+          <div className="border-b border-white/[0.08] px-4 py-4">
             <BrandLogo
               to="/app"
-              variant="light"
+              variant="dark"
               className="w-full"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            <div className="mt-3 flex items-center gap-3 rounded-xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-white px-3 py-2.5 shadow-sm">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-600 to-primary-800 text-xs font-bold text-white shadow-sm">
+            <div className="mt-3 flex items-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.05] px-3 py-2.5 shadow-inner shadow-black/10 backdrop-blur-sm">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary-400 to-primary-700 text-xs font-bold text-white shadow-md shadow-primary-900/40">
                 {user?.firstName?.[0] || 'U'}{user?.lastName?.[0] || ''}
               </div>
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-slate-900">
+                <p className="truncate text-sm font-semibold text-white">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium capitalize text-slate-500">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <p className="mt-0.5 flex items-center gap-1.5 text-[11px] font-medium capitalize text-slate-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.9)]" />
                   {user?.role?.replace(/_/g, ' ')}
                 </p>
               </div>
             </div>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-3 py-3 scrollbar-thin">
+          <nav className="flex-1 overflow-y-auto px-3 py-3 scrollbar-thin scrollbar-sidebar">
             {navigationSections.map((section, sectionIndex) => (
-              <div key={section.title} className={sectionIndex > 0 ? 'mt-5 pt-4 border-t border-slate-200/70' : ''}>
-                <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+              <div key={section.title} className={sectionIndex > 0 ? 'mt-5 pt-4 border-t border-white/[0.07]' : ''}>
+                <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                   {section.title}
                 </p>
                 <div className="space-y-0.5">
@@ -193,18 +212,18 @@ const Layout: React.FC = () => {
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={`group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-150 ${
                           active
-                            ? 'bg-primary-50 text-primary-900'
-                            : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
+                            ? 'bg-gradient-to-r from-primary-500/[0.22] to-primary-500/[0.06] text-white ring-1 ring-inset ring-primary-400/25 shadow-[0_0_18px_rgba(61,90,54,0.28)]'
+                            : 'text-slate-400 hover:bg-white/[0.06] hover:text-white'
                         }`}
                         aria-current={active ? 'page' : undefined}
                       >
                         {active && (
-                          <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-primary-600" />
+                          <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-primary-300 to-primary-500 shadow-[0_0_8px_rgba(158,181,146,0.8)]" />
                         )}
-                        <Icon className={`h-4 w-4 shrink-0 ${active ? 'text-primary-700' : 'text-slate-400 group-hover:text-slate-600'}`} />
+                        <Icon className={`h-4 w-4 shrink-0 ${active ? 'text-primary-300' : 'text-slate-500 group-hover:text-slate-300'}`} />
                         <span className="min-w-0 flex-1 truncate">{item.name}</span>
                         {'badge' in item && typeof item.badge === 'number' && item.badge > 0 ? (
-                          <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm shadow-rose-500/40">
+                          <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm shadow-rose-500/50">
                             {item.badge}
                           </span>
                         ) : null}
@@ -216,12 +235,12 @@ const Layout: React.FC = () => {
             ))}
           </nav>
 
-          <div className="border-t border-slate-200/70 px-3 py-3">
+          <div className="border-t border-white/[0.08] px-3 py-3">
             <button
               onClick={handleLogout}
-              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 transition-all hover:bg-rose-50 hover:text-rose-700"
+              className="group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-400 transition-all hover:bg-rose-500/10 hover:text-rose-300"
             >
-              <LogOut className="h-4 w-4 text-slate-400 group-hover:text-rose-500" />
+              <LogOut className="h-4 w-4 text-slate-500 group-hover:text-rose-400" />
               <span>Sign out</span>
             </button>
           </div>

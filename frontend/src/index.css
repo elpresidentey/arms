@@ -439,12 +439,14 @@
   }
 
   .panel-shell {
-    background: rgba(255, 255, 255, 0.96);
-    border: 1px solid rgba(226, 232, 240, 0.88);
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(244, 247, 242, 0.5), transparent 55%),
+      rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(226, 232, 240, 0.9);
     box-shadow:
       0 1px 2px rgba(15, 23, 42, 0.04),
-      0 10px 26px rgba(15, 23, 42, 0.035),
-      inset 0 1px 0 rgba(255, 255, 255, 0.82);
+      0 12px 30px rgba(15, 23, 42, 0.045),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     transition:
       background-color 180ms ease,
@@ -454,15 +456,18 @@
   .metric-panel {
     position: relative;
     overflow: hidden;
-    border-radius: 1rem;
-    border: 1px solid rgba(226, 232, 240, 0.88);
-    background: rgba(255, 255, 255, 0.96);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(244, 247, 242, 0.55), transparent 58%),
+      rgba(255, 255, 255, 0.98);
     box-shadow:
       0 1px 2px rgba(15, 23, 42, 0.035),
-      0 8px 20px rgba(15, 23, 42, 0.035);
+      0 10px 26px rgba(15, 23, 42, 0.045),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
     transition:
-      transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
-      box-shadow 160ms ease,
+      transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 180ms ease,
       border-color 220ms ease;
   }
 
@@ -470,7 +475,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, rgba(61, 90, 54, 0.12), transparent 42%);
+    background: linear-gradient(90deg, rgba(61, 90, 54, 0.14), transparent 42%);
     width: 3px;
     right: auto;
     opacity: 0;
@@ -479,11 +484,12 @@
   }
 
   .metric-panel:hover {
-    transform: translateY(-2px);
-    border-color: rgba(61, 90, 54, 0.18);
+    transform: translateY(-3px);
+    border-color: rgba(61, 90, 54, 0.2);
     box-shadow:
-      0 2px 4px rgba(15, 23, 42, 0.05),
-      0 16px 32px rgba(15, 23, 42, 0.07);
+      0 3px 6px rgba(15, 23, 42, 0.05),
+      0 20px 40px rgba(15, 23, 42, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
 
   .metric-panel:hover::before {
@@ -669,6 +675,24 @@
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: rgb(var(--slate-400));
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-3xl);
+  }
+
+  .scrollbar-sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.22);
   }
 
   /* Hide scrollbar but keep functionality */
