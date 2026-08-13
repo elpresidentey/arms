@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { io, Socket } from 'socket.io-client'
+import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js'
+import { supabase } from '../lib/supabase'
 import { useAuth } from './AuthContext'
 import toast from 'react-hot-toast'
 import { formatCurrency } from '../utils/format'
@@ -15,7 +16,7 @@ export type AppNotification = {
 }
 
 interface SocketContextType {
-  socket: Socket | null
+  socket: RealtimeChannel | null
   isConnected: boolean
   notifications: AppNotification[]
   unreadCount: number
@@ -34,11 +35,22 @@ export const useSocket = () => {
   return context
 }
 
+type Row = Record<string, unknown>
+
+const TABLE_EVENTS = [
+  { table: 'waste_collections', event: 'waste-collection-update' },
+  { table: 'recyclables', event: 'recyclable-update' },
+  { table: 'wallet_transactions', event: 'wallet-update' },
+  { table: 'service_requests', event: 'service-request-update' },
+  { table: 'reports', event: 'report-update' },
+  { table: 'collection_routes', event: 'collection-route-update' },
+] as const
+
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [socket, setSocket] = useState<Socket | null>(null)
+  const [socket, setSocket] = useState<RealtimeChannel | null>(null)
   const [isConnected, setIsConnected] = useState(false)
   const [notifications, setNotifications] = useState<AppNotification[]>([])
-  const { token, user } = useAuth()
+  const { user } = useAuth()
 
   const unreadCount = notifications.reduce((count, item) => (item.read ? count : count + 1), 0)
 
@@ -69,158 +81,138 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const formatStatus = (value: unknown) => String(value ?? '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
 
-  const isRelevantToCurrentUser = (payload: unknown) => {
-    if (!user || typeof payload !== 'object' || payload === null) return true
-    const data = payload as { userId?: string | null; residentId?: string | null }
+  const isRelevantToCurrentUser = (data: Row) => {
+    if (!user) return true
     if (user.role !== 'resident') return true
-    return !data.userId && !data.residentId ? true : data.userId === user.id || data.residentId === user.id
+    const userId = data.userId as string | null | undefined
+    const residentId = data.residentId as string | null | undefined
+    const reporterId = data.reporterId as string | null | undefined
+    return [userId, residentId, reporterId].every((id) => !id || id === user.id)
+  }
+
+  const rowFromPayload = (payload: RealtimePostgresChangesPayload<Row>): Row => {
+    return (payload.new ?? payload.old ?? {}) as Row
+  }
+
+  const handleTableEvent = (payload: RealtimePostgresChangesPayload<Row>) => {
+    const event = TABLE_EVENTS.find((entry) => entry.table === payload.table)
+    if (!event) return
+
+    const data = rowFromPayload(payload)
+    if (!data || typeof data !== 'object') return
+    if (!isRelevantToCurrentUser(data)) return
+
+    switch (event.event) {
+      case 'waste-collection-update': {
+        const status = formatStatus(data.status)
+        pushNotification({
+          event: event.event,
+          title: 'Collection update',
+          message: status ? `Status changed to ${status}` : 'Collection status updated',
+          payload: data,
+        })
+        if (['completed', 'verified'].includes(String(data.status ?? ''))) {
+          toast.success(status === 'verified' ? 'Refuse collection verified for your area.' : 'Refuse collection completed for your area.')
+        }
+        break
+      }
+      case 'recyclable-update': {
+        const status = formatStatus(data.status)
+        pushNotification({
+          event: event.event,
+          title: 'Recyclable update',
+          message: status ? `Status changed to ${status}` : 'Recyclable status updated',
+          payload: data,
+        })
+        toast.success(`Recyclable update: ${status || 'updated'}`)
+        break
+      }
+      case 'wallet-update': {
+        const amount = Number(data.amount || 0)
+        const isDebit = data.type === 'debit'
+        const amountText = `${isDebit ? '-' : '+'}${formatCurrency(amount)}`
+        pushNotification({
+          event: event.event,
+          title: 'Wallet update',
+          message: `Transaction ${amountText}`,
+          payload: data,
+        })
+        toast.success(`Wallet updated: ${amountText}`)
+        break
+      }
+      case 'service-request-update': {
+        const status = formatStatus(data.status)
+        pushNotification({
+          event: event.event,
+          title: 'Service request update',
+          message: status ? `Status changed to ${status}` : 'Service request updated',
+          payload: data,
+        })
+        break
+      }
+      case 'report-update': {
+        const status = formatStatus(data.status)
+        pushNotification({
+          event: event.event,
+          title: 'Report update',
+          message: status ? `Status changed to ${status}` : 'Report updated',
+          payload: data,
+        })
+        break
+      }
+      case 'collection-route-update': {
+        if (
+          user?.role === 'resident' &&
+          (data.ward !== (user as { ward?: string | null }).ward || data.street !== (user as { street?: string | null }).street)
+        ) {
+          return
+        }
+        const status = formatStatus(data.status)
+        pushNotification({
+          event: event.event,
+          title: 'Route update',
+          message: status ? `Route status changed to ${status}` : 'Collection route updated',
+          payload: data,
+        })
+        break
+      }
+    }
   }
 
   useEffect(() => {
-    if (!token || !user) {
+    if (!user) {
+      setIsConnected(false)
       return
     }
 
-    // Check if a real-time backend is configured
-    const apiUrl = import.meta.env.VITE_API_URL
+    const channel = supabase.channel('dashboard-live')
 
-    if (!apiUrl || apiUrl.trim() === '') {
-      // No backend configured - disable WebSocket connections
-      setIsConnected(false)
-      console.warn('Real-time notifications disabled: no backend configured (VITE_API_URL unset)')
-      return
+    for (const entry of TABLE_EVENTS) {
+      channel.on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: entry.table },
+        handleTableEvent,
+      )
     }
 
-    // Render backend supports WebSockets, so we can connect
-    console.log(`Initializing socket connection to: ${apiUrl}`)
+    setSocket(channel)
 
-    const newSocket = io(apiUrl, {
-      auth: {
-        token,
-      },
-      transports: ['websocket', 'polling'],
-      timeout: 5000,
-    })
-
-    newSocket.on('connect', () => {
-      setIsConnected(true)
-      console.log('Socket connected successfully')
-    })
-
-    newSocket.on('disconnect', () => {
-      setIsConnected(false)
-      console.log('Socket disconnected')
-    })
-
-    newSocket.on('connect_error', (error) => {
-      setIsConnected(false)
-      console.warn('Socket connection failed:', error.message)
-      // Don't retry on problematic backends to prevent spam
-      if (apiUrl.includes('vercel.app') || apiUrl.includes('backend-seven-chi-51')) {
-        newSocket.disconnect()
+    channel.subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        setIsConnected(true)
+        console.log('Supabase Realtime connected')
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+        setIsConnected(false)
+        console.warn('Supabase Realtime unavailable:', status)
       }
     })
-
-    newSocket.on('waste-collection-update', (data) => {
-      if (!isRelevantToCurrentUser(data)) return
-      const status = formatStatus(data?.status)
-      pushNotification({
-        event: 'waste-collection-update',
-        title: 'Collection update',
-        message: status ? `Status changed to ${status}` : 'Collection status updated',
-        payload: data,
-      })
-      if (['completed', 'verified'].includes(String(data?.status ?? ''))) {
-        toast.success(status === 'verified' ? 'Refuse collection verified for your area.' : 'Refuse collection completed for your area.')
-      }
-    })
-
-    newSocket.on('recyclable-update', (data) => {
-      if (!isRelevantToCurrentUser(data)) return
-      const status = formatStatus(data?.status)
-      pushNotification({
-        event: 'recyclable-update',
-        title: 'Recyclable update',
-        message: status ? `Status changed to ${status}` : 'Recyclable status updated',
-        payload: data,
-      })
-      toast.success(`Recyclable update: ${status || 'updated'}`)
-    })
-
-    newSocket.on('wallet-update', (data) => {
-      if (!isRelevantToCurrentUser(data)) return
-      const amount = Number(data?.amount || 0)
-      const isDebit = data?.type === 'debit'
-      const amountText = `${isDebit ? '-' : '+'}${formatCurrency(amount)}`
-      pushNotification({
-        event: 'wallet-update',
-        title: 'Wallet update',
-        message: `Transaction ${amountText}`,
-        payload: data,
-      })
-      toast.success(`Wallet updated: ${amountText}`)
-    })
-
-    newSocket.on('service-request-update', (data) => {
-      if (!isRelevantToCurrentUser(data)) return
-      const status = formatStatus(data?.status)
-      pushNotification({
-        event: 'service-request-update',
-        title: 'Service request update',
-        message: status ? `Status changed to ${status}` : 'Service request updated',
-        payload: data,
-      })
-    })
-
-    newSocket.on('report-update', (data) => {
-      if (!isRelevantToCurrentUser(data)) return
-      const status = formatStatus(data?.status)
-      pushNotification({
-        event: 'report-update',
-        title: 'Report update',
-        message: status ? `Status changed to ${status}` : 'Report updated',
-        payload: data,
-      })
-    })
-
-    newSocket.on('collection-route-update', (data) => {
-      if (
-        user.role === 'resident' &&
-        (data?.ward !== user.ward || data?.street !== user.street)
-      ) {
-        return
-      }
-      const status = formatStatus(data?.status)
-      pushNotification({
-        event: 'collection-route-update',
-        title: 'Route update',
-        message: status ? `Route status changed to ${status}` : 'Collection route updated',
-        payload: data,
-      })
-    })
-
-    newSocket.on('notification', (data) => {
-      if (!isRelevantToCurrentUser(data)) return
-      const title = String(data?.title || 'Notification')
-      const message = String(data?.message || 'A service update is available.')
-
-      pushNotification({
-        event: String(data?.type || 'notification'),
-        title,
-        message,
-        payload: data?.data ?? data,
-      })
-      toast.success(message, { duration: 6500 })
-    })
-
-    setSocket(newSocket)
 
     return () => {
-      newSocket.close()
+      supabase.removeChannel(channel)
       setSocket(null)
       setIsConnected(false)
     }
-  }, [token, user])
+  }, [user])
 
   const value = {
     socket,
