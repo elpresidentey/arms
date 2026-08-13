@@ -45,16 +45,28 @@ const getCurrentUserId = async (): Promise<string> => {
   return data.user.id
 }
 
-const invokeEdge = async <T>(name: string, body: Record<string, unknown>): Promise<T> => {
+const edgeErrorMessage = async (error: unknown, fallback: string): Promise<string> => {
+  const e = error as { message?: string; context?: unknown }
   try {
-    const { data, error } = await supabase.functions.invoke(name, { body })
-    if (error) {
-      throw error
+    const response = e?.context as Response | undefined
+    if (response && typeof response.json === 'function') {
+      const parsed = (await response.json()) as { error?: string } | null
+      if (parsed && typeof parsed.error === 'string' && parsed.error) {
+        return parsed.error
+      }
     }
-    return data as T
-  } catch (_error) {
-    throw new Error(MIGRATION_MESSAGE)
+  } catch {
+    // Ignore body parse failures; fall back to the generic message below.
   }
+  return typeof e?.message === 'string' && e.message.trim() ? e.message : fallback
+}
+
+const invokeEdge = async <T>(name: string, body: Record<string, unknown>): Promise<T> => {
+  const { data, error } = await supabase.functions.invoke(name, { body })
+  if (error) {
+    throw new Error(await edgeErrorMessage(error, MIGRATION_MESSAGE))
+  }
+  return data as T
 }
 
 const throwSupabaseError = (error: { message?: string } | null, fallback: string): never => {
