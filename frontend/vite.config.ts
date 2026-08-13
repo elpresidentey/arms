@@ -21,11 +21,12 @@ export default defineConfig({
           'query-vendor': ['@tanstack/react-query'],
           'ui-vendor': ['lucide-react'],
           'charts-vendor': ['recharts'],
+          'map-vendor': ['leaflet', 'react-leaflet'],
         },
       },
     },
     // Optimize chunk size
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 600,
   },
   // Optimize dependencies
   optimizeDeps: {

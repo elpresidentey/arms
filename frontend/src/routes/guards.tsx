@@ -1,6 +1,6 @@
+import { lazy } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import Dashboard from '../pages/Dashboard'
 import { User } from '../types'
 import {
   RouteAccess,
@@ -9,6 +9,8 @@ import {
   getAccessDeniedRedirect,
   getDefaultAppPath,
 } from './roles'
+
+const Dashboard = lazy(() => import('../pages/Dashboard'))
 
 type AppRole = User['role']
 
