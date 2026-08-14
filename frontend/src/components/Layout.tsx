@@ -248,36 +248,42 @@ const Layout: React.FC = () => {
       </aside>
 
       <div className="lg:pl-[260px]">
-        <main className="px-4 pb-8 pt-16 sm:px-6 lg:px-8 lg:pt-6">
+        <main className="px-4 pb-8 pt-3 sm:px-6 lg:px-8">
           <div className="mx-auto w-full max-w-[1280px] @container">
-            <div className="sticky top-3 z-30 mb-5 rounded-lg border border-slate-200/80 bg-white/80 px-5 py-3.5 shadow-sm backdrop-blur-md sm:relative sm:top-auto sm:-mx-6 sm:rounded-none sm:border-x-0 sm:border-t-0 sm:border-b sm:bg-white/70 sm:px-6 sm:py-3 sm:shadow-none lg:-mx-8 lg:px-8">
+            <header className="sticky top-0 z-30 mb-6 border-b border-slate-200/70 bg-white/85 px-4 py-3 shadow-[0_1px_0_0_rgba(255,255,255,0.6)_inset,0_8px_24px_-16px_rgba(15,23,42,0.25)] backdrop-blur-xl sm:px-6 lg:px-8">
               <div className="flex items-center justify-between gap-3">
-                <div className="ml-12 flex min-w-0 items-center gap-3 lg:ml-0">
-                  <div className="hidden h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 text-primary-700 shadow-sm sm:flex">
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="ml-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-primary-800 text-white shadow-md shadow-primary-700/25 ring-1 ring-inset ring-white/20 lg:ml-0">
                     {React.createElement(currentIcon, { className: 'h-5 w-5' })}
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-base font-semibold text-slate-900">{currentSection}</p>
+                    <p className="truncate font-display text-base font-bold tracking-tight text-slate-950">{currentSection}</p>
+                    <p className="hidden text-[11px] font-medium uppercase tracking-[0.12em] text-slate-400 sm:block">
+                      {isResident ? 'Resident workspace' : 'Admin workspace'}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex shrink-0 items-center gap-2">
-                  <div className="hidden items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-600 sm:flex">
-                    <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                    <span className="truncate max-w-[160px] font-medium">{user?.street || 'N/A'}</span>
+                  <div className="hidden items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-3 py-1.5 text-xs text-slate-600 shadow-sm shadow-slate-900/[0.03] lg:flex">
+                    <MapPin className="h-3.5 w-3.5 text-primary-500" />
+                    <span className="truncate max-w-[160px] font-medium text-slate-700">{user?.street || 'N/A'}</span>
                     <span className="text-slate-300">•</span>
-                    <span className="text-slate-500 font-medium">{user?.ward || 'N/A'}</span>
+                    <span className="font-medium text-slate-500">{user?.ward || 'N/A'}</span>
                   </div>
 
                   <div
-                    className={`hidden items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[11px] font-semibold md:flex ${
+                    className={`hidden items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[11px] font-semibold shadow-sm shadow-slate-900/[0.03] md:flex ${
                       isConnected
-                        ? 'border-emerald-200/80 bg-emerald-50 text-emerald-700'
-                        : 'border-slate-200 bg-slate-100 text-slate-500'
+                        ? 'border-emerald-200/80 bg-emerald-50/80 text-emerald-700'
+                        : 'border-slate-200/80 bg-slate-100 text-slate-500'
                     }`}
                     title={isConnected ? 'Live updates connected' : 'Live updates unavailable'}
                   >
-                    <span className={`h-1.5 w-1.5 rounded-full ${isConnected ? 'animate-pulse bg-emerald-500' : 'bg-slate-400'}`} />
+                    <span className={`relative flex h-2 w-2`}>
+                      <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${isConnected ? 'bg-emerald-400' : 'bg-slate-400'}`} />
+                      <span className={`relative inline-flex h-2 w-2 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+                    </span>
                     {isConnected ? 'Live' : 'Offline'}
                   </div>
 
@@ -285,30 +291,30 @@ const Layout: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsNotificationsOpen((prev) => !prev)}
-                      className={`relative inline-flex h-9 items-center gap-2 rounded-lg border px-3 text-sm font-medium transition-all ${
-                        isConnected 
-                          ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50' 
-                          : 'border-slate-200 bg-slate-50 text-slate-500'
+                      className={`relative inline-flex h-9 items-center gap-2 rounded-xl border px-3 text-sm font-medium shadow-sm shadow-slate-900/[0.04] transition-all active:scale-[0.98] ${
+                        isConnected
+                          ? 'border-slate-200/80 bg-white text-slate-700 hover:border-primary-300 hover:bg-primary-50/60'
+                          : 'border-slate-200/80 bg-slate-50 text-slate-500'
                       }`}
                       aria-label="Open updates"
                     >
                       <Bell className={`h-4 w-4 ${isConnected ? 'text-slate-600' : 'text-slate-400'}`} />
                       <span className="hidden sm:inline">Notifications</span>
                       {unreadCount > 0 ? (
-                        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-rose-600 px-1.5 text-[10px] font-bold text-white">
+                        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-rose-600 px-1.5 text-[10px] font-bold text-white shadow-sm shadow-rose-600/40">
                           {unreadCount > 9 ? '9+' : unreadCount}
                         </span>
                       ) : null}
                     </button>
 
                     {isNotificationsOpen ? (
-                      <div className="fixed inset-x-4 top-20 z-[9999] max-h-[70vh] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-12 sm:w-[380px]">
+                      <div className="fixed inset-x-4 top-[4.5rem] z-[9999] max-h-[70vh] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_24px_60px_-16px_rgba(15,23,42,0.35)] sm:absolute sm:inset-x-auto sm:right-0 sm:top-12 sm:w-[380px]">
                         <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
                           <div>
-                            <p className="text-sm font-semibold text-slate-950">Updates</p>
-                            <p className="text-xs text-slate-500">{unreadCount} unread</p>
+                            <p className="text-sm font-bold text-slate-950">Updates</p>
+                            <p className="text-xs font-medium text-slate-500">{unreadCount} unread</p>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1">
                             <button
                               type="button"
                               className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -334,7 +340,7 @@ const Layout: React.FC = () => {
                               <button
                                 key={item.id}
                                 type="button"
-                                className="grid w-full grid-cols-[auto_1fr] gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50"
+                                className="grid w-full grid-cols-[auto_1fr] gap-3 px-4 py-3 text-left transition-colors hover:bg-primary-50/50"
                                 onClick={() => markRead(item.id)}
                               >
                                 <span className={`mt-1 h-2.5 w-2.5 rounded-full ${item.read ? 'bg-slate-300' : 'bg-primary-600'}`} />
@@ -347,8 +353,8 @@ const Layout: React.FC = () => {
                             ))
                           ) : (
                             <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-                              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 mb-3">
-                                <Bell className="h-8 w-8 text-slate-400" />
+                              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary-50 mb-3">
+                                <Bell className="h-8 w-8 text-primary-500" />
                               </div>
                               <p className="text-sm font-semibold text-slate-900 mb-1">No updates yet</p>
                               <p className="text-xs text-slate-500 max-w-[240px]">
@@ -362,7 +368,7 @@ const Layout: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </header>
             <div key={location.pathname} className="page-enter">
               <Outlet />
             </div>
