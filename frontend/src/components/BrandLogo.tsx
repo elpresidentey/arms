@@ -54,11 +54,11 @@ const BrandLogo: React.FC<BrandLogoProps> = ({
         {!isCompact ? (
           <p
             className={clsx(
-              'whitespace-normal break-words text-[10px] font-medium uppercase leading-[1.18] tracking-[0.14em] transition-colors duration-200',
+              'whitespace-normal break-words text-[9px] font-medium uppercase leading-[1.15] tracking-[0.1em] transition-colors duration-200',
               isDark ? 'text-slate-400 group-hover/brand:text-slate-200' : 'text-slate-500 group-hover/brand:text-slate-700',
             )}
           >
-            Automated Refuse Management
+            Automated Refuse Management Systems
           </p>
         ) : null}
       </div>
