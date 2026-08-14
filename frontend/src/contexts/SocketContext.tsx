@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import { useAuth } from './AuthContext'
-import toast from 'react-hot-toast'
 import { formatCurrency } from '../utils/format'
 
 export type AppNotification = {
@@ -111,9 +110,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           message: status ? `Status changed to ${status}` : 'Collection status updated',
           payload: data,
         })
-        if (['completed', 'verified'].includes(String(data.status ?? ''))) {
-          toast.success(status === 'verified' ? 'Refuse collection verified for your area.' : 'Refuse collection completed for your area.')
-        }
         break
       }
       case 'recyclable-update': {
@@ -124,7 +120,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           message: status ? `Status changed to ${status}` : 'Recyclable status updated',
           payload: data,
         })
-        toast.success(`Recyclable update: ${status || 'updated'}`)
         break
       }
       case 'wallet-update': {
@@ -137,7 +132,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           message: `Transaction ${amountText}`,
           payload: data,
         })
-        toast.success(`Wallet updated: ${amountText}`)
         break
       }
       case 'service-request-update': {
