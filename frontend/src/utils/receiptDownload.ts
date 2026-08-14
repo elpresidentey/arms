@@ -37,7 +37,7 @@ export const buildReceiptHtml = (bill: Bill, customer: ReceiptCustomer) => {
 <body>
   <div style="text-align:center">
     <h1>ARMS</h1>
-    <p class="muted">Automated Refuse Management System — Payment Receipt</p>
+    <p class="muted">Automated Refuse Management Systems — Payment Receipt</p>
   </div>
   <table>
     <tr><td>Receipt Number</td><td style="text-align:right"><strong>${bill.billNumber}</strong></td></tr>

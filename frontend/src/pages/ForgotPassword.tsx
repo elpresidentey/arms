@@ -39,7 +39,7 @@ const ForgotPassword: React.FC = () => {
             </div>
             <div>
               <p className="text-base font-bold text-slate-900">ARMS</p>
-              <p className="text-[10px] leading-tight text-slate-500 font-medium uppercase tracking-[0.16em]">Automated Refuse Management</p>
+              <p className="text-[10px] leading-tight text-slate-500 font-medium uppercase tracking-[0.16em]">Automated Refuse Management Systems</p>
             </div>
           </Link>
 

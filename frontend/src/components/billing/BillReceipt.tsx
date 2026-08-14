@@ -28,7 +28,7 @@ const BillReceipt = ({ bill, customer, showActions = true, onClose, className = 
             <Truck className="h-6 w-6" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">ARMS</h1>
-          <p className="text-[10px] text-slate-600 font-medium uppercase tracking-[0.16em]">Automated Refuse Management</p>
+          <p className="text-[10px] text-slate-600 font-medium uppercase tracking-[0.16em]">Automated Refuse Management Systems</p>
           <p className="text-xs font-semibold uppercase tracking-wider text-primary-700 mt-2">
             Official Payment Receipt
           </p>
@@ -111,7 +111,7 @@ const BillReceipt = ({ bill, customer, showActions = true, onClose, className = 
         </div>
 
         <div className="text-center text-xs text-slate-500 pt-6 border-t border-slate-200">
-          <p className="font-medium text-slate-700">Thank you for using ARMS - Automated Refuse Management.</p>
+          <p className="font-medium text-slate-700">Thank you for using ARMS - Automated Refuse Management Systems.</p>
           <p className="mt-1">This receipt confirms payment for refuse collection services.</p>
           <p className="mt-2">support@arms.ng</p>
         </div>

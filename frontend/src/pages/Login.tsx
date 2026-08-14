@@ -118,7 +118,7 @@ const Login: React.FC = () => {
               <div>
                 <p className="text-base font-bold text-white">ARMS</p>
                 <p className="text-[10px] uppercase tracking-[0.16em] text-white/70">
-                  Automated Refuse Management
+                  Automated Refuse Management Systems
                 </p>
               </div>
             </Link>
