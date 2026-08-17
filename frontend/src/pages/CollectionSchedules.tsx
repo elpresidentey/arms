@@ -100,7 +100,7 @@ const CollectionSchedules: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['collection-routes'] })
       queryClient.invalidateQueries({ queryKey: ['collection-routes-summary'] })
       queryClient.invalidateQueries({ queryKey: ['waste-collections'] })
-      toast.success('Route completed and collection records generated.')
+      toast.success('Route completed. Next collection scheduled.')
     },
     onError: (error) => {
       toast.error(getErrorMessage(error, 'Could not complete this route.'))

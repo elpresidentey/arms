@@ -1056,10 +1056,35 @@ export const collectionRoutesApi = {
   },
 
   completeRoute: async (id: string, payload?: { completedAt?: string; notes?: string }) => {
+    const { data: existing, error: fetchError } = await supabase
+      .from('collection_routes')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle()
+    if (fetchError) {
+      throwSupabaseError(fetchError, 'Could not complete this route')
+    }
+    if (!existing) {
+      throw new Error('This route no longer exists.')
+    }
+
+    const base = existing.nextCollectionDate ? new Date(existing.nextCollectionDate) : new Date()
+    const advanceBy: Record<string, (day: number) => number> = {
+      daily: (day: number) => day + 1,
+      weekly: (day: number) => day + 7,
+      biweekly: (day: number) => day + 14,
+      monthly: (day: number) => day + 28,
+    }
+    const frequency = (existing.frequency as string) || 'weekly'
+    const nextDate = new Date(base)
+    const advance = advanceBy[frequency] || advanceBy.weekly
+    nextDate.setDate(advance(nextDate.getDate()))
+
     const { data, error } = await supabase
       .from('collection_routes')
       .update({
         lastCompletedAt: payload?.completedAt || new Date().toISOString(),
+        nextCollectionDate: nextDate.toISOString(),
         notes: payload?.notes || null,
       })
       .eq('id', id)
