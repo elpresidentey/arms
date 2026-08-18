@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import PageHeader from '../components/PageHeader'
 import StatePanel from '../components/StatePanel'
 import Surface from '../components/Surface'
+import Skeleton from '../components/Skeleton'
 import { recyclablesApi } from '../services/api'
 import { Recyclable } from '../types'
 import { getErrorMessage } from '../utils/errors'
@@ -186,7 +187,11 @@ const Recyclables: React.FC = () => {
             <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
               <p className="label text-slate-500">Items</p>
               <p className="mt-2 heading-3 text-slate-950">
-                {isLoading ? 'Loading...' : recyclables?.length || 0}
+                {isLoading ? (
+                  <Skeleton variant="text" width="40%" height={28} className="inline-block" />
+                ) : (
+                  recyclables?.length || 0
+                )}
               </p>
             </div>
             <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 px-4 py-3 shadow-sm">
@@ -194,7 +199,11 @@ const Recyclables: React.FC = () => {
                 Estimated value
               </p>
               <p className="mt-2 heading-3 text-emerald-900">
-                {isLoading ? 'Loading...' : formatCurrency(totalValue)}
+                {isLoading ? (
+                  <Skeleton variant="text" width="60%" height={28} className="inline-block" />
+                ) : (
+                  formatCurrency(totalValue)
+                )}
               </p>
             </div>
             <div className="rounded-2xl border border-amber-100 bg-amber-50/80 px-4 py-3 shadow-sm">
@@ -202,7 +211,11 @@ const Recyclables: React.FC = () => {
                 Pending pickups
               </p>
               <p className="mt-2 heading-3 text-amber-900">
-                {isLoading ? 'Loading...' : pendingCount}
+                {isLoading ? (
+                  <Skeleton variant="text" width="40%" height={28} className="inline-block" />
+                ) : (
+                  pendingCount
+                )}
               </p>
             </div>
           </div>

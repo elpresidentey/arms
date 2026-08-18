@@ -8,6 +8,7 @@ import OptimizedImage from '../components/OptimizedImage'
 import PageHeader from '../components/PageHeader'
 import StatePanel from '../components/StatePanel'
 import Surface from '../components/Surface'
+import Skeleton from '../components/Skeleton'
 import { reportsApi, uploadApi } from '../services/api'
 import { Report } from '../types'
 import { getErrorMessage } from '../utils/errors'
@@ -226,19 +227,31 @@ const Reports: React.FC = () => {
             <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
               <p className="label text-slate-500">Total reports</p>
               <p className="mt-2 heading-3 text-slate-950">
-                {isLoading ? 'Loading...' : reports?.length || 0}
+                {isLoading ? (
+                  <Skeleton variant="text" width="40%" height={28} className="inline-block" />
+                ) : (
+                  reports?.length || 0
+                )}
               </p>
             </div>
             <div className="rounded-2xl border border-amber-100 bg-amber-50/80 px-4 py-3 shadow-sm">
               <p className="label text-amber-700">Active</p>
               <p className="mt-2 heading-3 text-amber-900">
-                {isLoading ? 'Loading...' : activeReports}
+                {isLoading ? (
+                  <Skeleton variant="text" width="40%" height={28} className="inline-block" />
+                ) : (
+                  activeReports
+                )}
               </p>
             </div>
             <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 px-4 py-3 shadow-sm">
               <p className="label text-emerald-700">Resolved</p>
               <p className="mt-2 heading-3 text-emerald-900">
-                {isLoading ? 'Loading...' : resolvedReports}
+                {isLoading ? (
+                  <Skeleton variant="text" width="40%" height={28} className="inline-block" />
+                ) : (
+                  resolvedReports
+                )}
               </p>
             </div>
           </div>

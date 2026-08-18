@@ -3,7 +3,7 @@ import clsx from 'clsx'
 
 interface StatsCardProps {
   title: string
-  value: string
+  value: React.ReactNode
   icon: React.ReactNode
   trend?: {
     value: number

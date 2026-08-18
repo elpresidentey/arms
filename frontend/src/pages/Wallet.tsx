@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext'
 import PageHeader from '../components/PageHeader'
 import StatePanel from '../components/StatePanel'
 import Surface from '../components/Surface'
+import Skeleton from '../components/Skeleton'
 import { walletApi } from '../services/api'
 import { getErrorMessage } from '../utils/errors'
 import { formatCurrency, formatDayTime } from '../utils/format'
@@ -151,18 +152,32 @@ const Wallet: React.FC = () => {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-primary-100 bg-primary-700 px-4 py-3 text-white shadow-sm">
               <p className="label text-primary-200">Balance</p>
-              <p className="mt-2 heading-3 text-white">{isBalanceLoading ? 'Loading...' : formatCurrency(currentBalance)}</p>
+              <p className="mt-2 heading-3 text-white">
+                {isBalanceLoading ? (
+                  <Skeleton variant="text" width="60%" height={28} className="inline-block bg-white/30" />
+                ) : (
+                  formatCurrency(currentBalance)
+                )}
+              </p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
               <p className="label text-slate-500">Total earned</p>
               <p className="mt-2 heading-3 text-slate-950">
-                {isSummaryLoading ? 'Loading...' : formatCurrency(walletSummary?.totalCredits || 0)}
+                {isSummaryLoading ? (
+                  <Skeleton variant="text" width="60%" height={28} className="inline-block" />
+                ) : (
+                  formatCurrency(walletSummary?.totalCredits || 0)
+                )}
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
               <p className="label text-slate-500">Total withdrawn</p>
               <p className="mt-2 heading-3 text-slate-950">
-                {isSummaryLoading ? 'Loading...' : formatCurrency(walletSummary?.totalDebits || 0)}
+                {isSummaryLoading ? (
+                  <Skeleton variant="text" width="60%" height={28} className="inline-block" />
+                ) : (
+                  formatCurrency(walletSummary?.totalDebits || 0)
+                )}
               </p>
             </div>
           </div>

@@ -5,6 +5,7 @@ import PageHeader from '../components/PageHeader'
 import StatePanel from '../components/StatePanel'
 import StatsCard from '../components/StatsCard'
 import Surface from '../components/Surface'
+import Skeleton from '../components/Skeleton'
 import WasteTimeline from '../components/WasteTimeline'
 import { useAuth } from '../contexts/AuthContext'
 import { wasteCollectionsApi } from '../services/api'
@@ -47,22 +48,38 @@ const WasteHistory: React.FC = () => {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatsCard
           title="Total routes"
-          value={isLoading ? 'Loading...' : `${collections?.length || 0}`}
+          value={isLoading ? (
+            <Skeleton variant="text" width="40%" height={32} className="inline-block" />
+          ) : (
+            `${collections?.length || 0}`
+          )}
           icon={<Truck className="h-5 w-5" />}
         />
         <StatsCard
           title="Completed"
-          value={isLoading ? 'Loading...' : `${completedCount}`}
+          value={isLoading ? (
+            <Skeleton variant="text" width="40%" height={32} className="inline-block" />
+          ) : (
+            `${completedCount}`
+          )}
           icon={<CheckCircle2 className="h-5 w-5" />}
         />
         <StatsCard
           title="Scheduled"
-          value={isLoading ? 'Loading...' : `${scheduledCount}`}
+          value={isLoading ? (
+            <Skeleton variant="text" width="40%" height={32} className="inline-block" />
+          ) : (
+            `${scheduledCount}`
+          )}
           icon={<CalendarClock className="h-5 w-5" />}
         />
         <StatsCard
           title="Missed"
-          value={isLoading ? 'Loading...' : `${missedCount}`}
+          value={isLoading ? (
+            <Skeleton variant="text" width="40%" height={32} className="inline-block" />
+          ) : (
+            `${missedCount}`
+          )}
           icon={<XCircle className="h-5 w-5" />}
         />
       </div>

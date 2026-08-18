@@ -1068,7 +1068,8 @@
     .hero-hover-focus,
     .ambient-pulse::after,
     .stagger-enter,
-    .page-enter {
+    .page-enter,
+    .skeleton {
       animation: none;
       transition-duration: 0.01ms;
       opacity: 1;
