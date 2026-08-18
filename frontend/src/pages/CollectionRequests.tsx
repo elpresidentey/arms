@@ -11,17 +11,17 @@ import { getErrorMessage } from '../utils/errors'
 import { formatDate } from '../utils/format'
 
 const typeColors: Record<CollectionRequestType, string> = {
-  routine: 'bg-blue-100 text-blue-800',
-  urgent: 'bg-red-100 text-red-800',
-  bulky: 'bg-orange-100 text-orange-800',
-  special: 'bg-purple-100 text-purple-800',
+  routine: 'bg-primary-50 text-primary-700',
+  urgent: 'bg-rose-50 text-rose-700',
+  bulky: 'bg-amber-50 text-amber-700',
+  special: 'bg-indigo-50 text-indigo-700',
 }
 
 const statusColors: Record<CollectionRequestStatus, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  scheduled: 'bg-blue-100 text-blue-800',
-  completed: 'bg-green-100 text-green-800',
-  cancelled: 'bg-gray-100 text-gray-800',
+  pending: 'bg-amber-50 text-amber-700',
+  scheduled: 'bg-primary-50 text-primary-700',
+  completed: 'bg-emerald-50 text-emerald-700',
+  cancelled: 'bg-slate-100 text-slate-600',
 }
 
 const statusIcons: Record<CollectionRequestStatus, React.ReactNode> = {

@@ -18,6 +18,7 @@ import Button from '../Button'
 import PayBillButton from '../billing/PayBillButton'
 import { getResidentDashboardGreeting } from '../../utils/greeting'
 import { formatCurrency, formatShortDate } from '../../utils/format'
+import { CHART_COLORS } from '../../utils/chartColors'
 
 interface DashboardHeaderProps {
   user: User
@@ -37,7 +38,7 @@ const SnapshotStat: React.FC<{
   value: string | number
   detail: string
   accent?: string
-}> = ({ label, value, detail, accent = '#3d5a36' }) => (
+}> = ({ label, value, detail, accent = CHART_COLORS.primary }) => (
   <div className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-3.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300/80 hover:shadow-md">
     <span
       className="absolute inset-x-0 top-0 h-[3px] opacity-70 transition-opacity duration-200 group-hover:opacity-100"
@@ -245,7 +246,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 label="Open requests"
                 value={openRequests}
                 detail="Items waiting for response"
-                accent="#d97706"
+                accent={CHART_COLORS.warning}
               />
             </div>
           )}

@@ -93,21 +93,21 @@ const Bills: React.FC = () => {
             subtitle="Your upcoming monthly bill"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-4">
-                <p className="text-sm font-medium text-blue-900 mb-1">Billing Period</p>
-                <p className="text-xl font-bold text-blue-900">
+              <div className="rounded-xl border border-primary-100 bg-primary-50 px-4 py-4">
+                <p className="text-sm font-medium text-primary-900 mb-1">Billing Period</p>
+                <p className="text-xl font-bold text-primary-900">
                   {new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toLocaleDateString('en-NG', {
                     year: 'numeric',
                     month: 'long',
                   })}
                 </p>
               </div>
-              <div className="rounded-xl border border-purple-200 bg-purple-50 px-4 py-4">
-                <p className="text-sm font-medium text-purple-900 mb-1">Expected Amount</p>
-                <p className="text-xl font-bold text-purple-900">
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-4">
+                <p className="text-sm font-medium text-amber-900 mb-1">Expected Amount</p>
+                <p className="text-xl font-bold text-amber-900">
                   {formatCurrency(user.propertyType === 'commercial' ? 3500 : 2000)}
                 </p>
-                <p className="text-xs text-purple-700 mt-1">
+                <p className="text-xs text-amber-700 mt-1">
                   {user.propertyType === 'commercial' ? 'Commercial rate' : 'Residential rate'}
                 </p>
               </div>
@@ -201,7 +201,7 @@ const Bills: React.FC = () => {
       )}
 
       {showReceipt && selectedBill && user && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-sm p-4">
           <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
             <BillReceipt bill={selectedBill} customer={user} onClose={() => setShowReceipt(false)} />
           </div>

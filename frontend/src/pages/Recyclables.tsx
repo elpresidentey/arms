@@ -27,7 +27,7 @@ const statusStyles: Record<string, string> = {
   logged: 'bg-slate-100 text-slate-700',
   pickup_requested: 'bg-amber-50 text-amber-700',
   collected: 'bg-primary-50 text-primary-700',
-  processed: 'bg-violet-50 text-violet-700',
+  processed: 'bg-indigo-50 text-indigo-700',
   paid: 'bg-emerald-50 text-emerald-700',
 }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, AlertCircle, Eye, DollarSign, User, Calendar } from 'lucide-react';
+import Button from '../components/Button';
 import { walletApi } from '../services/api';
 import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
@@ -134,11 +135,11 @@ export default function WithdrawalApprovals() {
 
   const getStatusBadge = (status: string) => {
     const badges = {
-      pending: { color: 'bg-yellow-100 text-yellow-800', icon: Clock, text: 'Pending' },
-      approved: { color: 'bg-blue-100 text-blue-800', icon: CheckCircle, text: 'Approved' },
-      completed: { color: 'bg-green-100 text-green-800', icon: CheckCircle, text: 'Done' },
-      rejected: { color: 'bg-red-100 text-red-800', icon: XCircle, text: 'Rejected' },
-      failed: { color: 'bg-gray-100 text-gray-800', icon: AlertCircle, text: 'Failed' },
+      pending: { color: 'bg-amber-50 text-amber-700', icon: Clock, text: 'Pending' },
+      approved: { color: 'bg-primary-50 text-primary-700', icon: CheckCircle, text: 'Approved' },
+      completed: { color: 'bg-emerald-50 text-emerald-700', icon: CheckCircle, text: 'Done' },
+      rejected: { color: 'bg-rose-50 text-rose-700', icon: XCircle, text: 'Rejected' },
+      failed: { color: 'bg-slate-100 text-slate-600', icon: AlertCircle, text: 'Failed' },
     };
 
     const badge = badges[status as keyof typeof badges] || badges.pending;
@@ -179,77 +180,74 @@ export default function WithdrawalApprovals() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="heading-1 text-gray-900">Withdrawal Management</h1>
-          <p className="body text-gray-600 mt-1">Review, approve, and track all resident withdrawal requests</p>
+          <h1 className="heading-1 text-slate-900">Withdrawal Management</h1>
+          <p className="body text-slate-600 mt-1">Review, approve, and track all resident withdrawal requests</p>
         </div>
-        <button
-          onClick={fetchWithdrawals}
-          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-        >
-          Refresh
-        </button>
+<Button onClick={fetchWithdrawals} variant="outline" size="md">
+            Refresh
+          </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="label text-gray-600">Total Requests</p>
-              <p className="heading-3 text-gray-900">{withdrawals.length}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+          <div className="flex items-start justify-between mb-2">
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Requests</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+              <DollarSign className="h-4 w-4" />
             </div>
-            <DollarSign className="w-8 h-8 text-gray-400" />
           </div>
+          <p className="text-2xl font-bold text-slate-900">{withdrawals.length}</p>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="label text-gray-600">Pending</p>
-              <p className="heading-3 text-yellow-600">
-                {withdrawals.filter((w) => w.status === 'pending').length}
-              </p>
+        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+          <div className="flex items-start justify-between mb-2">
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Pending</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+              <Clock className="h-4 w-4" />
             </div>
-            <Clock className="w-8 h-8 text-yellow-400" />
           </div>
+          <p className="text-2xl font-bold text-amber-600">
+            {withdrawals.filter((w) => w.status === 'pending').length}
+          </p>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="label text-gray-600">Done</p>
-              <p className="heading-3 text-green-600">
-                {withdrawals.filter((w) => w.status === 'completed').length}
-              </p>
+        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+          <div className="flex items-start justify-between mb-2">
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Done</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+              <CheckCircle className="h-4 w-4" />
             </div>
-            <CheckCircle className="w-8 h-8 text-green-400" />
           </div>
+          <p className="text-2xl font-bold text-emerald-600">
+            {withdrawals.filter((w) => w.status === 'completed').length}
+          </p>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="label text-gray-600">Rejected</p>
-              <p className="heading-3 text-red-600">
-                {withdrawals.filter((w) => w.status === 'rejected').length}
-              </p>
+        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+          <div className="flex items-start justify-between mb-2">
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Rejected</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-600">
+              <XCircle className="h-4 w-4" />
             </div>
-            <XCircle className="w-8 h-8 text-red-400" />
           </div>
+          <p className="text-2xl font-bold text-rose-600">
+            {withdrawals.filter((w) => w.status === 'rejected').length}
+          </p>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="label text-gray-600">Failed</p>
-              <p className="heading-3 text-gray-600">
-                {withdrawals.filter((w) => w.status === 'failed').length}
-              </p>
+        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+          <div className="flex items-start justify-between mb-2">
+            <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Failed</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
+              <AlertCircle className="h-4 w-4" />
             </div>
-            <AlertCircle className="w-8 h-8 text-gray-400" />
           </div>
+          <p className="text-2xl font-bold text-slate-600">
+            {withdrawals.filter((w) => w.status === 'failed').length}
+          </p>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="border-b border-gray-200">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm">
+        <div className="border-b border-slate-200">
           <nav className="flex -mb-px">
             {['all', 'pending', 'approved', 'completed', 'rejected', 'failed'].map((tab) => (
               <button
@@ -258,7 +256,7 @@ export default function WithdrawalApprovals() {
                 className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
                   filter === tab
                     ? 'border-primary-600 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
                 }`}
               >
                 {tab === 'completed' ? 'Done' : tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -268,26 +266,26 @@ export default function WithdrawalApprovals() {
         </div>
 
         {/* Withdrawals List */}
-        <div className="divide-y divide-gray-200">
+        <div className="divide-y divide-slate-200">
           {filteredWithdrawals.length === 0 ? (
             <div className="p-12 text-center">
-              <DollarSign className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No withdrawal requests found</p>
+              <DollarSign className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+              <p className="text-slate-500">No withdrawal requests found</p>
             </div>
           ) : (
             filteredWithdrawals.map((withdrawal) => (
-              <div key={withdrawal.id} className="p-6 hover:bg-gray-50 transition-colors">
+              <div key={withdrawal.id} className="p-6 hover:bg-slate-50 transition-colors">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="heading-4 text-gray-900">
+                      <h3 className="heading-4 text-slate-900">
                         {formatCurrency(withdrawal.amount)}
                       </h3>
                       {getStatusBadge(withdrawal.status)}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                      <div className="flex items-center gap-2 body-small text-gray-600">
+                      <div className="flex items-center gap-2 body-small text-slate-600">
                         <User className="w-4 h-4" />
                         <span>
                           {withdrawal.user
@@ -295,30 +293,30 @@ export default function WithdrawalApprovals() {
                             : 'Unknown User'}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 body-small text-gray-600">
+                      <div className="flex items-center gap-2 body-small text-slate-600">
                         <Calendar className="w-4 h-4" />
                         <span>{formatDate(withdrawal.createdAt)}</span>
                       </div>
-                      <div className="body-small text-gray-600">
+                      <div className="body-small text-slate-600">
                         <span className="font-medium">Account:</span> {withdrawal.metadata?.accountName ?? 'N/A'}
                       </div>
-                      <div className="body-small text-gray-600">
+                      <div className="body-small text-slate-600">
                         <span className="font-medium">Account Number:</span> {withdrawal.metadata?.accountNumber ?? 'N/A'}
                       </div>
                     </div>
 
                     {withdrawal.description && (
-                      <p className="body-small text-gray-600 mt-2">{withdrawal.description}</p>
+                      <p className="body-small text-slate-600 mt-2">{withdrawal.description}</p>
                     )}
 
                     {withdrawal.status === 'rejected' && withdrawal.metadata?.rejectionReason && (
-                      <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <p className="text-sm text-red-800">
+                      <div className="mt-3 p-3 bg-rose-50 border border-rose-200 rounded-lg">
+                        <p className="text-sm text-rose-800">
                           <span className="font-medium">Rejection Reason:</span>{' '}
                           {withdrawal.metadata.rejectionReason}
                         </p>
                         {withdrawal.metadata.rejectedAt && (
-                          <p className="text-xs text-red-600 mt-1">
+                          <p className="text-xs text-rose-600 mt-1">
                             Rejected on {formatDate(withdrawal.metadata.rejectedAt)}
                           </p>
                         )}
@@ -326,13 +324,13 @@ export default function WithdrawalApprovals() {
                     )}
 
                     {withdrawal.status === 'approved' && withdrawal.metadata?.approvedAt && (
-                      <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                        <p className="text-sm text-green-800">
+                      <div className="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                        <p className="text-sm text-emerald-800">
                           <span className="font-medium">Approved:</span>{' '}
                           {formatDate(withdrawal.metadata.approvedAt)}
                         </p>
                         {withdrawal.metadata.transferReference && (
-                          <p className="text-xs text-green-600 mt-1">
+                          <p className="text-xs text-emerald-600 mt-1">
                             Transfer Ref: {withdrawal.metadata.transferReference}
                           </p>
                         )}
@@ -345,8 +343,8 @@ export default function WithdrawalApprovals() {
                     )}
 
                     {withdrawal.status === 'failed' && withdrawal.metadata?.failureReason && (
-                      <div className="mt-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                        <p className="text-sm text-gray-800">
+                      <div className="mt-3 p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                        <p className="text-sm text-slate-800">
                           <span className="font-medium">Failure Reason:</span>{' '}
                           {withdrawal.metadata.failureReason}
                         </p>
@@ -357,27 +355,28 @@ export default function WithdrawalApprovals() {
                   <div className="flex items-center gap-2 ml-4">
                     <button
                       onClick={() => openModal(withdrawal)}
-                      className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
                       title="View Details"
                     >
                       <Eye className="w-5 h-5" />
                     </button>
                     {withdrawal.status === 'pending' && (
                       <>
-                        <button
+                        <Button
+                          size="sm"
                           onClick={() => handleApprove(withdrawal.id)}
                           disabled={processing}
-                          className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Approve
-                        </button>
-                        <button
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="danger"
                           onClick={() => openModal(withdrawal)}
                           disabled={processing}
-                          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Reject
-                        </button>
+                        </Button>
                       </>
                     )}
                   </div>
@@ -390,14 +389,14 @@ export default function WithdrawalApprovals() {
 
       {/* Modal */}
       {showModal && selectedWithdrawal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={(e) => e.target === e.currentTarget && closeModal()}>
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-gray-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-sm p-4" onClick={(e) => e.target === e.currentTarget && closeModal()}>
+          <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 border-b border-slate-200">
               <div className="flex items-center justify-between">
-                <h2 className="heading-3 text-gray-900">Withdrawal Request Details</h2>
+                <h2 className="heading-3 text-slate-900">Withdrawal Request Details</h2>
                 <button
                   onClick={closeModal}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
                   aria-label="Close modal"
                 >
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -410,41 +409,41 @@ export default function WithdrawalApprovals() {
             <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="body-small text-gray-600">Amount</p>
-                  <p className="heading-4 text-gray-900">
+                  <p className="body-small text-slate-600">Amount</p>
+                  <p className="heading-4 text-slate-900">
                     {formatCurrency(selectedWithdrawal.amount)}
                   </p>
                 </div>
                 <div>
-                  <p className="body-small text-gray-600">Status</p>
+                  <p className="body-small text-slate-600">Status</p>
                   <div className="mt-1">{getStatusBadge(selectedWithdrawal.status)}</div>
                 </div>
                 <div>
-                  <p className="body-small text-gray-600">Resident</p>
-                  <p className="body font-medium text-gray-900">
+                  <p className="body-small text-slate-600">Resident</p>
+                  <p className="body font-medium text-slate-900">
                     {selectedWithdrawal.user
                       ? `${selectedWithdrawal.user.firstName} ${selectedWithdrawal.user.lastName}`
                       : 'Unknown'}
                   </p>
                   {selectedWithdrawal.user && (
-                    <p className="caption text-gray-500">{selectedWithdrawal.user.email}</p>
+                    <p className="caption text-slate-500">{selectedWithdrawal.user.email}</p>
                   )}
                 </div>
                 <div>
-                  <p className="body-small text-gray-600">Request Date</p>
-                  <p className="body font-medium text-gray-900">
+                  <p className="body-small text-slate-600">Request Date</p>
+                  <p className="body font-medium text-slate-900">
                     {formatDate(selectedWithdrawal.createdAt)}
                   </p>
                 </div>
                 <div>
-                  <p className="body-small text-gray-600">Account Name</p>
-                  <p className="body font-medium text-gray-900">
+                  <p className="body-small text-slate-600">Account Name</p>
+                  <p className="body font-medium text-slate-900">
                     {selectedWithdrawal.metadata?.accountName ?? 'N/A'}
                   </p>
                 </div>
                 <div>
-                  <p className="body-small text-gray-600">Account Number</p>
-                  <p className="body font-medium text-gray-900">
+                  <p className="body-small text-slate-600">Account Number</p>
+                  <p className="body font-medium text-slate-900">
                     {selectedWithdrawal.metadata?.accountNumber ?? 'N/A'}
                   </p>
                 </div>
@@ -452,34 +451,34 @@ export default function WithdrawalApprovals() {
 
               {selectedWithdrawal.description && (
                 <div>
-                  <p className="body-small text-gray-600">Description</p>
-                  <p className="body text-gray-900 mt-1">{selectedWithdrawal.description}</p>
+                  <p className="body-small text-slate-600">Description</p>
+                  <p className="body text-slate-900 mt-1">{selectedWithdrawal.description}</p>
                 </div>
               )}
 
               {selectedWithdrawal.status === 'pending' && (
                 <div className="mt-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
                     Rejection Reason (if rejecting)
                   </label>
                   <textarea
                     value={rejectionReason}
                     onChange={(e) => setRejectionReason(e.target.value)}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder="Enter reason for rejection..."
                   />
                 </div>
               )}
 
               {selectedWithdrawal.status === 'completed' && selectedWithdrawal.metadata?.approvedAt && (
-                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <p className="text-sm font-semibold text-green-900">✓ Withdrawal Completed</p>
-                  <p className="text-sm text-green-800 mt-2">
+                <div className="mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                  <p className="text-sm font-semibold text-emerald-900">✓ Withdrawal Completed</p>
+                  <p className="text-sm text-emerald-800 mt-2">
                     Approved on {new Date(selectedWithdrawal.metadata.approvedAt).toLocaleString()}
                   </p>
                   {selectedWithdrawal.metadata.transferReference && (
-                    <p className="text-xs text-green-700 mt-1">
+                    <p className="text-xs text-emerald-700 mt-1">
                       Transfer Ref: {selectedWithdrawal.metadata.transferReference}
                     </p>
                   )}
@@ -492,30 +491,25 @@ export default function WithdrawalApprovals() {
               )}
             </div>
 
-            <div className="p-6 border-t border-gray-200 flex items-center justify-end gap-3">
-              <button
-                onClick={closeModal}
-                disabled={processing}
-                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
-              >
+            <div className="p-6 border-t border-slate-200 flex items-center justify-end gap-3">
+              <Button variant="secondary" onClick={closeModal} disabled={processing}>
                 Close
-              </button>
+              </Button>
               {selectedWithdrawal.status === 'pending' && (
                 <>
-                  <button
+                  <Button
+                    variant="danger"
                     onClick={() => handleReject(selectedWithdrawal.id)}
                     disabled={processing || !rejectionReason.trim()}
-                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {processing ? 'Processing...' : 'Reject'}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => handleApprove(selectedWithdrawal.id)}
                     disabled={processing}
-                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {processing ? 'Processing...' : 'Approve & Transfer'}
-                  </button>
+                  </Button>
                 </>
               )}
             </div>

@@ -99,7 +99,7 @@ const DashboardBillingWidget = ({ bills }: DashboardBillingWidgetProps) => {
                   <span className="font-mono text-xs text-slate-500">{bill.billNumber}</span>
                   <BillStatusBadge status={bill.status} />
                   {expired && bill.status !== 'overdue' && (
-                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                    <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700">
                       Past due
                     </span>
                   )}

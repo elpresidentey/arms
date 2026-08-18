@@ -6,26 +6,26 @@ const statusConfig: Record<
   { bg: string; text: string; label: string; icon: JSX.Element }
 > = {
   pending: {
-    bg: 'bg-yellow-100',
-    text: 'text-yellow-800',
+    bg: 'bg-amber-50',
+    text: 'text-amber-700',
     label: 'Pending',
     icon: <Clock className="w-4 h-4" />,
   },
   paid: {
-    bg: 'bg-green-100',
-    text: 'text-green-800',
+    bg: 'bg-emerald-50',
+    text: 'text-emerald-700',
     label: 'Paid',
     icon: <CheckCircle2 className="w-4 h-4" />,
   },
   overdue: {
-    bg: 'bg-red-100',
-    text: 'text-red-800',
+    bg: 'bg-rose-50',
+    text: 'text-rose-700',
     label: 'Overdue',
     icon: <AlertCircle className="w-4 h-4" />,
   },
   cancelled: {
-    bg: 'bg-gray-100',
-    text: 'text-gray-600',
+    bg: 'bg-slate-100',
+    text: 'text-slate-600',
     label: 'Cancelled',
     icon: <XCircle className="w-4 h-4" />,
   },

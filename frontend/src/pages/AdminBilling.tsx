@@ -24,9 +24,9 @@ import {
 } from '../utils/billingFormat'
 
 const paymentStatusStyles: Record<BillPayment['status'], string> = {
-  pending: 'bg-amber-100 text-amber-800',
-  success: 'bg-emerald-100 text-emerald-800',
-  failed: 'bg-red-100 text-red-800',
+  pending: 'bg-amber-50 text-amber-700',
+  success: 'bg-emerald-50 text-emerald-700',
+  failed: 'bg-rose-50 text-rose-700',
   cancelled: 'bg-slate-100 text-slate-600',
 }
 

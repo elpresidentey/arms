@@ -58,21 +58,21 @@ const Skeleton: React.FC<SkeletonProps> = ({
 
 // Specialized skeleton components
 export const StatsCardSkeleton: React.FC = () => (
-  <div className="rounded-[1.7rem] border border-black/5 bg-[#fffdf9]/95 p-5 shadow-[0_20px_40px_rgba(15,23,42,0.05)] sm:p-6">
+  <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
     <div className="flex items-start justify-between gap-3">
       <div className="min-w-0 flex-1">
         <Skeleton variant="text" width="60%" height={16} />
         <Skeleton variant="text" width="80%" height={32} className="mt-3" />
       </div>
-      <Skeleton variant="circular" width={44} height={44} />
+      <Skeleton variant="rounded" width={44} height={44} />
     </div>
   </div>
 )
 
 export const SurfaceSkeleton: React.FC<{ showTitle?: boolean }> = ({ showTitle = true }) => (
-  <section className="rounded-[1.8rem] border border-black/5 bg-[#fffdf9]/95 shadow-[0_24px_45px_rgba(15,23,42,0.05)]">
+  <section className="rounded-2xl border border-slate-200/80 bg-white shadow-sm">
     {showTitle && (
-      <div className="flex flex-col gap-3 border-b border-black/5 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="flex flex-col gap-3 border-b border-slate-200/70 bg-slate-50/55 px-5 py-3.5">
         <div>
           <Skeleton variant="text" width={120} height={20} />
           <Skeleton variant="text" width={200} height={16} className="mt-1" />

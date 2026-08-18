@@ -11,11 +11,12 @@ import StatePanel from '../StatePanel'
 import WasteTimeline from '../WasteTimeline'
 import { TimelineSkeleton } from '../Skeleton'
 import { formatDayTime } from '../../utils/format'
+import { CHART_COLORS } from '../../utils/chartColors'
 import { WasteCollection } from '../../types'
 
 const chartTooltipStyle: React.CSSProperties = {
   borderRadius: 14,
-  border: '1px solid #e2e8f0',
+  border: `1px solid ${CHART_COLORS.slateTint}`,
   background: 'rgba(255,255,255,0.97)',
   boxShadow: '0 18px 40px rgba(15,23,42,0.12)',
   fontSize: 12,
@@ -183,37 +184,37 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
               <AreaChart data={servicePulseData} margin={{ top: 10, right: 8, left: -18, bottom: 0 }}>
                 <defs>
                   <linearGradient id="residentPulse" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4a6b41" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#4a6b41" stopOpacity={0} />
+                    <stop offset="5%" stopColor={CHART_COLORS.primary} stopOpacity={0.3} />
+                    <stop offset="95%" stopColor={CHART_COLORS.primary} stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#eef2f6" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.slateTint} vertical={false} />
                 <XAxis
                   dataKey="label"
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fill: '#94a3b8', fontSize: 11 }}
+                  tick={{ fill: CHART_COLORS.tick, fontSize: 11 }}
                 />
                 <YAxis
                   allowDecimals={false}
                   tickLine={false}
                   axisLine={false}
-                  tick={{ fill: '#94a3b8', fontSize: 11 }}
+                  tick={{ fill: CHART_COLORS.tick, fontSize: 11 }}
                 />
                 <Tooltip
                   contentStyle={chartTooltipStyle}
-                  labelStyle={{ fontWeight: 600, color: '#0f172a' }}
-                  cursor={{ stroke: '#cbd5e1', strokeDasharray: '4 4' }}
+                  labelStyle={{ fontWeight: 600, color: CHART_COLORS.slate }}
+                  cursor={{ stroke: CHART_COLORS.cursor, strokeDasharray: '4 4' }}
                 />
                 <Area
                   type="monotone"
                   dataKey="activity"
-                  stroke="#4a6b41"
+                  stroke={CHART_COLORS.primary}
                   strokeWidth={2.5}
                   strokeLinecap="round"
                   fill="url(#residentPulse)"
                   animationDuration={1000}
-                  activeDot={{ r: 5, strokeWidth: 2, stroke: '#ffffff', fill: '#4a6b41' }}
+                  activeDot={{ r: 5, strokeWidth: 2, stroke: '#ffffff', fill: CHART_COLORS.primary }}
                 />
               </AreaChart>
             </ResponsiveContainer>

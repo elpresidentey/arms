@@ -22,7 +22,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({ isOpen, onClose, userName }
       icon: FileText,
       title: 'Track Your Collections',
       description: 'View scheduled pickups, track collection history, and stay updated on service activity from your dashboard.',
-      color: 'bg-blue-50 text-blue-700',
+      color: 'bg-indigo-50 text-indigo-700',
     },
     {
       icon: Recycle,

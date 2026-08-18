@@ -13,6 +13,7 @@ import Surface from '../components/Surface'
 import { adminInvitesApi, collectionRoutesApi, logisticsApi, reportsApi, serviceRequestsApi, walletApi, wasteCollectionsApi } from '../services/api'
 import { getErrorMessage } from '../utils/errors'
 import { formatCurrency, formatDayTime } from '../utils/format'
+import { CHART_COLORS } from '../utils/chartColors'
 
 const Operations: React.FC = () => {
   const { user } = useAuth()
@@ -181,10 +182,10 @@ const Operations: React.FC = () => {
   const operationsTrend = React.useMemo(() => buildOperationsTrendData(collections || [], serviceRequests || [], reports || []), [collections, serviceRequests, reports])
   const queueMix = React.useMemo(
     () => [
-      { label: 'Collections', value: pendingCollectionRequests, fill: '#0f766e' },
-      { label: 'Requests', value: pendingServiceRequests, fill: '#d97706' },
-      { label: 'Complaints', value: openComplaints, fill: '#dc2626' },
-      { label: 'Routes', value: routeSummary?.disruptedRoutes ?? 0, fill: '#334155' },
+      { label: 'Collections', value: pendingCollectionRequests, fill: CHART_COLORS.success },
+      { label: 'Requests', value: pendingServiceRequests, fill: CHART_COLORS.warning },
+      { label: 'Complaints', value: openComplaints, fill: CHART_COLORS.danger },
+      { label: 'Routes', value: routeSummary?.disruptedRoutes ?? 0, fill: CHART_COLORS.slate },
     ],
     [openComplaints, pendingCollectionRequests, pendingServiceRequests, routeSummary?.disruptedRoutes],
   )
@@ -260,37 +261,37 @@ const Operations: React.FC = () => {
 
           <Surface title="Operational load" subtitle="A seven-day moving picture of incoming field work across collections, service requests, and complaints.">
             <div className="mb-4 flex flex-wrap gap-3 text-xs font-medium text-slate-500">
-              <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#0f766e]" /> Collections</span>
-              <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#d97706]" /> Requests</span>
-              <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#dc2626]" /> Complaints</span>
+              <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ background: CHART_COLORS.success }} /> Collections</span>
+              <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ background: CHART_COLORS.warning }} /> Requests</span>
+              <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ background: CHART_COLORS.danger }} /> Complaints</span>
             </div>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={operationsTrend} margin={{ top: 12, right: 8, left: -18, bottom: 0 }}>
                   <defs>
                     <linearGradient id="opsCollections" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0f766e" stopOpacity={0.28} />
-                      <stop offset="95%" stopColor="#0f766e" stopOpacity={0} />
+                      <stop offset="5%" stopColor={CHART_COLORS.success} stopOpacity={0.28} />
+                      <stop offset="95%" stopColor={CHART_COLORS.success} stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="opsRequests" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#d97706" stopOpacity={0.24} />
-                      <stop offset="95%" stopColor="#d97706" stopOpacity={0} />
+                      <stop offset="5%" stopColor={CHART_COLORS.warning} stopOpacity={0.24} />
+                      <stop offset="95%" stopColor={CHART_COLORS.warning} stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="opsComplaints" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#dc2626" stopOpacity={0.22} />
-                      <stop offset="95%" stopColor="#dc2626" stopOpacity={0} />
+                      <stop offset="5%" stopColor={CHART_COLORS.danger} stopOpacity={0.22} />
+                      <stop offset="95%" stopColor={CHART_COLORS.danger} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                  <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
-                  <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.slateTint} vertical={false} />
+                  <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: CHART_COLORS.tick, fontSize: 12 }} />
+                  <YAxis allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: CHART_COLORS.tick, fontSize: 12 }} />
                   <Tooltip
-                    contentStyle={{ borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 18px 40px rgba(15,23,42,0.12)' }}
-                    cursor={{ stroke: '#cbd5e1', strokeDasharray: '4 4' }}
+                    contentStyle={{ borderRadius: 16, border: `1px solid ${CHART_COLORS.slateTint}`, boxShadow: '0 18px 40px rgba(15,23,42,0.12)' }}
+                    cursor={{ stroke: CHART_COLORS.cursor, strokeDasharray: '4 4' }}
                   />
-                  <Area type="monotone" dataKey="collections" stroke="#0f766e" strokeWidth={2.5} fill="url(#opsCollections)" animationDuration={900} />
-                  <Area type="monotone" dataKey="requests" stroke="#d97706" strokeWidth={2.5} fill="url(#opsRequests)" animationDuration={1100} />
-                  <Area type="monotone" dataKey="complaints" stroke="#dc2626" strokeWidth={2.5} fill="url(#opsComplaints)" animationDuration={1300} />
+                  <Area type="monotone" dataKey="collections" stroke={CHART_COLORS.success} strokeWidth={2.5} fill="url(#opsCollections)" animationDuration={900} />
+                  <Area type="monotone" dataKey="requests" stroke={CHART_COLORS.warning} strokeWidth={2.5} fill="url(#opsRequests)" animationDuration={1100} />
+                  <Area type="monotone" dataKey="complaints" stroke={CHART_COLORS.danger} strokeWidth={2.5} fill="url(#opsComplaints)" animationDuration={1300} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -364,7 +365,7 @@ const Operations: React.FC = () => {
                       <p className="label text-slate-500">Active Drivers</p>
                       <p className="mt-1 heading-3 text-slate-950">{logistics?.drivers.activeDrivers ?? 0}</p>
                     </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
                       <Users className="h-5 w-5" />
                     </div>
                   </div>
@@ -410,11 +411,11 @@ const Operations: React.FC = () => {
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={queueMix} layout="vertical" margin={{ top: 8, right: 16, left: 8, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
-                  <XAxis type="number" allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: '#64748b', fontSize: 12 }} />
-                  <YAxis type="category" dataKey="label" tickLine={false} axisLine={false} tick={{ fill: '#0f172a', fontSize: 12, fontWeight: 600 }} width={88} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.slateTint} horizontal={false} />
+                  <XAxis type="number" allowDecimals={false} tickLine={false} axisLine={false} tick={{ fill: CHART_COLORS.tick, fontSize: 12 }} />
+                  <YAxis type="category" dataKey="label" tickLine={false} axisLine={false} tick={{ fill: CHART_COLORS.slate, fontSize: 12, fontWeight: 600 }} width={88} />
                   <Tooltip
-                    contentStyle={{ borderRadius: 16, border: '1px solid #e2e8f0', boxShadow: '0 18px 40px rgba(15,23,42,0.12)' }}
+                    contentStyle={{ borderRadius: 16, border: `1px solid ${CHART_COLORS.slateTint}`, boxShadow: '0 18px 40px rgba(15,23,42,0.12)' }}
                     cursor={{ fill: 'rgba(148,163,184,0.08)' }}
                   />
                   <Bar dataKey="value" radius={[0, 12, 12, 0]} animationDuration={1000}>

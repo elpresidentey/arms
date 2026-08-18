@@ -161,19 +161,19 @@ const FleetManagement: React.FC = () => {
     switch (status) {
       case 'active':
       case 'operational':
-        return 'text-green-700 bg-green-50 border-green-200'
+        return 'text-emerald-700 bg-emerald-50 border-emerald-200'
       case 'inactive':
       case 'retired':
-        return 'text-gray-700 bg-gray-50 border-gray-200'
+        return 'text-slate-600 bg-slate-100 border-slate-200'
       case 'maintenance':
-        return 'text-orange-700 bg-orange-50 border-orange-200'
+        return 'text-amber-700 bg-amber-50 border-amber-200'
       case 'out_of_service':
       case 'suspended':
-        return 'text-red-700 bg-red-50 border-red-200'
+        return 'text-rose-700 bg-rose-50 border-rose-200'
       case 'on_leave':
-        return 'text-blue-700 bg-blue-50 border-blue-200'
+        return 'text-sky-700 bg-sky-50 border-sky-200'
       default:
-        return 'text-gray-700 bg-gray-50 border-gray-200'
+        return 'text-slate-600 bg-slate-100 border-slate-200'
     }
   }
 
@@ -301,7 +301,7 @@ const FleetManagement: React.FC = () => {
         {/* Total Vehicles Card */}
         <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
           <div className="flex items-start justify-between mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-sky-50 text-sky-600">
               <Truck className="h-6 w-6" />
             </div>
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Vehicles</span>
@@ -309,7 +309,7 @@ const FleetManagement: React.FC = () => {
           <div className="space-y-1">
             <p className="text-3xl font-bold text-slate-900">{logistics?.fleet.totalVehicles || vehicles.length || 0}</p>
             <p className="text-sm text-slate-600">
-              <span className="font-medium text-green-600">{logistics?.fleet.operationalVehicles || vehicles.filter(v => v.status === 'operational').length || 0}</span> operational
+              <span className="font-medium text-emerald-600">{logistics?.fleet.operationalVehicles || vehicles.filter(v => v.status === 'operational').length || 0}</span> operational
             </p>
           </div>
         </div>
@@ -317,7 +317,7 @@ const FleetManagement: React.FC = () => {
         {/* Active Drivers Card */}
         <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
           <div className="flex items-start justify-between mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 text-green-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
               <Users className="h-6 w-6" />
             </div>
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Drivers</span>
@@ -325,7 +325,7 @@ const FleetManagement: React.FC = () => {
           <div className="space-y-1">
             <p className="text-3xl font-bold text-slate-900">{logistics?.drivers.activeDrivers || drivers.length || 0}</p>
             <p className="text-sm text-slate-600">
-              <span className="font-medium text-green-600">{logistics?.drivers.assignedDrivers || 0}</span> assigned today
+              <span className="font-medium text-emerald-600">{logistics?.drivers.assignedDrivers || 0}</span> assigned today
             </p>
           </div>
         </div>
@@ -460,7 +460,7 @@ const FleetManagement: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-1">
                     {deployment.inProgress && (
-                      <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></div>
+                      <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></div>
                     )}
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(deployment.status)}`}>
                       {deployment.status.replace('_', ' ')}
@@ -518,7 +518,7 @@ const FleetManagement: React.FC = () => {
               )}
 
               {(!logistics?.attention.maintenanceAlerts?.length && !logistics?.attention.expiringLicenses?.length) && (
-                <div className="flex items-center gap-2 text-green-600 p-4 bg-green-50 rounded-lg">
+                <div className="flex items-center gap-2 text-emerald-600 p-4 bg-emerald-50 rounded-lg">
                   <CheckCircle className="h-4 w-4" />
                   <span className="text-sm font-medium">No critical alerts</span>
                 </div>
@@ -695,7 +695,7 @@ const FleetManagement: React.FC = () => {
                           <div className="text-xs text-slate-500">Next service:</div>
                           <div className={`text-sm ${
                             new Date(vehicle.nextServiceDue) < new Date() 
-                              ? 'text-red-600 font-medium' 
+                              ? 'text-rose-600 font-medium' 
                               : 'text-slate-900'
                           }`}>
                             {formatDistanceToNow(new Date(vehicle.nextServiceDue), { addSuffix: true })}
@@ -753,7 +753,7 @@ const FleetManagement: React.FC = () => {
                   </div>
                   
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-700 font-medium text-xs">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-100 text-sky-700 font-medium text-xs">
                       {assignment.driver.name.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div>
@@ -785,7 +785,7 @@ const FleetManagement: React.FC = () => {
 
       {/* Add Driver Modal */}
       {showDriverModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
               <h2 className="heading-3">Add New Driver</h2>
@@ -951,7 +951,7 @@ const FleetManagement: React.FC = () => {
 
       {/* Add Vehicle Modal */}
       {showVehicleModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
               <h2 className="heading-3">Add New Vehicle</h2>

@@ -13,6 +13,7 @@ import Skeleton from '../components/Skeleton'
 import OnboardingChecklist from '../components/OnboardingChecklist'
 import AdminBillIssuePanel from '../components/billing/AdminBillIssuePanel'
 import { summarizeBills } from '../utils/bills'
+import { CHART_COLORS } from '../utils/chartColors'
 import { BILLING_ADMIN_ROLES, hasRole } from '../routes/roles'
 
 // Helper function to build pulse data
@@ -207,9 +208,9 @@ const Dashboard: React.FC = () => {
   const workloadRingData = React.useMemo(
     () => {
       const data = [
-        { name: 'Collections', value: pendingCollections, fill: '#3d5a36' },
-        { name: 'Requests', value: requestSummary?.openRequests ?? 0, fill: '#d97706' },
-        { name: 'Recyclables', value: pendingRecyclables, fill: '#16a34a' },
+        { name: 'Collections', value: pendingCollections, fill: CHART_COLORS.primary },
+        { name: 'Requests', value: requestSummary?.openRequests ?? 0, fill: CHART_COLORS.warning },
+        { name: 'Recyclables', value: pendingRecyclables, fill: CHART_COLORS.success },
       ].filter((entry) => entry.value > 0)
       
       return data.length > 0 ? data : []

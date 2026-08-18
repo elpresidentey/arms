@@ -277,10 +277,10 @@ const BillPaymentSection = ({ user, bills, onRefresh, isRefreshing }: BillPaymen
                       <div
                         className={`shrink-0 rounded-lg px-2.5 py-1.5 text-right ${
                           isOverdue
-                            ? 'bg-rose-100 text-rose-800'
+                            ? 'bg-rose-50 text-rose-700'
                             : selected
-                              ? 'bg-primary-100 text-primary-800'
-                              : 'bg-slate-100 text-slate-800'
+                              ? 'bg-primary-50 text-primary-800'
+                              : 'bg-slate-100 text-slate-700'
                         }`}
                       >
                         <p className="font-display text-sm font-bold">{formatCurrency(bill.totalAmount)}</p>
