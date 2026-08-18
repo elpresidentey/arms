@@ -1,8 +1,26 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Activity, ArrowUpRight, ChevronRight, HelpCircle, Mail, MapPin, Phone } from 'lucide-react'
+import {
+  Activity,
+  ArrowUp,
+  ArrowUpRight,
+  ChevronRight,
+  Facebook,
+  HelpCircle,
+  Instagram,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+} from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import BrandLogo from './BrandLogo'
+
+const socialLinks = [
+  { name: 'Twitter / X', href: 'https://x.com', Icon: Twitter },
+  { name: 'Facebook', href: 'https://facebook.com', Icon: Facebook },
+  { name: 'Instagram', href: 'https://instagram.com', Icon: Instagram },
+]
 
 const Footer: React.FC = () => {
   const { user } = useAuth()
@@ -99,20 +117,18 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="mt-6 flex gap-3">
-              <a
-                href="mailto:support@arms.local?subject=ARMS%20support%20request"
-                aria-label="Email ARMS support"
-                className="group/contact flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
-              >
-                <Mail className="h-4 w-4 transition-transform duration-300 group-hover/contact:-rotate-6" />
-              </a>
-              <a
-                href="tel:+18002767"
-                aria-label="Call ARMS support"
-                className="group/contact flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
-              >
-                <Phone className="h-4 w-4 transition-transform duration-300 group-hover/contact:rotate-6" />
-              </a>
+              {socialLinks.map(({ name, href, Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`ARMS on ${name}`}
+                  className="group/contact flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
+                >
+                  <Icon className="h-4 w-4 transition-transform duration-300 group-hover/contact:scale-110" />
+                </a>
+              ))}
               <Link
                 to="/status"
                 aria-label="View ARMS system status"
@@ -207,6 +223,15 @@ const Footer: React.FC = () => {
                 </Link>
               ))}
             </div>
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              aria-label="Back to top"
+              className="group/top inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/40 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
+            >
+              <ArrowUp className="h-4 w-4 transition-transform duration-300 group-hover/top:-translate-y-0.5" />
+              Back to top
+            </button>
           </div>
         </div>
       </div>

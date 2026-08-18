@@ -610,6 +610,11 @@
     scroll-behavior: smooth;
   }
 
+  /* Keep anchored sections clear of the sticky landing header */
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+
   /* Text balance for better typography */
   .text-balance {
     text-wrap: balance;
