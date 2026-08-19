@@ -1067,10 +1067,58 @@
     animation: hero-hover-focus 1.15s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
+  @keyframes landing-kenburns {
+    from {
+      transform: scale(1.04);
+    }
+    to {
+      transform: scale(1.12);
+    }
+  }
+
+  .landing-kenburns-active {
+    animation: landing-kenburns 10s ease-out forwards;
+  }
+
+  @keyframes landing-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  .landing-float {
+    animation: landing-float 7s ease-in-out infinite;
+  }
+
+  @media (max-width: 767px) {
+    .landing-float {
+      animation: none;
+    }
+  }
+
+  .landing-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.28;
+    mix-blend-mode: overlay;
+  }
+
+  .landing-mesh {
+    background:
+      radial-gradient(ellipse 80% 50% at 8% -10%, rgba(61, 90, 54, 0.08), transparent 55%),
+      radial-gradient(ellipse 55% 40% at 96% 0%, rgba(194, 120, 59, 0.07), transparent 50%),
+      #f6f3ec;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .footer-link::after,
     .hero-sweep,
     .hero-hover-focus,
+    .landing-kenburns-active,
+    .landing-float,
     .ambient-pulse::after,
     .stagger-enter,
     .page-enter,
