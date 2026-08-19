@@ -458,7 +458,7 @@ const LandingPage: React.FC = () => {
           </div>
 
           <div className="relative mx-auto flex min-h-[100svh] w-full max-w-7xl flex-col justify-start px-4 pb-10 pt-28 sm:px-6 lg:justify-center lg:px-8 lg:pt-32">
-            <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+            <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)] lg:gap-12">
               <div className="max-w-2xl space-y-8">
                 <div className="space-y-5">
                   <span className="stagger-enter inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md">
@@ -467,8 +467,8 @@ const LandingPage: React.FC = () => {
                     <span className="hidden h-1 w-1 rounded-full bg-white/40 sm:block" />
                     <span className="hidden text-white/70 sm:inline">Waste service, simplified</span>
                   </span>
-                  <h1 className="stagger-enter font-display text-[2.35rem] font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.5rem] lg:leading-[1.05]">
-                    Your street&apos;s refuse service,
+                  <h1 className="stagger-enter font-display text-[2.3rem] font-bold leading-[1.1] tracking-tight text-white sm:text-[2.4rem] lg:text-[3rem] lg:leading-[1.05]">
+                    <span className="block">Your street&apos;s refuse service,</span>
                     <span className="block bg-gradient-to-r from-amber-200 via-emerald-200 to-primary-200 bg-clip-text text-transparent">
                       finally in one place.
                     </span>
