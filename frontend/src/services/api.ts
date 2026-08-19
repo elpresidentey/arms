@@ -2202,8 +2202,13 @@ export const billingApi = {
   verifyPayment: async (reference: string): Promise<BillPayment & { bill?: Bill }> =>
     invokeEdge<BillPayment & { bill?: Bill }>('billing', { action: 'verifyPayment', reference }),
 
-  getReceiptCode: async (billId: string): Promise<{ code: string }> =>
-    invokeEdge<{ code: string }>('billing', { action: 'getReceiptCode', billId }),
+  getReceiptCode: async (billId: string): Promise<{ code: string }> => {
+    const { data, error } = await supabase.rpc('get_receipt_code', { bill_id: billId })
+    if (error) {
+      throw new Error(error.message || 'Could not load the receipt verification code.')
+    }
+    return { code: String(data) }
+  },
 
   verifyReceipt: async (billNumber: string, code: string): Promise<{
     valid: boolean
@@ -2215,7 +2220,26 @@ export const billingApi = {
       paymentMethod: string | null
       status: string
     }
-  }> => invokeEdge('billing', { action: 'verifyReceipt', billNumber, code }),
+  }> => {
+    const { data, error } = await supabase.rpc('verify_receipt', {
+      bill_number: billNumber,
+      code,
+    })
+    if (error) {
+      throw new Error(error.message || 'Could not verify this receipt.')
+    }
+    return data as {
+      valid: boolean
+      bill?: {
+        billNumber: string
+        billingPeriod: string
+        totalAmount: number
+        paidAt: string | null
+        paymentMethod: string | null
+        status: string
+      }
+    }
+  },
 
   getAllPayments: async (status?: string): Promise<BillPayment[]> => {
     let query = supabase.from('bill_payments').select('*').order('createdAt', { ascending: false })

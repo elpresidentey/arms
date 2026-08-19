@@ -3,7 +3,6 @@ import { HttpError } from '../_shared/errors.ts'
 import { requireStaff, requireUser, readBody } from '../_shared/auth.ts'
 import { serviceClient } from '../_shared/db.ts'
 import { initializeTransaction, verifyTransaction } from '../_shared/paystack.ts'
-import { normalizeCode, safeEqualHex, signReceipt } from '../_shared/receipt.ts'
 
 const GRACE_PERIOD_DAYS = 7
 
@@ -30,10 +29,6 @@ Deno.serve(async (req: Request) => {
         return json(await rejectPayment(req, String(body.paymentId ?? ''), String(body.reason ?? '')))
       case 'issue':
         return json(await issue(req, String(body.userId ?? ''), body.period ? String(body.period) : undefined))
-      case 'getReceiptCode':
-        return json(await getReceiptCode(req, String(body.billId ?? '')))
-      case 'verifyReceipt':
-        return json(await verifyReceipt(req, String(body.billNumber ?? ''), String(body.code ?? '')))
       default:
         return json({ error: `Unknown action: ${action}` }, 400)
     }
@@ -368,66 +363,4 @@ async function issue(req: Request, userId: string, period?: string): Promise<unk
   if (existing) throw new HttpError(400, `A bill already exists for this resident for ${billingPeriod}`)
 
   return generateBillForUser(service, { id: userId, propertyType: user.propertyType }, billingPeriod)
-}
-
-/**
- * Return the server-side verification code for a paid bill.
- * The code is an HMAC over the authoritative bill data, so it can only be
- * produced by the server holding the signing secret. Anyone (resident or a
- * third party checking a receipt) can validate it via the public
- * `verifyReceipt` action.
- */
-async function getReceiptCode(req: Request, billId: string): Promise<{ code: string }> {
-  const caller = await requireUser(req)
-  const service = serviceClient()
-
-  const { data: bill, error } = await service.from('bills').select('*').eq('id', billId).maybeSingle()
-  if (error) throw new HttpError(500, error.message)
-  if (!bill) throw new HttpError(404, 'Bill not found')
-  if (bill.userId !== caller.uid) throw new HttpError(403, 'This bill does not belong to you')
-  if (bill.status !== 'paid') throw new HttpError(400, 'Receipt code is only available after the bill is paid')
-
-  return { code: await signReceipt(bill) }
-}
-
-/**
- * Public, unauthenticated receipt verification. Given a bill number and the
- * verification code printed on a receipt, recompute the HMAC over the
- * authoritative bill record and compare in constant time. Returns whether the
- * code is genuine, plus the authoritative payment facts so a forged receipt
- * can never be made to look valid.
- */
-async function verifyReceipt(
-  req: Request,
-  billNumber: string,
-  code: string,
-): Promise<{ valid: boolean; bill?: Record<string, unknown> }> {
-  const service = serviceClient()
-
-  if (!billNumber.trim() || !code.trim()) {
-    throw new HttpError(400, 'billNumber and code are required')
-  }
-
-  const { data: bill, error } = await service
-    .from('bills')
-    .select('*')
-    .eq('billNumber', billNumber.trim())
-    .maybeSingle()
-  if (error) throw new HttpError(500, error.message)
-  if (!bill) throw new HttpError(404, 'Receipt not found')
-
-  const expected = await signReceipt(bill)
-  const valid = safeEqualHex(expected, normalizeCode(code))
-
-  return {
-    valid,
-    bill: {
-      billNumber: bill.billNumber,
-      billingPeriod: bill.billingPeriod,
-      totalAmount: Number(bill.totalAmount),
-      paidAt: bill.paidAt,
-      paymentMethod: bill.paymentMethod,
-      status: bill.status,
-    },
-  }
 }
