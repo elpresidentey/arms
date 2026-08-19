@@ -28,8 +28,8 @@ const BillReceipt = ({ bill, customer, showActions = true, onClose, className = 
 
   const handlePrint = () => window.print()
 
-  const handleDownload = () => {
-    downloadReceiptHtml(bill, customer, receiptCode?.code)
+  const handleDownload = async () => {
+    await downloadReceiptHtml(bill, customer, receiptCode?.code)
   }
 
   return (

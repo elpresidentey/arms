@@ -1,3 +1,4 @@
+import QRCode from 'qrcode'
 import { Bill } from '../types'
 import { formatBillingDate, formatBillingPeriod, propertyTypeLabel } from './billingFormat'
 import { formatCurrency } from './format'
@@ -12,7 +13,18 @@ interface ReceiptCustomer {
   phoneNumber?: string
 }
 
-export const buildReceiptHtml = (bill: Bill, customer: ReceiptCustomer, verificationCode?: string) => {
+export const buildReceiptVerifyUrl = (billNumber: string, code: string): string => {
+  const base = `${window.location.origin}/verify-receipt`
+  const params = new URLSearchParams({ bill: billNumber, code })
+  return `${base}?${params.toString()}`
+}
+
+export const buildReceiptHtml = (
+  bill: Bill,
+  customer: ReceiptCustomer,
+  verificationCode?: string,
+  qrDataUrl?: string,
+) => {
   const customerName = [customer.firstName, customer.lastName].filter(Boolean).join(' ') || 'Customer'
   const lateFeeRow =
     bill.lateFee > 0
@@ -24,8 +36,13 @@ export const buildReceiptHtml = (bill: Bill, customer: ReceiptCustomer, verifica
         <p style="margin:8px 0 0;font-family:monospace;font-weight:bold;letter-spacing:1px">
           ${verificationCode.toUpperCase().replace(/.{4}/g, '$& ').trim()}
         </p>
+        ${
+          qrDataUrl
+            ? `<div style="margin-top:12px"><img src="${qrDataUrl}" width="140" height="140" alt="QR code to verify this receipt" /></div>`
+            : ''
+        }
         <p style="margin:8px 0 0;font-size:11px;color:#475569">
-          Verify this receipt at ${window.location.origin}/verify-receipt
+          Scan the QR code, or visit ${window.location.origin}/verify-receipt and enter the code above.
         </p>
       </div>`
     : ''
@@ -79,8 +96,20 @@ export const buildReceiptHtml = (bill: Bill, customer: ReceiptCustomer, verifica
 </html>`
 }
 
-export const downloadReceiptHtml = (bill: Bill, customer: ReceiptCustomer, verificationCode?: string) => {
-  const html = buildReceiptHtml(bill, customer, verificationCode)
+export const downloadReceiptHtml = async (
+  bill: Bill,
+  customer: ReceiptCustomer,
+  verificationCode?: string,
+) => {
+  let qrDataUrl: string | undefined
+  if (verificationCode) {
+    qrDataUrl = await QRCode.toDataURL(buildReceiptVerifyUrl(bill.billNumber, verificationCode), {
+      margin: 1,
+      width: 300,
+      color: { dark: '#0f172a' },
+    })
+  }
+  const html = buildReceiptHtml(bill, customer, verificationCode, qrDataUrl)
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')

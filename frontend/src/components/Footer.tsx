@@ -11,9 +11,11 @@ import {
   Mail,
   MapPin,
   Phone,
+  ShieldCheck,
   Twitter,
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { PATHS } from '../routes/paths'
 import BrandLogo from './BrandLogo'
 
 const socialLinks = [
@@ -38,6 +40,7 @@ const Footer: React.FC = () => {
             { name: 'My Recyclables', href: '/app/recyclables' },
             { name: 'Bin Locations', href: '/app/locations' },
             { name: 'Wallet', href: '/app/wallet' },
+            { name: 'Verify a Receipt', href: PATHS.verifyReceipt },
           ],
         },
         {
@@ -91,17 +94,46 @@ const Footer: React.FC = () => {
       ]
 
   const utilityLinks = [
+    { name: 'Verify a Receipt', href: PATHS.verifyReceipt },
     { name: 'System Status', href: '/status' },
     { name: 'API Docs', href: '/api-docs' },
     { name: 'Security', href: '/security' },
     { name: 'Changelog', href: '/changelog' },
   ]
 
+  const quickCards = [
+    {
+      name: 'Email support',
+      value: 'support@arms.local',
+      href: 'mailto:support@arms.local',
+      Icon: Mail,
+    },
+    {
+      name: 'Phone line',
+      value: '1-800-ARMS',
+      href: 'tel:+18002767',
+      Icon: Phone,
+    },
+    {
+      name: 'Help & FAQs',
+      value: '24/7 Support',
+      href: '/help',
+      Icon: HelpCircle,
+    },
+  ]
+
   return (
     <footer className="relative overflow-hidden border-t border-primary-900/20 bg-slate-950 text-white">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-300/70 to-transparent" />
 
-      <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+      {/* Ambient glows */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-32 -left-24 h-80 w-80 rounded-full bg-primary-500/10 blur-[110px]" />
+        <div className="absolute -bottom-36 -right-20 h-96 w-96 rounded-full bg-amber-400/10 blur-[130px]" />
+        <div className="absolute top-1/3 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-primary-400/5 blur-[120px]" />
+      </div>
+
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_2fr_0.95fr]">
           <div>
             <BrandLogo to={user ? '/app' : '/'} variant="dark" className="mb-6" />
@@ -142,8 +174,11 @@ const Footer: React.FC = () => {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
             {footerLinks.map((section) => (
               <div key={section.title}>
-                <h3 className="mb-4 text-sm font-semibold text-white">{section.title}</h3>
-                <ul className="space-y-3">
+                <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-100">
+                  {section.title}
+                  <span className="mt-2 block h-px w-9 bg-gradient-to-r from-primary-300/80 to-transparent" />
+                </h3>
+                <ul className="space-y-2.5">
                   {section.links.map((link) => (
                     <li key={link.name}>
                       <Link
@@ -161,38 +196,50 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="mb-4 text-sm font-semibold text-white">Quick Links</h3>
+            <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-100">
+              Get in touch
+              <span className="mt-2 block h-px w-9 bg-gradient-to-r from-primary-300/80 to-transparent" />
+            </h3>
+
             <div className="space-y-3">
-              <a
-                href="mailto:support@arms.local"
-                className="group/quick flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-slate-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/40 hover:bg-white/[0.07] hover:text-white focus-visible:ring-offset-slate-950"
-              >
-                <span className="flex min-w-0 items-center gap-2">
-                  <Mail className="h-4 w-4 flex-shrink-0 text-primary-200" />
-                  <span className="truncate">support@arms.local</span>
-                </span>
-                <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-50 transition-transform duration-300 group-hover/quick:-translate-y-0.5 group-hover/quick:translate-x-0.5 group-hover/quick:opacity-100" />
-              </a>
-              <a
-                href="tel:+18002767"
-                className="group/quick flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-slate-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/40 hover:bg-white/[0.07] hover:text-white focus-visible:ring-offset-slate-950"
-              >
-                <span className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 flex-shrink-0 text-primary-200" />
-                  1-800-ARMS
-                </span>
-                <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-50 transition-transform duration-300 group-hover/quick:-translate-y-0.5 group-hover/quick:translate-x-0.5 group-hover/quick:opacity-100" />
-              </a>
               <Link
-                to="/help"
-                className="group/quick flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-slate-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/40 hover:bg-white/[0.07] hover:text-white focus-visible:ring-offset-slate-950"
+                to={PATHS.verifyReceipt}
+                className="group/verify flex items-center justify-between gap-3 rounded-lg border border-primary-300/25 bg-primary-300/[0.06] px-3 py-3 text-sm text-primary-100 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
               >
-                <span className="flex items-center gap-2">
-                  <HelpCircle className="h-4 w-4 flex-shrink-0 text-primary-200" />
-                  24/7 Support
+                <span className="flex min-w-0 items-center gap-2.5">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-300/15 text-primary-200">
+                    <ShieldCheck className="h-4 w-4" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[11px] font-medium uppercase tracking-wider text-primary-200/80">
+                      Receipt authenticity
+                    </span>
+                    <span className="block truncate font-semibold">Verify a Receipt</span>
+                  </span>
                 </span>
-                <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-50 transition-transform duration-300 group-hover/quick:-translate-y-0.5 group-hover/quick:translate-x-0.5 group-hover/quick:opacity-100" />
+                <ArrowUpRight className="h-4 w-4 shrink-0 opacity-60 transition-transform duration-300 group-hover/verify:-translate-y-0.5 group-hover/verify:translate-x-0.5 group-hover/verify:opacity-100" />
               </Link>
+
+              {quickCards.map(({ name, value, href, Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  className="group/quick flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-slate-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/40 hover:bg-white/[0.07] hover:text-white focus-visible:ring-offset-slate-950"
+                >
+                  <span className="flex min-w-0 items-center gap-2.5">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-primary-200">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[11px] font-medium uppercase tracking-wider text-slate-400">
+                        {name}
+                      </span>
+                      <span className="block truncate font-semibold">{value}</span>
+                    </span>
+                  </span>
+                  <ArrowUpRight className="h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 group-hover/quick:-translate-y-0.5 group-hover/quick:translate-x-0.5 group-hover/quick:opacity-100" />
+                </a>
+              ))}
             </div>
 
             <div className="mt-5 flex items-start gap-2 text-xs leading-5 text-slate-400">

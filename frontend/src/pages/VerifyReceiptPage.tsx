@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { CheckCircle2, XCircle, Loader2, ShieldCheck, Search } from 'lucide-react'
+import { CheckCircle2, XCircle, Loader2, ShieldCheck, Search, RotateCcw } from 'lucide-react'
 import { billingApi } from '../services/api'
 import { getErrorMessage } from '../utils/errors'
 import { formatCurrency } from '../utils/format'
@@ -28,6 +28,7 @@ const VerifyReceiptPage = () => {
   const [codeInput, setCodeInput] = useState('')
   const [status, setStatus] = useState<'idle' | 'verifying' | 'done' | 'error'>('idle')
   const [result, setResult] = useState<VerificationResult | null>(null)
+  const [verifiedCode, setVerifiedCode] = useState('')
   const [message, setMessage] = useState('')
 
   const runVerification = async (billNumber: string, code: string) => {
@@ -38,10 +39,12 @@ const VerifyReceiptPage = () => {
     }
     setStatus('verifying')
     setResult(null)
+    setVerifiedCode('')
     setMessage('Checking this receipt against official records…')
     try {
       const res = await billingApi.verifyReceipt(billNumber.trim(), code.trim())
       setResult(res)
+      setVerifiedCode(code.trim())
       setStatus('done')
       if (!res.valid) {
         setMessage('This verification code does not match our records or the receipt has been altered.')
@@ -56,9 +59,9 @@ const VerifyReceiptPage = () => {
     const bill = searchParams.get('bill')
     const code = searchParams.get('code')
     if (bill && code) {
-      runVerification(bill, code)
       setBillInput(bill)
       setCodeInput(code)
+      runVerification(bill, code)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -67,6 +70,20 @@ const VerifyReceiptPage = () => {
     event.preventDefault()
     runVerification(billInput, codeInput)
   }
+
+  const handleReset = () => {
+    setBillInput('')
+    setCodeInput('')
+    setResult(null)
+    setVerifiedCode('')
+    setMessage('')
+    setStatus('idle')
+    const url = new URL(window.location.href)
+    url.search = ''
+    window.history.replaceState({}, '', url.toString())
+  }
+
+  const showForm = status !== 'done' || !result?.valid
 
   return (
     <div className="min-h-screen bg-[#f6f3ec] px-4 py-10 sm:py-14">
@@ -82,43 +99,45 @@ const VerifyReceiptPage = () => {
           </p>
         </div>
 
-        <form
-          onSubmit={handleManualSubmit}
-          className="panel-shell rounded-[1.6rem] p-6 sm:p-8"
-        >
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Receipt number
-          </label>
-          <input
-            value={billInput}
-            onChange={(event) => setBillInput(event.target.value)}
-            placeholder="e.g. BILL-2026-08-0001"
-            className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
-          />
-
-          <label className="mt-5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Verification code
-          </label>
-          <input
-            value={codeInput}
-            onChange={(event) => setCodeInput(event.target.value)}
-            placeholder="e.g. A1B2 C3D4 E5F6 …"
-            className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 font-mono text-xs text-slate-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
-          />
-
-          <button
-            type="submit"
-            disabled={status === 'verifying'}
-            className="btn btn-primary mt-6 inline-flex h-11 w-full items-center justify-center gap-2"
+        {showForm && (
+          <form
+            onSubmit={handleManualSubmit}
+            className="panel-shell rounded-[1.6rem] p-6 sm:p-8"
           >
-            {status === 'verifying' ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Search className="h-4 w-4" />
-            )}
-            Verify receipt
-          </button>
-        </form>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Receipt number
+            </label>
+            <input
+              value={billInput}
+              onChange={(event) => setBillInput(event.target.value)}
+              placeholder="e.g. BILL-2026-08-0001"
+              className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
+            />
+
+            <label className="mt-5 block text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Verification code
+            </label>
+            <input
+              value={codeInput}
+              onChange={(event) => setCodeInput(event.target.value)}
+              placeholder="e.g. A1B2 C3D4 E5F6 …"
+              className="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 font-mono text-xs text-slate-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100"
+            />
+
+            <button
+              type="submit"
+              disabled={status === 'verifying'}
+              className="btn btn-primary mt-6 inline-flex h-11 w-full items-center justify-center gap-2"
+            >
+              {status === 'verifying' ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Search className="h-4 w-4" />
+              )}
+              Verify receipt
+            </button>
+          </form>
+        )}
 
         {status === 'verifying' && (
           <div className="mt-6 flex items-center justify-center gap-2 text-sm text-slate-600">
@@ -137,33 +156,44 @@ const VerifyReceiptPage = () => {
               </div>
             </div>
             <div className="space-y-3 px-6 py-5 text-sm">
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <span className="text-slate-500">Receipt number</span>
                 <span className="font-semibold text-slate-900">{result.bill.billNumber}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <span className="text-slate-500">Billing period</span>
                 <span className="font-semibold text-slate-900">{formatBillingPeriod(result.bill.billingPeriod)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <span className="text-slate-500">Total paid</span>
                 <span className="font-semibold text-emerald-800">{formatCurrency(result.bill.totalAmount)}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <span className="text-slate-500">Payment date</span>
                 <span className="font-semibold text-slate-900">
                   {result.bill.paidAt ? formatBillingDate(result.bill.paidAt) : '—'}
                 </span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between gap-4">
                 <span className="text-slate-500">Method</span>
                 <span className="font-semibold capitalize text-slate-900">
                   {result.bill.paymentMethod || 'Paystack'}
                 </span>
               </div>
-              <p className="border-t border-slate-100 pt-3 text-xs text-emerald-700">
-                Formal verification is on the QR code — keep this for your records.
-              </p>
+              <div className="flex items-center justify-between gap-4 border-t border-slate-100 pt-3">
+                <span className="text-slate-500">Matched code</span>
+                <span className="font-mono text-xs font-bold tracking-wider text-emerald-800">
+                  {chunkCode(verifiedCode)}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="btn btn-secondary mt-1 inline-flex h-11 w-full items-center justify-center gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Verify another receipt
+              </button>
             </div>
           </div>
         )}
@@ -181,7 +211,8 @@ const VerifyReceiptPage = () => {
               <p className="font-medium text-slate-900">The code you entered is displayed as:</p>
               <p className="mt-1 font-mono text-xs break-all text-slate-500">{chunkCode(codeInput)}</p>
               <p className="mt-3">
-                Double-check you copied the full code, or contact ARMS support if you believe this is an error.
+                Double-check you copied the full code, check the receipt number, or contact ARMS support if
+                you believe this is an error.
               </p>
               <p className="mt-2 text-xs">support@arms.ng</p>
             </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Receipt, History } from 'lucide-react'
+import { Receipt, History, ShieldCheck } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import PageHeader from '../components/PageHeader'
 import StatePanel from '../components/StatePanel'
@@ -12,6 +12,7 @@ import BillStatusBadge from '../components/billing/BillStatusBadge'
 import PayBillButton from '../components/billing/PayBillButton'
 import { usePayBill } from '../hooks/usePayBill'
 import { billingApi } from '../services/api'
+import { PATHS } from '../routes/paths'
 import { Bill } from '../types'
 import { getErrorMessage } from '../utils/errors'
 import { formatCurrency } from '../utils/format'
@@ -143,10 +144,19 @@ const Bills: React.FC = () => {
           title="Payment history"
           subtitle="Paid bills and receipts"
           action={
-            <span className="text-sm font-medium text-slate-500 flex items-center gap-1.5">
-              <History className="h-4 w-4" />
-              {paidBills.length} paid
-            </span>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <Link
+                to={PATHS.verifyReceipt}
+                className="text-sm font-medium text-primary-700 inline-flex items-center gap-1.5 hover:text-primary-800"
+              >
+                <ShieldCheck className="h-4 w-4" />
+                Verify a receipt
+              </Link>
+              <span className="text-sm font-medium text-slate-500 flex items-center gap-1.5">
+                <History className="h-4 w-4" />
+                {paidBills.length} paid
+              </span>
+            </div>
           }
         >
           <div className="space-y-3">

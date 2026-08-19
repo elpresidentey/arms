@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import QRCode from 'qrcode'
 import { ShieldCheck, ExternalLink, Loader2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { buildReceiptVerifyUrl } from '../../utils/receiptDownload'
 
 interface ReceiptVerificationCodeProps {
   code?: string
@@ -10,12 +11,6 @@ interface ReceiptVerificationCodeProps {
 
 const chunkCode = (code: string, size = 4): string =>
   code.toUpperCase().replace(new RegExp(`.{1,${size}}`, 'g'), '$& ').trim()
-
-export const buildReceiptVerifyUrl = (billNumber: string, code: string): string => {
-  const base = `${window.location.origin}/verify-receipt`
-  const params = new URLSearchParams({ bill: billNumber, code })
-  return `${base}?${params.toString()}`
-}
 
 const ReceiptVerificationCode = ({ code, billNumber = '' }: ReceiptVerificationCodeProps) => {
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null)
