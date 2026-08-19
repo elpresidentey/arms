@@ -95,7 +95,7 @@ export const AppRoutes = () => (
 
           {/* Static info pages (must stay after /app and /resident/*) */}
           {INFO_PAGE_SLUGS.map((slug) => (
-            <Route key={slug} path={slug} element={<FooterInfoPage />} />
+            <Route key={slug} path={slug} element={<FooterInfoPage slug={slug} />} />
           ))}
 
           {/* Authenticated workspace */}

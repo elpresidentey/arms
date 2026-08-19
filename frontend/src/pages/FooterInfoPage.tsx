@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, CheckCircle2, FileText, HelpCircle, ShieldCheck } from 'lucide-react'
 import Footer from '../components/Footer'
 
@@ -134,9 +134,8 @@ const pages = {
   },
 } as const
 
-const FooterInfoPage: React.FC = () => {
-  const { slug } = useParams()
-  const page = slug ? pages[slug as keyof typeof pages] : null
+const FooterInfoPage: React.FC<{ slug: string }> = ({ slug }) => {
+  const page = pages[slug as keyof typeof pages] ?? null
 
   if (!page) {
     return <Navigate to="/" replace />
