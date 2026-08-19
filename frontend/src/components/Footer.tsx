@@ -23,6 +23,27 @@ const socialLinks = [
   { name: 'Instagram', href: 'https://instagram.com', Icon: Instagram },
 ]
 
+const supportLinks = [
+  { name: 'Help Center', href: '/help' },
+  { name: 'FAQs', href: '/faqs' },
+  { name: 'Contact Us', href: '/contact' },
+  { name: 'Report Refuse Issue', href: '/app/reports' },
+]
+
+const resourceLinks = [
+  { name: 'System Status', href: '/status' },
+  { name: 'API Docs', href: '/api-docs' },
+  { name: 'Security', href: '/security' },
+  { name: 'Changelog', href: '/changelog' },
+]
+
+const legalLinks = [
+  { name: 'Privacy Policy', href: '/privacy' },
+  { name: 'Terms of Service', href: '/terms' },
+  { name: 'Cookie Policy', href: '/cookies' },
+  { name: 'Accessibility', href: '/accessibility' },
+]
+
 const Footer: React.FC = () => {
   const { user } = useAuth()
   const isStaff = Boolean(user && user.role !== 'resident')
@@ -53,66 +74,20 @@ const Footer: React.FC = () => {
         secondary: { label: 'Verify a receipt', href: PATHS.verifyReceipt },
       }
 
-  const footerLinks = isResident
+  const toolsLinks = isResident
     ? [
-        {
-          title: 'Resident Tools',
-          links: [
-            { name: 'Dashboard', href: '/app' },
-            { name: 'Collection History', href: '/app/waste-history' },
-            { name: 'My Recyclables', href: '/app/recyclables' },
-            { name: 'Bin Locations', href: '/app/locations' },
-            { name: 'Wallet', href: '/app/wallet' },
-          ],
-        },
-        {
-          title: 'Support',
-          links: [
-            { name: 'Help Center', href: '/help' },
-            { name: 'Report Refuse Issue', href: '/app/reports' },
-            { name: 'Contact Us', href: '/contact' },
-            { name: 'FAQs', href: '/faqs' },
-          ],
-        },
-        {
-          title: 'Legal',
-          links: [
-            { name: 'Privacy Policy', href: '/privacy' },
-            { name: 'Terms of Service', href: '/terms' },
-            { name: 'Cookie Policy', href: '/cookies' },
-            { name: 'Accessibility', href: '/accessibility' },
-          ],
-        },
+        { name: 'Dashboard', href: '/app' },
+        { name: 'Collection History', href: '/app/waste-history' },
+        { name: 'My Recyclables', href: '/app/recyclables' },
+        { name: 'Bin Locations', href: '/app/locations' },
+        { name: 'Wallet', href: '/app/wallet' },
       ]
     : [
-        {
-          title: 'Admin Tools',
-          links: [
-            { name: 'Operations', href: '/app/operations' },
-            { name: 'Collections', href: '/app/waste-history' },
-            { name: 'Complaints', href: '/app/reports' },
-            { name: 'Resident Requests', href: '/app/service-requests' },
-            { name: 'Route Schedules', href: '/app/schedules' },
-          ],
-        },
-        {
-          title: 'Oversight',
-          links: [
-            { name: 'Recycling Queue', href: '/app/recyclables' },
-            { name: 'Locations', href: '/app/locations' },
-            { name: 'Staff Profile', href: '/app/profile' },
-            { name: 'System Status', href: '/status' },
-          ],
-        },
-        {
-          title: 'Legal',
-          links: [
-            { name: 'Privacy Policy', href: '/privacy' },
-            { name: 'Terms of Service', href: '/terms' },
-            { name: 'Cookie Policy', href: '/cookies' },
-            { name: 'Accessibility', href: '/accessibility' },
-          ],
-        },
+        { name: 'Operations', href: '/app/operations' },
+        { name: 'Collections', href: '/app/waste-history' },
+        { name: 'Complaints', href: '/app/reports' },
+        { name: 'Resident Requests', href: '/app/service-requests' },
+        { name: 'Route Schedules', href: '/app/schedules' },
       ]
 
   const utilityLinks = [
@@ -128,6 +103,29 @@ const Footer: React.FC = () => {
     { label: 'Phone', value: '1-800-ARMS', href: 'tel:+18002767', Icon: Phone },
   ]
 
+  const columnHeading = (title: string) => (
+    <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-100">
+      {title}
+      <span className="mt-2 block h-px w-9 bg-gradient-to-r from-primary-300/80 to-transparent" />
+    </h3>
+  )
+
+  const linkList = (links: { name: string; href: string }[]) => (
+    <ul className="space-y-2.5">
+      {links.map((link) => (
+        <li key={link.name}>
+          <Link
+            to={link.href}
+            className="group/link inline-flex items-center gap-2 text-sm text-slate-300 transition-colors duration-200 hover:text-white focus-visible:ring-offset-slate-950"
+          >
+            <span className="h-1 w-1 rounded-full bg-primary-300/0 transition-colors duration-200 group-hover/link:bg-primary-300" />
+            <span className="footer-link">{link.name}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+
   return (
     <footer className="relative overflow-hidden border-t border-primary-900/30 bg-slate-950 text-white">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-300/70 to-transparent" />
@@ -142,6 +140,7 @@ const Footer: React.FC = () => {
       <div className="relative mx-auto w-full max-w-7xl px-4 pt-12 sm:px-6 lg:px-8">
         {/* CTA band */}
         <div className="relative overflow-hidden rounded-[1.75rem] border border-primary-300/25 bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 px-6 py-10 sm:px-10 sm:py-12">
+          <div aria-hidden className="hero-hover-grid pointer-events-none absolute inset-0 opacity-40" />
           <div aria-hidden className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary-300/20 blur-[100px]" />
           <div aria-hidden className="pointer-events-none absolute -bottom-24 -left-14 h-64 w-64 rounded-full bg-amber-300/10 blur-[90px]" />
 
@@ -174,14 +173,35 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Main grid */}
-        <div className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-[1.15fr_2fr_1fr]">
+        <div className="grid grid-cols-1 gap-12 py-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.1fr]">
           <div>
-            <BrandLogo to={user ? '/app' : '/'} variant="dark" className="mb-6" />
+            <BrandLogo to={user ? '/app' : '/'} variant="dark" className="mb-5" />
             <p className="max-w-sm text-sm leading-6 text-slate-300">
               {isResident
                 ? 'Automated refuse service tracking, reporting, and recycling records for residents.'
                 : 'Administrative oversight for refuse routes, resident complaints, service requests, and logistics readiness.'}
             </p>
+
+            <ul className="mt-6 space-y-3">
+              {contactRows.map(({ label, value, href, Icon }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    className="group/contact row flex items-center gap-3 text-sm text-slate-300 transition-colors duration-200 hover:text-white"
+                  >
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-primary-200 transition-colors duration-300 group-hover/contact:border-primary-300/40 group-hover/contact:bg-primary-300/10">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[11px] font-medium uppercase tracking-wider text-slate-500">
+                        {label}
+                      </span>
+                      <span className="block truncate font-semibold">{value}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
 
             <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-primary-300/20 bg-primary-300/10 px-3 py-1.5 text-xs font-medium text-primary-100">
               <span className="h-2 w-2 rounded-full bg-primary-300 shadow-[0_0_0_4px_rgb(134_239_172_/_0.16)]" />
@@ -211,66 +231,29 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-            {footerLinks.map((section) => (
-              <div key={section.title}>
-                <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-100">
-                  {section.title}
-                  <span className="mt-2 block h-px w-9 bg-gradient-to-r from-primary-300/80 to-transparent" />
-                </h3>
-                <ul className="space-y-2.5">
-                  {section.links.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        to={link.href}
-                        className="group/link inline-flex items-center gap-2 text-sm text-slate-300 transition-colors duration-200 hover:text-white focus-visible:ring-offset-slate-950"
-                      >
-                        <span className="h-1 w-1 rounded-full bg-primary-300/0 transition-colors duration-200 group-hover/link:bg-primary-300" />
-                        <span className="footer-link">{link.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
           <div>
-            <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-100">
-              Reach us
-              <span className="mt-2 block h-px w-9 bg-gradient-to-r from-primary-300/80 to-transparent" />
-            </h3>
-
-            <ul className="space-y-4">
-              {contactRows.map(({ label, value, href, Icon }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    className="group/contact row flex items-center gap-3 text-sm text-slate-300 transition-colors duration-200 hover:text-white"
-                  >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-primary-200 transition-colors duration-300 group-hover/contact:border-primary-300/40 group-hover/contact:bg-primary-300/10">
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block text-[11px] font-medium uppercase tracking-wider text-slate-500">
-                        {label}
-                      </span>
-                      <span className="block truncate font-semibold">{value}</span>
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-
+            {columnHeading(isResident ? 'Resident Tools' : 'Admin Tools')}
+            {linkList(toolsLinks)}
             <Link
               to={PATHS.verifyReceipt}
-              className="group/verify mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-primary-300/25 bg-primary-300/10 text-sm font-semibold text-primary-100 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/50 hover:bg-primary-300/15 hover:text-white"
+              className="group/verify mt-5 inline-flex items-center gap-2 rounded-xl border border-primary-300/25 bg-primary-300/10 px-3.5 py-2.5 text-sm font-semibold text-primary-100 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/50 hover:bg-primary-300/15 hover:text-white"
             >
               <ShieldCheck className="h-4 w-4" />
               Verify a Receipt
               <ArrowUpRight className="h-4 w-4 opacity-60 transition-transform duration-300 group-hover/verify:-translate-y-0.5 group-hover/verify:translate-x-0.5 group-hover/verify:opacity-100" />
             </Link>
+          </div>
 
+          <div>
+            {columnHeading('Support')}
+            {linkList(supportLinks)}
+            {columnHeading('Resources')}
+            {linkList(resourceLinks)}
+          </div>
+
+          <div>
+            {columnHeading('Legal')}
+            {linkList(legalLinks)}
             <div className="mt-5 flex items-start gap-2 text-xs leading-5 text-slate-400">
               <MapPin className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary-200" />
               <span>Resident service records stay tied to verified street and ward details.</span>
