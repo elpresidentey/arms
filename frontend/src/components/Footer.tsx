@@ -2,11 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import {
   Activity,
+  ArrowRight,
   ArrowUp,
   ArrowUpRight,
-  ChevronRight,
   Facebook,
-  HelpCircle,
   Instagram,
   Mail,
   MapPin,
@@ -30,6 +29,30 @@ const Footer: React.FC = () => {
   const isResident = !isStaff
   const currentYear = new Date().getFullYear()
 
+  const cta = user
+    ? user.role === 'resident'
+      ? {
+          eyebrow: 'Resident services',
+          title: 'Your bill, paid in minutes.',
+          subtitle: 'View your billing period, pay securely, and keep an instantly verifiable receipt.',
+          primary: { label: 'Pay your bill', href: '/app/bills' },
+          secondary: { label: 'Verify a receipt', href: PATHS.verifyReceipt },
+        }
+      : {
+          eyebrow: 'Operations workspace',
+          title: 'Your operations, at a glance.',
+          subtitle: 'Manage routes, complaints, service requests, and resident billing from one place.',
+          primary: { label: 'Open Operations', href: '/app/operations' },
+          secondary: { label: 'System status', href: '/status' },
+        }
+    : {
+        eyebrow: 'Automated refuse management',
+        title: 'Cleaner streets, clearer records.',
+        subtitle: 'Track collections, manage billing, and verify every payment receipt — all in one place.',
+        primary: { label: 'Explore ARMS', href: '/' },
+        secondary: { label: 'Verify a receipt', href: PATHS.verifyReceipt },
+      }
+
   const footerLinks = isResident
     ? [
         {
@@ -40,7 +63,6 @@ const Footer: React.FC = () => {
             { name: 'My Recyclables', href: '/app/recyclables' },
             { name: 'Bin Locations', href: '/app/locations' },
             { name: 'Wallet', href: '/app/wallet' },
-            { name: 'Verify a Receipt', href: PATHS.verifyReceipt },
           ],
         },
         {
@@ -101,40 +123,58 @@ const Footer: React.FC = () => {
     { name: 'Changelog', href: '/changelog' },
   ]
 
-  const quickCards = [
-    {
-      name: 'Email support',
-      value: 'support@arms.local',
-      href: 'mailto:support@arms.local',
-      Icon: Mail,
-    },
-    {
-      name: 'Phone line',
-      value: '1-800-ARMS',
-      href: 'tel:+18002767',
-      Icon: Phone,
-    },
-    {
-      name: 'Help & FAQs',
-      value: '24/7 Support',
-      href: '/help',
-      Icon: HelpCircle,
-    },
+  const contactRows = [
+    { label: 'Email', value: 'support@arms.local', href: 'mailto:support@arms.local', Icon: Mail },
+    { label: 'Phone', value: '1-800-ARMS', href: 'tel:+18002767', Icon: Phone },
   ]
 
   return (
-    <footer className="relative overflow-hidden border-t border-primary-900/20 bg-slate-950 text-white">
+    <footer className="relative overflow-hidden border-t border-primary-900/30 bg-slate-950 text-white">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-300/70 to-transparent" />
 
       {/* Ambient glows */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 -left-24 h-80 w-80 rounded-full bg-primary-500/10 blur-[110px]" />
-        <div className="absolute -bottom-36 -right-20 h-96 w-96 rounded-full bg-amber-400/10 blur-[130px]" />
-        <div className="absolute top-1/3 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-primary-400/5 blur-[120px]" />
+        <div className="absolute -top-40 -left-28 h-96 w-96 rounded-full bg-primary-500/10 blur-[130px]" />
+        <div className="absolute -bottom-40 -right-24 h-[26rem] w-[26rem] rounded-full bg-amber-400/10 blur-[140px]" />
+        <div className="absolute top-1/3 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary-400/5 blur-[130px]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_2fr_0.95fr]">
+      <div className="relative mx-auto w-full max-w-7xl px-4 pt-12 sm:px-6 lg:px-8">
+        {/* CTA band */}
+        <div className="relative overflow-hidden rounded-[1.75rem] border border-primary-300/25 bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 px-6 py-10 sm:px-10 sm:py-12">
+          <div aria-hidden className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary-300/20 blur-[100px]" />
+          <div aria-hidden className="pointer-events-none absolute -bottom-24 -left-14 h-64 w-64 rounded-full bg-amber-300/10 blur-[90px]" />
+
+          <div className="relative grid items-center gap-8 lg:grid-cols-[1fr_auto]">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-100">
+                {cta.eyebrow}
+              </p>
+              <h2 className="font-display mt-3 text-2xl font-bold leading-tight text-white sm:text-3xl">
+                {cta.title}
+              </h2>
+              <p className="mt-3 max-w-lg text-sm leading-6 text-primary-100/90">{cta.subtitle}</p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-end">
+              <Link
+                to={cta.primary.href}
+                className="group/cta inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-primary-800 shadow-lg shadow-primary-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-50"
+              >
+                {cta.primary.label}
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5" />
+              </Link>
+              <Link
+                to={cta.secondary.href}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/15"
+              >
+                {cta.secondary.label}
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Main grid */}
+        <div className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-[1.15fr_2fr_1fr]">
           <div>
             <BrandLogo to={user ? '/app' : '/'} variant="dark" className="mb-6" />
             <p className="max-w-sm text-sm leading-6 text-slate-300">
@@ -183,10 +223,10 @@ const Footer: React.FC = () => {
                     <li key={link.name}>
                       <Link
                         to={link.href}
-                        className="footer-link group/link inline-flex items-center gap-2 text-sm text-slate-300 transition-colors duration-200 hover:text-white focus-visible:ring-offset-slate-950"
+                        className="group/link inline-flex items-center gap-2 text-sm text-slate-300 transition-colors duration-200 hover:text-white focus-visible:ring-offset-slate-950"
                       >
-                        <span>{link.name}</span>
-                        <ChevronRight className="h-3.5 w-3.5 -translate-x-2 opacity-0 transition-all duration-200 group-hover/link:translate-x-0 group-hover/link:opacity-100" />
+                        <span className="h-1 w-1 rounded-full bg-primary-300/0 transition-colors duration-200 group-hover/link:bg-primary-300" />
+                        <span className="footer-link">{link.name}</span>
                       </Link>
                     </li>
                   ))}
@@ -197,50 +237,39 @@ const Footer: React.FC = () => {
 
           <div>
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-100">
-              Get in touch
+              Reach us
               <span className="mt-2 block h-px w-9 bg-gradient-to-r from-primary-300/80 to-transparent" />
             </h3>
 
-            <div className="space-y-3">
-              <Link
-                to={PATHS.verifyReceipt}
-                className="group/verify flex items-center justify-between gap-3 rounded-lg border border-primary-300/25 bg-primary-300/[0.06] px-3 py-3 text-sm text-primary-100 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
-              >
-                <span className="flex min-w-0 items-center gap-2.5">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-300/15 text-primary-200">
-                    <ShieldCheck className="h-4 w-4" />
-                  </span>
-                  <span className="min-w-0">
-                    <span className="block text-[11px] font-medium uppercase tracking-wider text-primary-200/80">
-                      Receipt authenticity
-                    </span>
-                    <span className="block truncate font-semibold">Verify a Receipt</span>
-                  </span>
-                </span>
-                <ArrowUpRight className="h-4 w-4 shrink-0 opacity-60 transition-transform duration-300 group-hover/verify:-translate-y-0.5 group-hover/verify:translate-x-0.5 group-hover/verify:opacity-100" />
-              </Link>
-
-              {quickCards.map(({ name, value, href, Icon }) => (
-                <a
-                  key={name}
-                  href={href}
-                  className="group/quick flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-3 text-sm text-slate-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/40 hover:bg-white/[0.07] hover:text-white focus-visible:ring-offset-slate-950"
-                >
-                  <span className="flex min-w-0 items-center gap-2.5">
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-primary-200">
+            <ul className="space-y-4">
+              {contactRows.map(({ label, value, href, Icon }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    className="group/contact row flex items-center gap-3 text-sm text-slate-300 transition-colors duration-200 hover:text-white"
+                  >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-primary-200 transition-colors duration-300 group-hover/contact:border-primary-300/40 group-hover/contact:bg-primary-300/10">
                       <Icon className="h-4 w-4" />
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-[11px] font-medium uppercase tracking-wider text-slate-400">
-                        {name}
+                      <span className="block text-[11px] font-medium uppercase tracking-wider text-slate-500">
+                        {label}
                       </span>
                       <span className="block truncate font-semibold">{value}</span>
                     </span>
-                  </span>
-                  <ArrowUpRight className="h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 group-hover/quick:-translate-y-0.5 group-hover/quick:translate-x-0.5 group-hover/quick:opacity-100" />
-                </a>
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
+
+            <Link
+              to={PATHS.verifyReceipt}
+              className="group/verify mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-primary-300/25 bg-primary-300/10 text-sm font-semibold text-primary-100 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/50 hover:bg-primary-300/15 hover:text-white"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              Verify a Receipt
+              <ArrowUpRight className="h-4 w-4 opacity-60 transition-transform duration-300 group-hover/verify:-translate-y-0.5 group-hover/verify:translate-x-0.5 group-hover/verify:opacity-100" />
+            </Link>
 
             <div className="mt-5 flex items-start gap-2 text-xs leading-5 text-slate-400">
               <MapPin className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary-200" />
@@ -249,11 +278,13 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-white/10 pt-6">
+        {/* Bottom bar */}
+        <div className="border-t border-white/10 py-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex flex-col gap-1">
               <p className="text-sm text-slate-400">
-                &copy; {currentYear} ARMS. All rights reserved.
+                &copy; {currentYear} ARMS <span className="text-slate-600">·</span>{' '}
+                <span className="text-slate-500">Automated Refuse Management Systems</span>
               </p>
               <p className="text-xs text-slate-500">
                 Built by <span className="font-semibold text-primary-300">IEL</span>
