@@ -468,8 +468,8 @@ const LandingPage: React.FC = () => {
                     <span className="hidden text-white/70 sm:inline">Waste service, simplified</span>
                   </span>
                   <h1 className="stagger-enter font-display text-[2.35rem] font-bold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.5rem] lg:leading-[1.05]">
-                    Your street&apos;s refuse service,{' '}
-                    <span className="bg-gradient-to-r from-amber-200 via-emerald-200 to-primary-200 bg-clip-text text-transparent">
+                    Your street&apos;s refuse service,
+                    <span className="block bg-gradient-to-r from-amber-200 via-emerald-200 to-primary-200 bg-clip-text text-transparent">
                       finally in one place.
                     </span>
                   </h1>
