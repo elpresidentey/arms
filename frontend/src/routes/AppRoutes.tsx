@@ -19,6 +19,7 @@ const DiagnosticPage = lazy(() => import('../pages/DiagnosticPage'))
 const BootstrapAdmin = lazy(() => import('../pages/BootstrapAdmin'))
 const AcceptAdminInvite = lazy(() => import('../pages/AcceptAdminInvite'))
 const FooterInfoPage = lazy(() => import('../pages/FooterInfoPage'))
+const VerifyReceiptPage = lazy(() => import('../pages/VerifyReceiptPage'))
 const WasteHistory = lazy(() => import('../pages/WasteHistory'))
 const Recyclables = lazy(() => import('../pages/Recyclables'))
 const Wallet = lazy(() => import('../pages/Wallet'))
@@ -90,6 +91,7 @@ export const AppRoutes = () => (
           <Route path="/diagnostic" element={<DiagnosticPage />} />
           <Route path={PATHS.bootstrap} element={<BootstrapAdmin />} />
           <Route path={PATHS.acceptInvite} element={<AcceptAdminInvite />} />
+          <Route path={PATHS.verifyReceipt} element={<VerifyReceiptPage />} />
 
           {/* Static info pages (must stay after /app and /resident/*) */}
           {INFO_PAGE_SLUGS.map((slug) => (

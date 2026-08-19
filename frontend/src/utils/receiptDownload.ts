@@ -12,12 +12,23 @@ interface ReceiptCustomer {
   phoneNumber?: string
 }
 
-export const buildReceiptHtml = (bill: Bill, customer: ReceiptCustomer) => {
+export const buildReceiptHtml = (bill: Bill, customer: ReceiptCustomer, verificationCode?: string) => {
   const customerName = [customer.firstName, customer.lastName].filter(Boolean).join(' ') || 'Customer'
   const lateFeeRow =
     bill.lateFee > 0
       ? `<tr><td>Late Fee (10%)</td><td style="text-align:right">${formatCurrency(bill.lateFee)}</td></tr>`
       : ''
+  const verificationBlock = verificationCode
+    ? `<div style="margin-top:32px;border:2px solid #0f766e;background:#f0fdfa;padding:16px;border-radius:8px;text-align:center">
+        <p style="margin:0;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#0f766e">Verification Code</p>
+        <p style="margin:8px 0 0;font-family:monospace;font-weight:bold;letter-spacing:1px">
+          ${verificationCode.toUpperCase().replace(/.{4}/g, '$& ').trim()}
+        </p>
+        <p style="margin:8px 0 0;font-size:11px;color:#475569">
+          Verify this receipt at ${window.location.origin}/verify-receipt
+        </p>
+      </div>`
+    : ''
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -59,6 +70,7 @@ export const buildReceiptHtml = (bill: Bill, customer: ReceiptCustomer) => {
   </table>
   <p><strong>Method:</strong> ${bill.paymentMethod || 'Paystack'}<br/>
   <strong>Reference:</strong> ${bill.paymentReference || 'N/A'}</p>
+  ${verificationBlock}
   <div class="footer">
     <p>Thank you for your payment.</p>
     <p>For inquiries: support@arms.ng</p>
@@ -67,8 +79,8 @@ export const buildReceiptHtml = (bill: Bill, customer: ReceiptCustomer) => {
 </html>`
 }
 
-export const downloadReceiptHtml = (bill: Bill, customer: ReceiptCustomer) => {
-  const html = buildReceiptHtml(bill, customer)
+export const downloadReceiptHtml = (bill: Bill, customer: ReceiptCustomer, verificationCode?: string) => {
+  const html = buildReceiptHtml(bill, customer, verificationCode)
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')

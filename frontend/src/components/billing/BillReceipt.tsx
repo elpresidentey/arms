@@ -1,9 +1,12 @@
 import { Download, Printer, Truck } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 import { Bill } from '../../types'
 import { User } from '../../types'
 import { formatBillingDate, formatBillingPeriod, propertyTypeLabel } from '../../utils/billingFormat'
 import { formatCurrency } from '../../utils/format'
 import { downloadReceiptHtml } from '../../utils/receiptDownload'
+import { billingApi } from '../../services/api'
+import ReceiptVerificationCode from './ReceiptVerificationCode'
 
 interface BillReceiptProps {
   bill: Bill
@@ -14,10 +17,19 @@ interface BillReceiptProps {
 }
 
 const BillReceipt = ({ bill, customer, showActions = true, onClose, className = '' }: BillReceiptProps) => {
+  const isPaid = bill.status === 'paid'
+
+  const { data: receiptCode } = useQuery({
+    queryKey: ['receipt-code', bill.id],
+    queryFn: () => billingApi.getReceiptCode(bill.id),
+    enabled: isPaid,
+    staleTime: Infinity,
+  })
+
   const handlePrint = () => window.print()
 
   const handleDownload = () => {
-    downloadReceiptHtml(bill, customer)
+    downloadReceiptHtml(bill, customer, receiptCode?.code)
   }
 
   return (
@@ -109,6 +121,8 @@ const BillReceipt = ({ bill, customer, showActions = true, onClose, className = 
             </p>
           </div>
         </div>
+
+        <ReceiptVerificationCode code={receiptCode?.code} billNumber={bill.billNumber} />
 
         <div className="text-center text-xs text-slate-500 pt-6 border-t border-slate-200">
           <p className="font-medium text-slate-700">Thank you for using ARMS - Automated Refuse Management Systems.</p>

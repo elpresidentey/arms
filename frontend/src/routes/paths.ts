@@ -9,6 +9,7 @@ export const PATHS = {
   resetPassword: '/reset-password',
   bootstrap: '/bootstrap',
   acceptInvite: '/accept-invite',
+  verifyReceipt: '/verify-receipt',
 
   app: '/app',
   appOperations: '/app/operations',

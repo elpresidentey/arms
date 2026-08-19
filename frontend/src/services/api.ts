@@ -2202,6 +2202,21 @@ export const billingApi = {
   verifyPayment: async (reference: string): Promise<BillPayment & { bill?: Bill }> =>
     invokeEdge<BillPayment & { bill?: Bill }>('billing', { action: 'verifyPayment', reference }),
 
+  getReceiptCode: async (billId: string): Promise<{ code: string }> =>
+    invokeEdge<{ code: string }>('billing', { action: 'getReceiptCode', billId }),
+
+  verifyReceipt: async (billNumber: string, code: string): Promise<{
+    valid: boolean
+    bill?: {
+      billNumber: string
+      billingPeriod: string
+      totalAmount: number
+      paidAt: string | null
+      paymentMethod: string | null
+      status: string
+    }
+  }> => invokeEdge('billing', { action: 'verifyReceipt', billNumber, code }),
+
   getAllPayments: async (status?: string): Promise<BillPayment[]> => {
     let query = supabase.from('bill_payments').select('*').order('createdAt', { ascending: false })
     if (status) query = query.eq('status', status)
