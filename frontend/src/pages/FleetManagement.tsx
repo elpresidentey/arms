@@ -299,15 +299,15 @@ const FleetManagement: React.FC = () => {
       {/* Fleet Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Vehicles Card */}
-        <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="metric-panel group p-6">
           <div className="flex items-start justify-between mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-sky-50 text-sky-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-50 text-sky-600 ring-1 ring-sky-100 transition-transform duration-200 group-hover:scale-[1.04]">
               <Truck className="h-6 w-6" />
             </div>
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Vehicles</span>
           </div>
           <div className="space-y-1">
-            <p className="text-3xl font-bold text-slate-900">{logistics?.fleet.totalVehicles || vehicles.length || 0}</p>
+            <p className="font-display text-3xl font-bold tracking-tight text-slate-900 tabular-nums">{logistics?.fleet.totalVehicles || vehicles.length || 0}</p>
             <p className="text-sm text-slate-600">
               <span className="font-medium text-emerald-600">{logistics?.fleet.operationalVehicles || vehicles.filter(v => v.status === 'operational').length || 0}</span> operational
             </p>
@@ -315,15 +315,15 @@ const FleetManagement: React.FC = () => {
         </div>
 
         {/* Active Drivers Card */}
-        <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="metric-panel group p-6">
           <div className="flex items-start justify-between mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 transition-transform duration-200 group-hover:scale-[1.04]">
               <Users className="h-6 w-6" />
             </div>
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Drivers</span>
           </div>
           <div className="space-y-1">
-            <p className="text-3xl font-bold text-slate-900">{logistics?.drivers.activeDrivers || drivers.length || 0}</p>
+            <p className="font-display text-3xl font-bold tracking-tight text-slate-900 tabular-nums">{logistics?.drivers.activeDrivers || drivers.length || 0}</p>
             <p className="text-sm text-slate-600">
               <span className="font-medium text-emerald-600">{logistics?.drivers.assignedDrivers || 0}</span> assigned today
             </p>
@@ -331,15 +331,15 @@ const FleetManagement: React.FC = () => {
         </div>
 
         {/* Fleet Utilization Card */}
-        <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="metric-panel group p-6">
           <div className="flex items-start justify-between mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600 ring-1 ring-purple-100 transition-transform duration-200 group-hover:scale-[1.04]">
               <CheckCircle className="h-6 w-6" />
             </div>
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Utilization</span>
           </div>
           <div className="space-y-1">
-            <p className="text-3xl font-bold text-slate-900">
+            <p className="font-display text-3xl font-bold tracking-tight text-slate-900 tabular-nums">
               {logistics?.fleet.totalVehicles > 0 
                 ? Math.round((logistics.fleet.assignedVehicles / logistics.fleet.totalVehicles) * 100)
                 : 0}%
@@ -351,15 +351,15 @@ const FleetManagement: React.FC = () => {
         </div>
 
         {/* Maintenance Due Card */}
-        <div className="relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200">
+        <div className="metric-panel group p-6">
           <div className="flex items-start justify-between mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 ring-1 ring-amber-100 transition-transform duration-200 group-hover:scale-[1.04]">
               <AlertTriangle className="h-6 w-6" />
             </div>
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Maintenance</span>
           </div>
           <div className="space-y-1">
-            <p className="text-3xl font-bold text-slate-900">{logistics?.attention.maintenanceAlerts?.length || vehicles.filter(v => v.status === 'maintenance').length || 0}</p>
+            <p className="font-display text-3xl font-bold tracking-tight text-slate-900 tabular-nums">{logistics?.attention.maintenanceAlerts?.length || vehicles.filter(v => v.status === 'maintenance').length || 0}</p>
             <p className="text-sm text-slate-600">
               {logistics?.attention.maintenanceAlerts?.length || 0} need attention
             </p>

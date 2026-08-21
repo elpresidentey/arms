@@ -94,7 +94,7 @@ const Bills: React.FC = () => {
             subtitle="Your upcoming monthly bill"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="rounded-xl border border-primary-100 bg-primary-50 px-4 py-4">
+              <div className="rounded-2xl border border-primary-100 bg-gradient-to-b from-primary-50/80 to-primary-50/40 px-4 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <p className="text-sm font-medium text-primary-900 mb-1">Billing Period</p>
                 <p className="text-xl font-bold text-primary-900">
                   {new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toLocaleDateString('en-NG', {
@@ -103,7 +103,7 @@ const Bills: React.FC = () => {
                   })}
                 </p>
               </div>
-              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-4">
+              <div className="rounded-2xl border border-amber-200/80 bg-gradient-to-b from-amber-50/90 to-amber-50/40 px-4 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <p className="text-sm font-medium text-amber-900 mb-1">Expected Amount</p>
                 <p className="text-xl font-bold text-amber-900">
                   {formatCurrency(user.propertyType === 'commercial' ? 3500 : 2000)}
@@ -112,7 +112,7 @@ const Bills: React.FC = () => {
                   {user.propertyType === 'commercial' ? 'Commercial rate' : 'Residential rate'}
                 </p>
               </div>
-              <div className="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-4">
+              <div className="rounded-2xl border border-indigo-200/80 bg-gradient-to-b from-indigo-50/90 to-indigo-50/40 px-4 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                 <p className="text-sm font-medium text-indigo-900 mb-1">Due Date</p>
                 <p className="text-xl font-bold text-indigo-900">
                   {(() => {
@@ -130,7 +130,7 @@ const Bills: React.FC = () => {
                 <p className="text-xs text-indigo-700 mt-1">7 days after month end</p>
               </div>
             </div>
-            <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+            <div className="mt-4 rounded-xl border border-slate-200/80 bg-slate-50/80 p-4">
               <p className="text-sm text-slate-700">
                 <strong>Note:</strong> Bills are generated at the beginning of each month. Pay before the due date to avoid a 10% late fee.
               </p>
@@ -163,7 +163,7 @@ const Bills: React.FC = () => {
             {paidBills.map((bill) => (
               <div
                 key={bill.id}
-                className="data-row flex flex-col gap-3 rounded-xl border border-slate-200/90 bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
+                className="data-row flex flex-col gap-3 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
                   <div className="flex flex-wrap items-center gap-2">

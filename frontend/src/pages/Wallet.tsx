@@ -150,19 +150,29 @@ const Wallet: React.FC = () => {
         }
         meta={
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-primary-100 bg-primary-700 px-4 py-3 text-white shadow-sm">
-              <p className="label text-primary-200">Balance</p>
-              <p className="mt-2 heading-3 text-white">
-                {isBalanceLoading ? (
-                  <Skeleton variant="text" width="60%" height={28} className="inline-block bg-white/30" />
-                ) : (
-                  formatCurrency(currentBalance)
-                )}
-              </p>
+            <div className="relative overflow-hidden rounded-2xl border border-primary-900/30 bg-[linear-gradient(135deg,#33502e_0%,#3d5a36_48%,#22321f_100%)] px-5 py-4 text-white shadow-lg shadow-primary-900/30">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 opacity-50"
+                style={{
+                  background:
+                    'radial-gradient(280px 140px at 85% 0%, rgba(134,239,172,0.28), transparent 65%), radial-gradient(200px 120px at 0% 100%, rgba(255,255,255,0.08), transparent 60%)',
+                }}
+              />
+              <div className="relative">
+                <p className="label text-primary-200">Balance</p>
+                <p className="mt-2 heading-3 text-white tabular-nums">
+                  {isBalanceLoading ? (
+                    <Skeleton variant="text" width="60%" height={28} className="inline-block bg-white/30" />
+                  ) : (
+                    formatCurrency(currentBalance)
+                  )}
+                </p>
+              </div>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
+            <div className="rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_10px_28px_-16px_rgba(15,23,42,0.12)]">
               <p className="label text-slate-500">Total earned</p>
-              <p className="mt-2 heading-3 text-slate-950">
+              <p className="mt-2 heading-3 text-slate-950 tabular-nums">
                 {isSummaryLoading ? (
                   <Skeleton variant="text" width="60%" height={28} className="inline-block" />
                 ) : (
@@ -170,9 +180,9 @@ const Wallet: React.FC = () => {
                 )}
               </p>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
+            <div className="rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_10px_28px_-16px_rgba(15,23,42,0.12)]">
               <p className="label text-slate-500">Total withdrawn</p>
-              <p className="mt-2 heading-3 text-slate-950">
+              <p className="mt-2 heading-3 text-slate-950 tabular-nums">
                 {isSummaryLoading ? (
                   <Skeleton variant="text" width="60%" height={28} className="inline-block" />
                 ) : (
@@ -363,7 +373,7 @@ const Wallet: React.FC = () => {
             {transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-4 rounded-2xl border border-slate-200/80 bg-white px-4 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-primary-200/70 hover:shadow-[0_12px_30px_-18px_rgba(15,23,42,0.18)] sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="flex items-center gap-3">
                   <div

@@ -39,7 +39,7 @@ const SnapshotStat: React.FC<{
   detail: string
   accent?: string
 }> = ({ label, value, detail, accent = CHART_COLORS.primary }) => (
-  <div className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-3.5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300/80 hover:shadow-md">
+  <div className="metric-panel group stagger-enter px-4 py-3.5">
     <span
       className="absolute inset-x-0 top-0 h-[3px] opacity-70 transition-opacity duration-200 group-hover:opacity-100"
       style={{ background: `linear-gradient(90deg, ${accent}, transparent 85%)` }}

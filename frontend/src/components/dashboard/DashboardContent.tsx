@@ -69,9 +69,9 @@ interface QuickLinkProps {
 const QuickLink: React.FC<QuickLinkProps> = ({ to, icon, label, description }) => (
   <Link
     to={to}
-    className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-200 hover:bg-primary-50/40 hover:text-slate-900 hover:shadow-md hover:shadow-primary-900/5"
+    className="group flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white px-3.5 py-3 text-sm font-medium text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-200 hover:bg-primary-50/40 hover:text-slate-900 hover:shadow-lg hover:shadow-primary-900/10"
   >
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition-colors duration-200 group-hover:border-primary-200 group-hover:bg-white group-hover:text-primary-700">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 transition-colors duration-200 group-hover:border-primary-200 group-hover:bg-white group-hover:text-primary-700">
       {icon}
     </div>
     <span className="min-w-0 flex-1">

@@ -114,7 +114,7 @@ export const FinanceDashboard = () => {
           ) : (
             <div className="space-y-3">
               {recentWithdrawals.map((withdrawal) => (
-                <div key={withdrawal.id} className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+                <div key={withdrawal.id} className="data-row flex items-center justify-between gap-3 rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-slate-900">
                       {withdrawal.user
@@ -138,8 +138,8 @@ export const FinanceDashboard = () => {
 }
 
 const FinanceStat = ({ label, value }: { label: string; value: string | number }) => (
-  <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-    <p className="text-xs font-medium text-slate-500">{label}</p>
-    <p className="mt-1 text-xl font-semibold text-slate-950">{value}</p>
+  <div className="metric-panel group px-4 py-3">
+    <p className="text-xs font-medium uppercase tracking-wider text-slate-500">{label}</p>
+    <p className="mt-1 font-display text-xl font-bold tracking-tight text-slate-950 tabular-nums">{value}</p>
   </div>
 )

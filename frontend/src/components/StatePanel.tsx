@@ -19,7 +19,7 @@ const toneConfig = {
   empty: {
     icon: Inbox,
     chip: 'border-slate-200 bg-white text-slate-400 shadow-sm',
-    panel: 'border-slate-200 bg-slate-50/60',
+    panel: 'border-slate-200/80 border-dashed bg-slate-50/60',
     spin: false,
   },
   error: {
