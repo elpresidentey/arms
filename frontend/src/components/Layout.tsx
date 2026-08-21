@@ -138,7 +138,14 @@ const Layout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="relative min-h-screen overflow-x-clip bg-slate-50 text-slate-900">
+      {/* Ambient canvas */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
+        <div className="absolute inset-x-0 top-0 h-[480px] bg-[radial-gradient(70%_100%_at_50%_0%,rgba(61,90,54,0.08),transparent_70%)]" />
+        <div className="absolute -left-44 top-1/3 h-[26rem] w-[26rem] rounded-full bg-primary-400/10 blur-[130px]" />
+        <div className="absolute -right-44 top-2/3 h-[26rem] w-[26rem] rounded-full bg-emerald-300/10 blur-[140px]" />
+      </div>
+
       <div className="fixed left-3 top-3 z-50 lg:hidden">
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -212,15 +219,12 @@ const Layout: React.FC = () => {
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={`group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-150 ${
                           active
-                            ? 'bg-gradient-to-r from-primary-500/[0.22] to-primary-500/[0.06] text-white ring-1 ring-inset ring-primary-400/25 shadow-[0_0_18px_rgba(61,90,54,0.28)]'
-                            : 'text-slate-400 hover:bg-white/[0.06] hover:text-white'
+                            ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-950/40'
+                            : 'text-slate-400 hover:bg-white/[0.07] hover:text-white'
                         }`}
                         aria-current={active ? 'page' : undefined}
                       >
-                        {active && (
-                          <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-primary-300 to-primary-500 shadow-[0_0_8px_rgba(158,181,146,0.8)]" />
-                        )}
-                        <Icon className={`h-4 w-4 shrink-0 ${active ? 'text-primary-300' : 'text-slate-500 group-hover:text-slate-300'}`} />
+                        <Icon className={`h-4 w-4 shrink-0 transition-colors duration-150 ${active ? 'text-white' : 'text-slate-500 group-hover:text-primary-300'}`} />
                         <span className="min-w-0 flex-1 truncate">{item.name}</span>
                         {'badge' in item && typeof item.badge === 'number' && item.badge > 0 ? (
                           <span className="rounded-full bg-rose-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm shadow-rose-500/50">
@@ -247,10 +251,10 @@ const Layout: React.FC = () => {
         </div>
       </aside>
 
-      <div className="lg:pl-[260px]">
+      <div className="relative z-10 lg:pl-[260px]">
         <main className="px-4 pb-8 pt-3 sm:px-6 lg:px-8">
           <div className="mx-auto w-full max-w-[1280px] @container">
-            <header className="sticky top-0 z-30 mb-6 border-b border-slate-200/70 bg-white/85 px-4 py-3 shadow-[0_1px_0_0_rgba(255,255,255,0.6)_inset,0_8px_24px_-16px_rgba(15,23,42,0.25)] backdrop-blur-xl sm:px-6 lg:px-8">
+            <header className="sticky top-3 z-30 mb-6 rounded-2xl border border-white/70 bg-white/75 px-4 py-3 shadow-[0_20px_50px_-24px_rgba(15,23,42,0.25)] ring-1 ring-slate-900/[0.04] backdrop-blur-xl sm:px-5">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-3">
                   <div className="ml-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-600 to-primary-800 text-white shadow-md shadow-primary-700/25 ring-1 ring-inset ring-white/20 lg:ml-0">
