@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Activity,
   ArrowRight,
   ArrowUp,
+  Check,
   Facebook,
   Instagram,
   Mail,
   Phone,
-  ShieldCheck,
+  Send,
   Twitter,
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
@@ -27,28 +28,25 @@ const Footer: React.FC = () => {
   const isResident = !isStaff
   const currentYear = new Date().getFullYear()
 
+  const [email, setEmail] = useState('')
+  const [subscribed, setSubscribed] = useState(false)
+
   const cta = user
     ? user.role === 'resident'
       ? {
           eyebrow: 'Resident services',
           title: 'Your bill, paid in minutes.',
-          subtitle: 'View your billing period, pay securely, and keep an instantly verifiable receipt.',
-          primary: { label: 'Pay your bill', href: '/app/bills' },
-          secondary: { label: 'Verify a receipt', href: PATHS.verifyReceipt },
+          subtitle: 'Product updates, collection alerts, and recycling tips — straight to your inbox.',
         }
       : {
           eyebrow: 'Operations workspace',
           title: 'Your operations, at a glance.',
-          subtitle: 'Manage routes, complaints, service requests, and resident billing from one place.',
-          primary: { label: 'Open Operations', href: '/app/operations' },
-          secondary: { label: 'System status', href: '/status' },
+          subtitle: 'Route changes, queue updates, and platform news for the operations team.',
         }
     : {
         eyebrow: 'Automated refuse management',
         title: 'Cleaner streets, clearer records.',
-        subtitle: 'Track collections, manage billing, and verify every payment receipt — all in one place.',
-        primary: { label: 'Explore ARMS', href: '/' },
-        secondary: { label: 'Verify a receipt', href: PATHS.verifyReceipt },
+        subtitle: 'Monthly product news and service updates. No spam, unsubscribe anytime.',
       }
 
   const linkColumns = isResident
@@ -131,89 +129,109 @@ const Footer: React.FC = () => {
         },
       ]
 
-  const utilityLinks = [
-    { name: 'Verify a Receipt', href: PATHS.verifyReceipt },
-    { name: 'System Status', href: '/status' },
-    { name: 'API Docs', href: '/api-docs' },
-    { name: 'Security', href: '/security' },
-    { name: 'Changelog', href: '/changelog' },
-  ]
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (email.trim().includes('@')) {
+      setSubscribed(true)
+    }
+  }
 
   return (
-    <footer className="relative overflow-hidden border-t border-primary-900/30 bg-slate-950 text-white">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-300/70 to-transparent" />
+    <footer className="relative overflow-hidden border-t border-white/5 bg-slate-950 text-white">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary-300/60 to-transparent" />
 
       {/* Ambient glows */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 -left-28 h-96 w-96 rounded-full bg-primary-500/10 blur-[130px]" />
-        <div className="absolute -bottom-40 -right-24 h-[26rem] w-[26rem] rounded-full bg-amber-400/10 blur-[140px]" />
-        <div className="absolute top-1/3 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary-400/5 blur-[130px]" />
+        <div className="absolute -top-32 -left-24 h-80 w-80 rounded-full bg-primary-500/10 blur-[120px]" />
+        <div className="absolute -bottom-24 -right-20 h-96 w-96 rounded-full bg-primary-400/[0.07] blur-[130px]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-4 pt-12 sm:px-6 lg:px-8">
-        {/* CTA band */}
-        <div className="relative overflow-hidden rounded-[1.75rem] border border-primary-300/25 bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 px-6 py-10 sm:px-10 sm:py-12">
-          <div aria-hidden className="hero-hover-grid pointer-events-none absolute inset-0 opacity-40" />
-          <div aria-hidden className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary-300/20 blur-[100px]" />
-          <div aria-hidden className="pointer-events-none absolute -bottom-24 -left-14 h-64 w-64 rounded-full bg-amber-300/10 blur-[90px]" />
-
-          <div className="relative grid items-center gap-8 lg:grid-cols-[1fr_auto]">
+      <div className="relative mx-auto w-full max-w-7xl px-4 pt-14 sm:px-6 lg:px-8">
+        {/* Newsletter band */}
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm sm:p-10">
+          <div aria-hidden className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-primary-300/10 blur-[90px]" />
+          <div className="relative grid items-center gap-8 lg:grid-cols-[1.1fr_1fr]">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-100">
+              <p className="inline-flex items-center gap-2 rounded-full border border-primary-300/25 bg-primary-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary-100">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary-300" />
                 {cta.eyebrow}
               </p>
-              <h2 className="font-display mt-3 text-2xl font-bold leading-tight text-white sm:text-3xl">
+              <h2 className="font-display mt-4 text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl">
                 {cta.title}
               </h2>
-              <p className="mt-3 max-w-lg text-sm leading-6 text-primary-100/90">{cta.subtitle}</p>
+              <p className="mt-2 max-w-md text-sm leading-6 text-slate-400">{cta.subtitle}</p>
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                to={cta.primary.href}
-                className="group/cta inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-primary-800 shadow-lg shadow-primary-900/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-50"
-              >
-                {cta.primary.label}
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5" />
-              </Link>
-              <Link
-                to={cta.secondary.href}
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/15"
-              >
-                {cta.secondary.label}
-              </Link>
+
+            <div>
+              {subscribed ? (
+                <div className="flex items-center gap-3 rounded-2xl border border-primary-300/30 bg-primary-300/10 px-5 py-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-300 text-slate-950">
+                    <Check className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-white">You&apos;re on the list.</p>
+                    <p className="text-xs text-slate-400">We&apos;ll reach out at {email}.</p>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="flex flex-col gap-3 sm:flex-row">
+                  <label htmlFor="footer-newsletter" className="sr-only">
+                    Email address
+                  </label>
+                  <input
+                    id="footer-newsletter"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="h-12 flex-1 rounded-full border border-white/10 bg-slate-900/80 px-5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors duration-200 focus:border-primary-300/60 focus:ring-2 focus:ring-primary-300/20"
+                  />
+                  <button
+                    type="submit"
+                    className="group/sub inline-flex h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary-500 to-primary-600 px-6 text-sm font-semibold text-white shadow-lg shadow-primary-900/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+                  >
+                    Subscribe
+                    <Send className="h-4 w-4 transition-transform duration-300 group-hover/sub:translate-x-0.5 group-hover/sub:-translate-y-0.5" />
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
 
         {/* Brand strip */}
-        <div className="flex flex-col gap-8 py-12 lg:flex-row lg:items-center lg:justify-between">
-          <div>
+        <div className="flex flex-col gap-6 py-12 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-md">
             <BrandLogo to={user ? '/app' : '/'} variant="dark" className="mb-4" />
-            <p className="max-w-md text-sm leading-6 text-slate-300">
+            <p className="text-sm leading-6 text-slate-400">
               {isResident
                 ? 'Automated refuse service tracking, reporting, and recycling records for residents.'
                 : 'Administrative oversight for refuse routes, resident complaints, service requests, and logistics readiness.'}
             </p>
           </div>
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="flex flex-wrap items-center gap-3">
             <a
               href="mailto:support@arms.local"
-              className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-slate-300 transition-colors duration-200 hover:border-primary-300/40 hover:bg-primary-300/10 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-slate-300 transition-all duration-200 hover:border-primary-300/40 hover:text-white"
             >
               <Mail className="h-4 w-4 text-primary-200" />
               support@arms.local
             </a>
             <a
               href="tel:+18002767"
-              className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-slate-300 transition-colors duration-200 hover:border-primary-300/40 hover:bg-primary-300/10 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-slate-300 transition-all duration-200 hover:border-primary-300/40 hover:text-white"
             >
               <Phone className="h-4 w-4 text-primary-200" />
               1-800-ARMS
             </a>
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary-300/20 bg-primary-300/10 px-4 py-2.5 text-xs font-medium text-primary-100">
-              <span className="h-2 w-2 rounded-full bg-primary-300 shadow-[0_0_0_4px_rgb(134_239_172_/_0.16)]" />
-              {isResident ? 'Resident services online' : 'Operations workspace online'}
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary-300/20 bg-primary-300/[0.08] px-4 py-2.5 text-xs font-medium text-primary-100">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-300 opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-300" />
+              </span>
+              All systems operational
             </span>
             <div className="flex gap-2">
               {socialLinks.map(({ name, href, Icon }) => (
@@ -223,83 +241,74 @@ const Footer: React.FC = () => {
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`ARMS on ${name}`}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
-                  <Icon className="h-4 w-4 transition-transform duration-300 hover:scale-110" />
+                  <Icon className="h-4 w-4" />
                 </a>
               ))}
               <Link
                 to="/status"
                 aria-label="View ARMS system status"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-all duration-300 hover:-translate-y-1 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/50 hover:bg-primary-300/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
-                <Activity className="h-4 w-4 transition-transform duration-300 hover:scale-110" />
+                <Activity className="h-4 w-4" />
               </Link>
             </div>
           </div>
         </div>
 
         {/* Link columns — identical structure for uniform alignment */}
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+        <div className="grid grid-cols-1 gap-10 border-t border-white/5 pt-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {linkColumns.map((column) => (
-            <div key={column.title}>
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-100">
-                {column.title}
-                <span className="mt-2 block h-px w-9 bg-gradient-to-r from-primary-300/80 to-transparent" />
-              </h3>
-              <ul className="space-y-3">
+            <nav key={column.title} aria-label={column.title}>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-200">{column.title}</h3>
+              <ul className="mt-4 space-y-2.5">
                 {column.links.map((link) => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
-                      className="group/link inline-flex items-center gap-2 text-sm text-slate-300 transition-colors duration-200 hover:text-white focus-visible:ring-offset-slate-950"
+                      className="group/link inline-flex items-center gap-2 text-sm text-slate-400 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                     >
-                      <span className="h-1 w-1 rounded-full bg-primary-300/0 transition-colors duration-200 group-hover/link:bg-primary-300" />
-                      <span className="footer-link">{link.name}</span>
+                      <ArrowRight className="h-3 w-3 -translate-x-1 text-primary-300 opacity-0 transition-all duration-200 group-hover/link:translate-x-0 group-hover/link:opacity-100" />
+                      <span className="-ml-5 transition-all duration-200 group-hover/link:ml-0">{link.name}</span>
                     </Link>
                   </li>
                 ))}
               </ul>
-            </div>
+            </nav>
           ))}
         </div>
 
+        {/* Giant wordmark */}
+        <div aria-hidden className="pointer-events-none mt-8 select-none overflow-hidden">
+          <p className="font-display bg-gradient-to-b from-white/[0.13] to-white/[0.01] bg-clip-text text-center text-[21vw] font-bold leading-[0.78] tracking-tighter text-transparent sm:text-[11rem] lg:text-[13rem]">
+            ARMS
+          </p>
+        </div>
+
         {/* Bottom bar */}
-        <div className="mt-10 flex flex-col gap-4 border-t border-white/10 py-6 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-slate-400">
-            &copy; {currentYear} ARMS <span className="text-slate-600">·</span>{' '}
-            <span className="text-slate-500">Automated Refuse Management Systems</span>{' '}
-            <span className="text-slate-600">·</span>{' '}
-            <span className="text-slate-500">Built by</span>{' '}
+        <div className="flex flex-col items-center gap-4 border-t border-white/5 py-6 md:flex-row md:justify-between">
+          <p className="order-2 text-center text-xs text-slate-500 md:order-1 md:text-left">
+            &copy; {currentYear} ARMS — Automated Refuse Management Systems · Built by{' '}
             <span className="font-semibold text-primary-300">IEL</span>
           </p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+          <div className="order-1 flex items-center gap-2 md:order-2">
             <Link
               to={PATHS.verifyReceipt}
-              className="inline-flex items-center gap-1.5 text-slate-400 transition-colors duration-200 hover:text-white"
+              className="rounded-full px-3 py-1.5 text-xs text-slate-500 transition-colors duration-200 hover:text-white"
             >
-              <ShieldCheck className="h-3.5 w-3.5" />
-              <span className="footer-link">Verify a Receipt</span>
+              Verify a Receipt
             </Link>
-            {utilityLinks.slice(1).map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className="footer-link text-slate-400 transition-colors duration-200 hover:text-white focus-visible:ring-offset-slate-950"
-              >
-                {link.name}
-              </Link>
-            ))}
+            <span className="h-3 w-px bg-white/10" />
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              aria-label="Back to top"
+              className="group/top inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-slate-400 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/40 hover:bg-primary-300/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+            >
+              <ArrowUp className="h-4 w-4 transition-transform duration-300 group-hover/top:-translate-y-0.5" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            aria-label="Back to top"
-            className="group/top inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-300/40 hover:bg-primary-300/10 hover:text-white focus-visible:ring-offset-slate-950"
-          >
-            <ArrowUp className="h-4 w-4 transition-transform duration-300 group-hover/top:-translate-y-0.5" />
-            Back to top
-          </button>
         </div>
       </div>
     </footer>
