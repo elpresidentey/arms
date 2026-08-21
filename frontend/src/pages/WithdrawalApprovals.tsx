@@ -164,7 +164,7 @@ export default function WithdrawalApprovals() {
   };
 
   const formatCurrency = (amount: number) => {
-    return `â‚¦${Number(amount).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `₦${Number(amount).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   if (loading) {

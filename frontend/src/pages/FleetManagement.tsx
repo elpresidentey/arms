@@ -455,7 +455,7 @@ const FleetManagement: React.FC = () => {
                   <div className="text-right">
                     <p className="font-medium text-sm text-slate-900">{deployment.driverName}</p>
                     <p className="text-xs text-slate-500">
-                      {deployment.routesToday} routes â€¢ {deployment.completedToday} completed
+                      {deployment.routesToday} routes • {deployment.completedToday} completed
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
@@ -658,7 +658,7 @@ const FleetManagement: React.FC = () => {
                         <div className="ml-4">
                           <div className="text-sm font-medium text-slate-900">{vehicle.vehicleCode}</div>
                           <div className="text-sm text-slate-500">
-                            {vehicle.plateNumber} â€¢ {vehicle.make} {vehicle.model}
+                            {vehicle.plateNumber} • {vehicle.make} {vehicle.model}
                           </div>
                         </div>
                       </div>
@@ -761,7 +761,7 @@ const FleetManagement: React.FC = () => {
                         {assignment.driver.name}
                       </p>
                       <p className="text-xs text-slate-500">
-                        {assignment.driver.driverCode} â€¢ Rating: {assignment.driver.performanceRating}/5
+                        {assignment.driver.driverCode} • Rating: {assignment.driver.performanceRating}/5
                       </p>
                     </div>
                   </div>
@@ -1108,7 +1108,7 @@ const FleetManagement: React.FC = () => {
                 {/* Purchase Price */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Purchase Price (â‚¦)
+                    Purchase Price (₦)
                   </label>
                   <input
                     type="number"
