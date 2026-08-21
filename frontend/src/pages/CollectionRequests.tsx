@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+﻿import React, { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Plus, X, AlertCircle, CheckCircle2, Clock, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -179,7 +179,7 @@ const CollectionRequests: React.FC = () => {
         ) : (
           <div className="space-y-3">
             {requests.map((request) => (
-              <div key={request.id} className="rounded-2xl border border-slate-200 bg-white p-4">
+              <div key={request.id} className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-primary-200/70 hover:shadow-[0_12px_30px_-18px_rgba(15,23,42,0.18)]">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-2">

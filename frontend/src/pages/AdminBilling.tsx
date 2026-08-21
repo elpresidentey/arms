@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AlertCircle,
@@ -148,7 +148,7 @@ const AdminBilling = () => {
           <select
             value={paymentFilter}
             onChange={(event) => setPaymentFilter(event.target.value)}
-            className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
+            className="input h-10 w-auto"
           >
             <option value="all">All payments</option>
             <option value="pending">Pending</option>
@@ -164,7 +164,7 @@ const AdminBilling = () => {
         ) : (
           <div className="space-y-3">
             {payments.map((payment) => (
-              <div key={payment.id} className="rounded-2xl border border-slate-200 p-4">
+              <div key={payment.id} className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-primary-200/70 hover:shadow-[0_12px_30px_-18px_rgba(15,23,42,0.18)]">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -216,7 +216,7 @@ const AdminBilling = () => {
                       value={rejectReason}
                       onChange={(event) => setRejectReason(event.target.value)}
                       placeholder="Rejection reason (optional)"
-                      className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm"
+                      className="input flex-1"
                     />
                     <button
                       type="button"
@@ -242,7 +242,7 @@ const AdminBilling = () => {
           <select
             value={billFilter}
             onChange={(event) => setBillFilter(event.target.value)}
-            className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
+            className="input h-10 w-auto"
           >
             <option value="all">All</option>
             <option value="pending">Pending</option>

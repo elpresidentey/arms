@@ -184,7 +184,7 @@ const Recyclables: React.FC = () => {
         }
         meta={
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-white/85 px-4 py-3 shadow-sm">
+            <div className="rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_10px_28px_-16px_rgba(15,23,42,0.12)]">
               <p className="label text-slate-500">Items</p>
               <p className="mt-2 heading-3 text-slate-950">
                 {isLoading ? (
@@ -451,7 +451,7 @@ const Recyclables: React.FC = () => {
             {recyclables.map((item) => (
               <div
                 key={item.id}
-                className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 sm:flex-row sm:items-start sm:justify-between"
+                className="flex flex-col gap-4 rounded-2xl border border-slate-200/80 bg-white px-4 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-primary-200/70 hover:shadow-[0_12px_30px_-18px_rgba(15,23,42,0.18)] sm:flex-row sm:items-start sm:justify-between"
               >
                 <div className="flex min-w-0 gap-3">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">

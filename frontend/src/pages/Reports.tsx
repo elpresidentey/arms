@@ -482,7 +482,7 @@ const Reports: React.FC = () => {
         ) : (
           <div className="space-y-3">
             {reports.map((report) => (
-              <div key={report.id} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+              <div key={report.id} className="rounded-2xl border border-slate-200/80 bg-white px-4 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 hover:border-primary-200/70 hover:shadow-[0_12px_30px_-18px_rgba(15,23,42,0.18)]">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="flex min-w-0 gap-3">
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-700">

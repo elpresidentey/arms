@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { 
   Truck, 
   Users, 
@@ -455,7 +455,7 @@ const FleetManagement: React.FC = () => {
                   <div className="text-right">
                     <p className="font-medium text-sm text-slate-900">{deployment.driverName}</p>
                     <p className="text-xs text-slate-500">
-                      {deployment.routesToday} routes • {deployment.completedToday} completed
+                      {deployment.routesToday} routes â€¢ {deployment.completedToday} completed
                     </p>
                   </div>
                   <div className="flex items-center gap-1">
@@ -529,7 +529,7 @@ const FleetManagement: React.FC = () => {
       )}
 
       {activeTab === 'drivers' && (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="rounded-2xl border border-slate-200/80 bg-white overflow-hidden shadow-[0_1px_2px_rgba(15,23,42,0.04),0_12px_32px_-20px_rgba(15,23,42,0.14)]">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200">
               <thead className="bg-slate-50">
@@ -622,7 +622,7 @@ const FleetManagement: React.FC = () => {
       )}
 
       {activeTab === 'vehicles' && (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="rounded-2xl border border-slate-200/80 bg-white overflow-hidden shadow-[0_1px_2px_rgba(15,23,42,0.04),0_12px_32px_-20px_rgba(15,23,42,0.14)]">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200">
               <thead className="bg-slate-50">
@@ -658,7 +658,7 @@ const FleetManagement: React.FC = () => {
                         <div className="ml-4">
                           <div className="text-sm font-medium text-slate-900">{vehicle.vehicleCode}</div>
                           <div className="text-sm text-slate-500">
-                            {vehicle.plateNumber} • {vehicle.make} {vehicle.model}
+                            {vehicle.plateNumber} â€¢ {vehicle.make} {vehicle.model}
                           </div>
                         </div>
                       </div>
@@ -727,7 +727,7 @@ const FleetManagement: React.FC = () => {
       )}
 
       {activeTab === 'assignments' && (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="rounded-2xl border border-slate-200/80 bg-white overflow-hidden shadow-[0_1px_2px_rgba(15,23,42,0.04),0_12px_32px_-20px_rgba(15,23,42,0.14)]">
           <div className="p-6">
             <h3 className="heading-4 mb-4">Current Vehicle Assignments</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -761,7 +761,7 @@ const FleetManagement: React.FC = () => {
                         {assignment.driver.name}
                       </p>
                       <p className="text-xs text-slate-500">
-                        {assignment.driver.driverCode} • Rating: {assignment.driver.performanceRating}/5
+                        {assignment.driver.driverCode} â€¢ Rating: {assignment.driver.performanceRating}/5
                       </p>
                     </div>
                   </div>
@@ -1085,8 +1085,8 @@ const FleetManagement: React.FC = () => {
                       className="input w-24"
                     >
                       <option value="tons">tons</option>
-                      <option value="cubic_meters">m³</option>
-                      <option value="cubic_yards">yd³</option>
+                      <option value="cubic_meters">mÂ³</option>
+                      <option value="cubic_yards">ydÂ³</option>
                     </select>
                   </div>
                 </div>
@@ -1108,7 +1108,7 @@ const FleetManagement: React.FC = () => {
                 {/* Purchase Price */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Purchase Price (₦)
+                    Purchase Price (â‚¦)
                   </label>
                   <input
                     type="number"

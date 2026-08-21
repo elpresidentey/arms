@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, AlertCircle, Eye, DollarSign, User, Calendar } from 'lucide-react';
 import Button from '../components/Button';
 import { walletApi } from '../services/api';
@@ -164,7 +164,7 @@ export default function WithdrawalApprovals() {
   };
 
   const formatCurrency = (amount: number) => {
-    return `₦${Number(amount).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `â‚¦${Number(amount).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
   if (loading) {
@@ -190,49 +190,49 @@ export default function WithdrawalApprovals() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+        <div className="metric-panel group p-5">
           <div className="flex items-start justify-between mb-2">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Requests</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
               <DollarSign className="h-4 w-4" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-slate-900">{withdrawals.length}</p>
+          <p className="font-display text-2xl font-bold tracking-tight text-slate-900 tabular-nums">{withdrawals.length}</p>
         </div>
-        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+        <div className="metric-panel group p-5">
           <div className="flex items-start justify-between mb-2">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Pending</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
               <Clock className="h-4 w-4" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-amber-600">
+          <p className="font-display text-2xl font-bold tracking-tight text-amber-600 tabular-nums">
             {withdrawals.filter((w) => w.status === 'pending').length}
           </p>
         </div>
-        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+        <div className="metric-panel group p-5">
           <div className="flex items-start justify-between mb-2">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Done</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
               <CheckCircle className="h-4 w-4" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-emerald-600">
+          <p className="font-display text-2xl font-bold tracking-tight text-emerald-600 tabular-nums">
             {withdrawals.filter((w) => w.status === 'completed').length}
           </p>
         </div>
-        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+        <div className="metric-panel group p-5">
           <div className="flex items-start justify-between mb-2">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Rejected</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-600">
               <XCircle className="h-4 w-4" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-rose-600">
+          <p className="font-display text-2xl font-bold tracking-tight text-rose-600 tabular-nums">
             {withdrawals.filter((w) => w.status === 'rejected').length}
           </p>
         </div>
-        <div className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200">
+        <div className="metric-panel group p-5">
           <div className="flex items-start justify-between mb-2">
             <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Failed</span>
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
@@ -336,7 +336,7 @@ export default function WithdrawalApprovals() {
                         )}
                         {withdrawal.metadata.testMode && (
                           <p className="text-xs text-amber-600 mt-1">
-                            ⚠️ Test Mode - No actual transfer
+                            âš ï¸ Test Mode - No actual transfer
                           </p>
                         )}
                       </div>
@@ -473,7 +473,7 @@ export default function WithdrawalApprovals() {
 
               {selectedWithdrawal.status === 'completed' && selectedWithdrawal.metadata?.approvedAt && (
                 <div className="mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
-                  <p className="text-sm font-semibold text-emerald-900">✓ Withdrawal Completed</p>
+                  <p className="text-sm font-semibold text-emerald-900">âœ“ Withdrawal Completed</p>
                   <p className="text-sm text-emerald-800 mt-2">
                     Approved on {new Date(selectedWithdrawal.metadata.approvedAt).toLocaleString()}
                   </p>
@@ -484,7 +484,7 @@ export default function WithdrawalApprovals() {
                   )}
                   {selectedWithdrawal.metadata.testMode && (
                     <p className="text-xs text-amber-600 mt-1">
-                      ⚠️ Test Mode - No actual transfer
+                      âš ï¸ Test Mode - No actual transfer
                     </p>
                   )}
                 </div>

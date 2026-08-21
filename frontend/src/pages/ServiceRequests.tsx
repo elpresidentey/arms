@@ -326,7 +326,7 @@ const ServiceRequests: React.FC = () => {
         ) : (
           <div className="space-y-4">
             {requests.map((request) => (
-              <article key={request.id} className="rounded-3xl border border-slate-200 bg-slate-50/60 p-4 shadow-sm">
+              <article key={request.id} className="rounded-3xl border border-slate-200/80 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_12px_32px_-20px_rgba(15,23,42,0.14)] transition-all duration-200 hover:border-primary-200/70 hover:shadow-[0_16px_40px_-22px_rgba(15,23,42,0.2)]">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
